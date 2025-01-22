@@ -1,6 +1,7 @@
 import { HardhatUserConfig, task } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
+import "@midl-xyz/hardhat-deploy";
 import "hardhat-abi-exporter";
 import exportDeployment from "./tasks/export";
 
@@ -74,11 +75,14 @@ const config: HardhatUserConfig = {
       }
     ]
   },
+  midl: {
+    mnemonic: "face spike layer label health knee cry taste carpet found elegant october",
+    path: "deployments/midl"
+  },
   networks: {
-    sepolia: {
-      accounts: newAccounts,
-      url: "https://ethereum-sepolia-rpc.publicnode.com",
-      chainId: 11155111
+    default: {
+      url: "https://evm-rpc.regtest.midl.xyz",
+      chainId: 777
     }
   },
 

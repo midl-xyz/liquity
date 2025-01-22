@@ -1,15 +1,16 @@
 import { DeployFunction } from "hardhat-deploy/types";
+import { deployConfig } from "../deploy-helpers/deployConfig";
 
 const deploy: DeployFunction = async ({ midl }) => {
   console.log("Starting deployment process...");
 
   await midl.initialize();
 
-  await midl.deploy("PriceFeed", { args: [] });
+  await midl.deploy("BTCOracle", { args: [deployConfig.feesSetter, deployConfig.feesAdmin] });
 
   await midl.execute();
 };
 
-deploy.tags = ["main", "PriceFeed"];
+deploy.tags = ["main", "BTCOracle"];
 
 export default deploy;

@@ -32,7 +32,7 @@ const deployContractAndGetBlockNumber = async (
   ...args: unknown[]
 ): Promise<[address: string, blockNumber: number]> => {
   log(`Deploying ${contractName} ...`);
-  const contract = await (await getContractFactory(contractName, deployer)).deploy(...args);
+  const contract = await (await getContractFactory(contractName, deployer)).midl.deploy(...args);
 
   log(`Waiting for transaction ${contract.deployTransaction.hash} ...`);
   const receipt = await contract.deployTransaction.wait();

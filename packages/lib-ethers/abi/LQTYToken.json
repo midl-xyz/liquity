@@ -13,11 +13,6 @@
       },
       {
         "internalType": "address",
-        "name": "_lockupFactoryAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_bountyAddress",
         "type": "address"
       },

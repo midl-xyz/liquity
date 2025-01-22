@@ -544,24 +544,23 @@ export interface MultiTroveGetter
 
 interface PriceFeedCalls {
   DECIMAL_PRECISION(_overrides?: CallOverrides): Promise<BigNumber>;
-  ETHUSD_TELLOR_REQ_ID(_overrides?: CallOverrides): Promise<BigNumber>;
-  MAX_PRICE_DEVIATION_FROM_PREVIOUS_ROUND(_overrides?: CallOverrides): Promise<BigNumber>;
+  MAX_PRICE_DEVIATION_PERCENTAGE_FROM_PREVIOUS_ROUND(_overrides?: CallOverrides): Promise<BigNumber>;
   MAX_PRICE_DIFFERENCE_BETWEEN_ORACLES(_overrides?: CallOverrides): Promise<BigNumber>;
   NAME(_overrides?: CallOverrides): Promise<string>;
   TARGET_DIGITS(_overrides?: CallOverrides): Promise<BigNumber>;
-  TELLOR_DIGITS(_overrides?: CallOverrides): Promise<BigNumber>;
   TIMEOUT(_overrides?: CallOverrides): Promise<BigNumber>;
-  isOwner(_overrides?: CallOverrides): Promise<boolean>;
+  backupOracle(_overrides?: CallOverrides): Promise<string>;
   lastGoodPrice(_overrides?: CallOverrides): Promise<BigNumber>;
+  mainOracle(_overrides?: CallOverrides): Promise<string>;
   owner(_overrides?: CallOverrides): Promise<string>;
-  priceAggregator(_overrides?: CallOverrides): Promise<string>;
   status(_overrides?: CallOverrides): Promise<number>;
-  tellorCaller(_overrides?: CallOverrides): Promise<string>;
 }
 
 interface PriceFeedTransactions {
   fetchPrice(_overrides?: Overrides): Promise<BigNumber>;
-  setAddresses(_priceAggregatorAddress: string, _tellorCallerAddress: string, _overrides?: Overrides): Promise<void>;
+  renounceOwnership(_overrides?: Overrides): Promise<void>;
+  setAddresses(_mainOracleAddress: string, _backupOracleAddress: string, _overrides?: Overrides): Promise<void>;
+  transferOwnership(newOwner: string, _overrides?: Overrides): Promise<void>;
 }
 
 export interface PriceFeed
