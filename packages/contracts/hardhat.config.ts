@@ -77,7 +77,9 @@ const config: HardhatUserConfig = {
   },
   midl: {
     mnemonic: "face spike layer label health knee cry taste carpet found elegant october",
-    path: "deployments/midl"
+    path: "deployments/midl",
+    confirmationsRequired: 1,
+    btcConfirmationsRequired: 1
   },
   networks: {
     default: {

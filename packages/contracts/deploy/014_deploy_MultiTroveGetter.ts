@@ -4,7 +4,7 @@ const deploy: DeployFunction = async ({ midl }) => {
   await midl.initialize();
 
   const TroveManager = await midl.getDeployment("TroveManager");
-  const SortedTroves = await midl.getDeployment("TroveManager");
+  const SortedTroves = await midl.getDeployment("SortedTroves");
 
   await midl.deploy("MultiTroveGetter", {
     args: [TroveManager?.address, SortedTroves?.address]

@@ -24,12 +24,12 @@ export const isOwnershipRenounced = async (contractAddress: any) => {
     const contract = new ethers.Contract(
       contractAddress,
       ["function owner() external view returns (address)"],
-      provider,
-      7
+      provider
     );
 
     // Call owner function
     const owner = await contract.owner();
+    console.log("owner: ", owner);
 
     // Check if ownership is renounced
     return owner === ethers.ZeroAddress;
