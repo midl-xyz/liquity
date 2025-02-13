@@ -113,6 +113,6 @@
     "node": "17.9.1"
   },
   "dependencies": {
-    "@midl-xyz/hardhat-deploy": "^0.0.2"
+    "@midl-xyz/hardhat-deploy": "^0.0.7"
   }
 }

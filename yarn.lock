@@ -1894,8 +1894,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@liquity/contracts@workspace:packages/contracts"
   dependencies:
-    "@midl-xyz/ethers": 6.13.0-0
-    "@midl-xyz/hardhat-deploy": ^0.0.3
+    "@midl-xyz/ethers": 6.13.0-4
+    "@midl-xyz/hardhat-deploy": ^0.0.7
     "@nomicfoundation/hardhat-chai-matchers": ^2.0.0
     "@nomicfoundation/hardhat-ethers": ^3.0.0
     "@nomicfoundation/hardhat-network-helpers": ^1.0.0
@@ -2566,43 +2566,38 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@midl-xyz/contracts@npm:^0.0.4-alpha":
-  version: 0.0.4
-  resolution: "@midl-xyz/contracts@npm:0.0.4::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40midl-xyz%2Fcontracts%2F0.0.4%2Fdcaca3cf3830ee0ef2e9d0e1d21302389f1f5f0d"
-  checksum: fc6371686b80a9f23be315ef03718fa1006c7fdda9d78595943e3742d8ff16c341ec8fbaa3a12bf947f205e123051c1fa1e8b62277cbd0edef3d59f1c2505af6
-  languageName: node
-  linkType: hard
-
 "@midl-xyz/contracts@npm:^0.0.6-alpha":
   version: 0.0.6-alpha
-  resolution: "@midl-xyz/contracts@npm:0.0.6-alpha::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40midl-xyz%2Fcontracts%2F0.0.6-alpha%2Fc98335337a40f14642025b7f81c2c24deaa2f41e"
-  checksum: eefa9362b280f9492678f82c3d77f4e809752f9c11c83a98e3e586b128cf1de978c88641fc2ec91a7df83dc16a5e6fc0d6b7021115290a15a78de72b736976e2
+  resolution: "@midl-xyz/contracts@npm:0.0.6-alpha"
+  checksum: e938f3f4e5e9a4fea83265deda50a86dcaa472fd13707d02f2b453e484c65862084158f8fa23ea36916ab5b9f824dad7bac1836c8f5d2565b2f50f44cce624ac
   languageName: node
   linkType: hard
 
-"@midl-xyz/ethers@npm:6.13.0-0, ethers@npm:@midl-xyz/ethers@^6.13.0-0":
-  version: 6.13.0-0
-  resolution: "@midl-xyz/ethers@npm:6.13.0-0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40midl-xyz%2Fethers%2F6.13.0-0%2F363042ba532cd2826e47e6455501a2698d525c4b"
+"@midl-xyz/ethers@npm:6.13.0-4, ethers@npm:@midl-xyz/ethers@^6.13.0-0":
+  version: 6.13.0-4
+  resolution: "@midl-xyz/ethers@npm:6.13.0-4"
   dependencies:
     "@adraffy/ens-normalize": 1.10.1
     "@noble/curves": 1.2.0
     "@noble/hashes": 1.3.2
+    "@scure/btc-signer": ^1.4.0
     "@types/node": 18.15.13
     aes-js: 4.0.0-beta.5
+    bip322-js: ^2.0.0
     tslib: 2.4.0
     ws: 8.5.0
-  checksum: c0196584fb19f29a5c905965f42b72f7f4ccbff922f4448c100fbf119a1d4615e0a49c032d39fc967ae14f5322e8814ce918946ab0b84e15f677a4d9812b454c
+  checksum: 19568a43c0f20afc345ebff22c290509d2c412af49f4d637d39a73b8787b23708c9e25ac9d35c6499f8acabe39a0fe67ad9979e54dbec6171f69cd3f5a53cabc
   languageName: node
   linkType: hard
 
-"@midl-xyz/hardhat-deploy@npm:^0.0.2":
-  version: 0.0.2
-  resolution: "@midl-xyz/hardhat-deploy@npm:0.0.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40midl-xyz%2Fhardhat-deploy%2F0.0.2%2Ff8c3acfad10415496a45070d7bbc96d3c86d69c7"
+"@midl-xyz/hardhat-deploy@npm:^0.0.7":
+  version: 0.0.7
+  resolution: "@midl-xyz/hardhat-deploy@npm:0.0.7"
   dependencies:
     "@bitcoinerlab/secp256k1": ^1.2.0
-    "@midl-xyz/midl-js-core": ^0.0.38
-    "@midl-xyz/midl-js-executor": ^0.0.74
-    "@midl-xyz/midl-js-react": ^0.0.45
+    "@midl-xyz/midl-js-core": ^0.0.77
+    "@midl-xyz/midl-js-executor": ^0.0.77
+    "@midl-xyz/midl-js-react": ^0.0.77
     bip32: 5.0.0-rc.0
     bip39: ^3.1.0
     bitcoinjs-lib: ^6.1.7
@@ -2611,27 +2606,7 @@ __metadata:
     viem: "npm:@midl-xyz/midl-viem@2.21.36"
   peerDependencies:
     hardhat: ^2.22.17
-  checksum: 3865f5f776fa6016b0b0f1ec61b8273c48a6eb335692e36cd7d12ab1f7ace9a46b706ff3b6aad249fd09bc0703c50b82187a7533ae4985b6ea8153d25bb55190
-  languageName: node
-  linkType: hard
-
-"@midl-xyz/hardhat-deploy@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "@midl-xyz/hardhat-deploy@npm:0.0.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40midl-xyz%2Fhardhat-deploy%2F0.0.3%2F0d8678e41973bceccda1006f59b1d5157d1ef54e"
-  dependencies:
-    "@bitcoinerlab/secp256k1": ^1.2.0
-    "@midl-xyz/midl-js-core": ^0.0.38
-    "@midl-xyz/midl-js-executor": ^0.0.74
-    "@midl-xyz/midl-js-react": ^0.0.45
-    bip32: 5.0.0-rc.0
-    bip39: ^3.1.0
-    bitcoinjs-lib: ^6.1.7
-    ecpair: ^2.1.0
-    ethers: "npm:@midl-xyz/ethers@^6.13.0-0"
-    viem: "npm:@midl-xyz/midl-viem@2.21.36"
-  peerDependencies:
-    hardhat: ^2.22.17
-  checksum: cf845d3e57e1c633024b59137159deb069538924e195627697e3b3d4b7d0afa845543635ed6edb0ddff0c34e5dce629f0c8c3e7a2407ecc130b1309d8cbdf693
+  checksum: 6c9c00c7b8d43a8cd71c07ea94916fbcd899445f3608afbd552d3013388ae26839a1af9441792a9936dcf3edb368ba27bd1029f96000ab23e738156b632779ed
   languageName: node
   linkType: hard
 
@@ -2655,29 +2630,6 @@ __metadata:
     viem: ^2.18.6
     zustand: ^5.0.1
   checksum: 8611477e23902f1243400f7bfc0223a37f2c0fac2031dc392e7d69ea23010295ba4f89c762b7d067c68cabfb7950dea175f2983050fd6f40db8e4ff6f62ba54b
-  languageName: node
-  linkType: hard
-
-"@midl-xyz/midl-js-core@npm:^0.0.38":
-  version: 0.0.38
-  resolution: "@midl-xyz/midl-js-core@npm:0.0.38::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40midl-xyz%2Fmidl-js-core%2F0.0.38%2F1afd3500c4541cb559e4952f72a1330159dfda6e"
-  dependencies:
-    "@bitcoinerlab/secp256k1": ^1.2.0
-    "@leather.io/bitcoin": ^0.19.16
-    "@metamask/providers": ^17.1.1
-    "@noble/hashes": ^1.7.1
-    axios: ^1.7.9
-    bip32: 5.0.0-rc.0
-    bip322-js: ^2.0.0
-    bitcoinjs-lib: 7.0.0-rc.0
-    bitcoinselect: ^1.0.0
-    ecpair: ^2.1.0
-    runelib: ^1.0.7
-    sats-connect: ^2.6.0
-    varuint-bitcoin: 1.1.2
-    viem: ^2.18.6
-    zustand: ^5.0.1
-  checksum: b1c84272e575c284db1554b89ac021c11ee3bf705c306a62330cf2a9994838df8439ee50ccee291ce5f4121e6eddfbddbc5dad5d167f42542f038ad1134582d5
   languageName: node
   linkType: hard
 
@@ -2719,23 +2671,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@midl-xyz/midl-js-executor@npm:^0.0.74":
-  version: 0.0.74
-  resolution: "@midl-xyz/midl-js-executor@npm:0.0.74::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40midl-xyz%2Fmidl-js-executor%2F0.0.74%2F5752233babff7394e47b2d935172dec4e3143ae5"
-  dependencies:
-    "@bitcoinerlab/secp256k1": ^1.2.0
-    "@midl-xyz/contracts": ^0.0.4-alpha
-    "@midl-xyz/midl-js-core": ^0.0.38
-    "@midl-xyz/midl-js-react": ^0.0.45
-    zustand: ^5.0.1
-  peerDependencies:
-    bitcoinjs-lib: 7.0.0-rc.0
-    ethers: "*"
-    viem: "*"
-  checksum: cff9a9638b2cbc4c3c639a9d6243389e50d1d158a44d62cdc15323186269f048d586471dbfbb0f0ad5089b82d70d4f46d46280ab8a7167ced013565b0af3ce69
-  languageName: node
-  linkType: hard
-
 "@midl-xyz/midl-js-react@npm:0.0.77, @midl-xyz/midl-js-react@npm:^0.0.77":
   version: 0.0.77
   resolution: "@midl-xyz/midl-js-react@npm:0.0.77"
@@ -2748,21 +2683,6 @@ __metadata:
     react: ^18.3.1
     react-dom: ^18.3.1
   checksum: e3fb8fd96aa2e9769ce7bfd8ba24f32b28613e1bd43fe6bdc84041f10a09a93694184d35aba8502a08ba1160ab647ccca529393d9184353fdea75b630462679e
-  languageName: node
-  linkType: hard
-
-"@midl-xyz/midl-js-react@npm:^0.0.45":
-  version: 0.0.45
-  resolution: "@midl-xyz/midl-js-react@npm:0.0.45::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40midl-xyz%2Fmidl-js-react%2F0.0.45%2F323e00b2a0c124a9dff5f00c5c71a24bd9e267bd"
-  dependencies:
-    "@midl-xyz/midl-js-core": ^0.0.38
-    zustand: ^5.0.1
-  peerDependencies:
-    "@tanstack/react-query": "*"
-    "@types/react": ^18.3.11
-    react: ^18.3.1
-    react-dom: ^18.3.1
-  checksum: 56ab12460607fbe94f35335517b4d25062c0341668f0809b22a9ac1e1ec2195163a40c9471004f602d59b4cb6ee5894b426fdb3e261f8ba295a00f30ace74db1
   languageName: node
   linkType: hard
 
@@ -4515,6 +4435,18 @@ __metadata:
     "@scure/base": ~1.1.9
     micro-packed: ~0.6.2
   checksum: b866af7db058ce13e65c8ce7941a4fb7b10fe3f08953b1753e3d7e2e1ebf038b8de393822896d6368750b49ff1b2cd2f1bc85690b8281cb96b258c3ce6125473
+  languageName: node
+  linkType: hard
+
+"@scure/btc-signer@npm:^1.4.0":
+  version: 1.6.0
+  resolution: "@scure/btc-signer@npm:1.6.0"
+  dependencies:
+    "@noble/curves": ~1.8.1
+    "@noble/hashes": ~1.7.1
+    "@scure/base": ~1.2.2
+    micro-packed: ~0.7.2
+  checksum: 1d57572ace3d69a7eead345eab8dcf7aef96940d94edb964f2a06f7aeb08153f6fbdf6965b59117baac36a949a085789c89bfd50ed81fae4afdf70a171459134
   languageName: node
   linkType: hard
 
@@ -17490,7 +17422,7 @@ __metadata:
     "@commitlint/cli": ^12.0.1
     "@commitlint/config-conventional": ^12.0.1
     "@microsoft/api-documenter": ^7.12.6
-    "@midl-xyz/hardhat-deploy": ^0.0.2
+    "@midl-xyz/hardhat-deploy": ^0.0.7
     fs-extra: ^9.1.0
     npm-run-all: ^4.1.5
     prettier: ^2.1.2
@@ -18587,6 +18519,15 @@ __metadata:
   dependencies:
     "@scure/base": ~1.1.5
   checksum: 957798f24cf317e50dfb2fb9866a1c91190d60efaf4dbe3e291a875b9146b2d5ec68fbf1713054b33fefbce5b028f1bf6d86aa7d74686b659a803b1766c39c54
+  languageName: node
+  linkType: hard
+
+"micro-packed@npm:~0.7.2":
+  version: 0.7.2
+  resolution: "micro-packed@npm:0.7.2"
+  dependencies:
+    "@scure/base": ~1.2.2
+  checksum: 7b9a102fe245f1902614aadf250e5d1a28caea070ad5b79fef9a449f021c5a5e2030ac3f43de7e657ec46283de0bb892a568024189064b71ecc2e9bc5efee684
   languageName: node
   linkType: hard
 
@@ -26231,7 +26172,7 @@ __metadata:
 
 "viem@npm:@midl-xyz/midl-viem@2.21.36":
   version: 2.21.36
-  resolution: "@midl-xyz/midl-viem@npm:2.21.36::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40midl-xyz%2Fmidl-viem%2F2.21.36%2F171dc70bc54c172653191efdc1a281b7472cb706"
+  resolution: "@midl-xyz/midl-viem@npm:2.21.36"
   dependencies:
     "@adraffy/ens-normalize": 1.10.0
     "@noble/curves": 1.4.0
@@ -26244,7 +26185,10 @@ __metadata:
     ws: 8.17.1
   peerDependencies:
     typescript: ">=5.0.4"
-  checksum: e7bc2c4983750ead7318c5c1843260c89bebe3eb55cfc2f760496a16b69fb78809228ec2d8325549cab26617c8d76f77b34907d23151657aa73b810412ed8b42
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 618f8294e84cbb9b7f49d82d66e09fca493f82c5f471628741f146040ec9006932c1600c7edb015d46a9f5f52b2b0be828cd164e6f4bfb36084c459b0e5a17c9
   languageName: node
   linkType: hard
 
