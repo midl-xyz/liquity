@@ -51,6 +51,9 @@ export const LiquityProvider: React.FC<LiquityProviderProps> = ({
   const account = useAccount();
   const walletClient = useWalletClient();
 
+
+  console.log('account', account.address)
+
   const signer =
     account.address &&
     walletClient.data &&

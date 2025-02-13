@@ -1936,6 +1936,10 @@ __metadata:
     "@fortawesome/react-fontawesome": 0.1.14
     "@liquity/chicken-bonds": "file:.yalc/@liquity/chicken-bonds"
     "@metamask/eth-sig-util": 5.0.1
+    "@midl-xyz/midl-js-core": 0.0.77
+    "@midl-xyz/midl-js-executor": 0.0.77
+    "@midl-xyz/midl-js-executor-react": 0.0.77
+    "@midl-xyz/midl-js-react": 0.0.77
     "@tanstack/react-query": ^5.24.1
     "@testing-library/dom": ^9.3.4
     "@testing-library/jest-dom": ^6.4.2
@@ -1969,7 +1973,7 @@ __metadata:
     source-map-explorer: 2.5.2
     theme-ui: ^0.16.2
     typescript: ^5.3.3
-    viem: ^2.7.15
+    viem: "npm:@midl-xyz/midl-viem@2.21.36"
     vite: ^5.1.4
     vite-plugin-node-polyfills: ^0.21.0
     vitest: ^1.3.1
@@ -2569,6 +2573,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@midl-xyz/contracts@npm:^0.0.6-alpha":
+  version: 0.0.6-alpha
+  resolution: "@midl-xyz/contracts@npm:0.0.6-alpha::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40midl-xyz%2Fcontracts%2F0.0.6-alpha%2Fc98335337a40f14642025b7f81c2c24deaa2f41e"
+  checksum: eefa9362b280f9492678f82c3d77f4e809752f9c11c83a98e3e586b128cf1de978c88641fc2ec91a7df83dc16a5e6fc0d6b7021115290a15a78de72b736976e2
+  languageName: node
+  linkType: hard
+
 "@midl-xyz/ethers@npm:6.13.0-0, ethers@npm:@midl-xyz/ethers@^6.13.0-0":
   version: 6.13.0-0
   resolution: "@midl-xyz/ethers@npm:6.13.0-0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40midl-xyz%2Fethers%2F6.13.0-0%2F363042ba532cd2826e47e6455501a2698d525c4b"
@@ -2624,6 +2635,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@midl-xyz/midl-js-core@npm:0.0.77, @midl-xyz/midl-js-core@npm:^0.0.77":
+  version: 0.0.77
+  resolution: "@midl-xyz/midl-js-core@npm:0.0.77"
+  dependencies:
+    "@bitcoinerlab/secp256k1": ^1.2.0
+    "@leather.io/bitcoin": ^0.19.16
+    "@metamask/providers": ^17.1.1
+    "@noble/hashes": ^1.7.1
+    axios: ^1.7.9
+    bip32: 5.0.0-rc.0
+    bip322-js: ^2.0.0
+    bitcoinjs-lib: 7.0.0-rc.0
+    bitcoinselect: ^1.0.0
+    ecpair: ^2.1.0
+    runelib: ^1.0.7
+    sats-connect: ^2.6.0
+    varuint-bitcoin: 1.1.2
+    viem: ^2.18.6
+    zustand: ^5.0.1
+  checksum: 8611477e23902f1243400f7bfc0223a37f2c0fac2031dc392e7d69ea23010295ba4f89c762b7d067c68cabfb7950dea175f2983050fd6f40db8e4ff6f62ba54b
+  languageName: node
+  linkType: hard
+
 "@midl-xyz/midl-js-core@npm:^0.0.38":
   version: 0.0.38
   resolution: "@midl-xyz/midl-js-core@npm:0.0.38::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40midl-xyz%2Fmidl-js-core%2F0.0.38%2F1afd3500c4541cb559e4952f72a1330159dfda6e"
@@ -2647,6 +2681,44 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@midl-xyz/midl-js-executor-react@npm:0.0.77":
+  version: 0.0.77
+  resolution: "@midl-xyz/midl-js-executor-react@npm:0.0.77"
+  dependencies:
+    "@midl-xyz/contracts": ^0.0.6-alpha
+    "@midl-xyz/midl-js-core": ^0.0.77
+    "@midl-xyz/midl-js-executor": ^0.0.77
+  peerDependencies:
+    "@midl-xyz/midl-js-react": ^0.0.77
+    "@tanstack/react-query": ^5.59.9
+    "@types/react": ^18
+    bitcoinjs-lib: 7.0.0-rc.0
+    ethers: "*"
+    react: ^18.*
+    viem: "*"
+    wagmi: ^2.*
+    zustand: ^5.0.1
+  checksum: a5f35927ee855f42ef8243b7e3db888b3c8c378364fca55edde88a73aff0b46397b025b166019eb05d3c8610cd597a36ae3e14ebab997ff557a980f124177781
+  languageName: node
+  linkType: hard
+
+"@midl-xyz/midl-js-executor@npm:0.0.77, @midl-xyz/midl-js-executor@npm:^0.0.77":
+  version: 0.0.77
+  resolution: "@midl-xyz/midl-js-executor@npm:0.0.77"
+  dependencies:
+    "@bitcoinerlab/secp256k1": ^1.2.0
+    "@midl-xyz/contracts": ^0.0.6-alpha
+    "@midl-xyz/midl-js-core": ^0.0.77
+    "@midl-xyz/midl-js-react": ^0.0.77
+    zustand: ^5.0.1
+  peerDependencies:
+    bitcoinjs-lib: 7.0.0-rc.0
+    ethers: "*"
+    viem: "*"
+  checksum: 5b9f6d83343c9af405618f749d87ecd522d810bf82485cb686bc9af6c4425e105c63d8f4ab7e465d9b04f74355b10e204af8aaf171217d1217002610396b95ee
+  languageName: node
+  linkType: hard
+
 "@midl-xyz/midl-js-executor@npm:^0.0.74":
   version: 0.0.74
   resolution: "@midl-xyz/midl-js-executor@npm:0.0.74::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40midl-xyz%2Fmidl-js-executor%2F0.0.74%2F5752233babff7394e47b2d935172dec4e3143ae5"
@@ -2661,6 +2733,21 @@ __metadata:
     ethers: "*"
     viem: "*"
   checksum: cff9a9638b2cbc4c3c639a9d6243389e50d1d158a44d62cdc15323186269f048d586471dbfbb0f0ad5089b82d70d4f46d46280ab8a7167ced013565b0af3ce69
+  languageName: node
+  linkType: hard
+
+"@midl-xyz/midl-js-react@npm:0.0.77, @midl-xyz/midl-js-react@npm:^0.0.77":
+  version: 0.0.77
+  resolution: "@midl-xyz/midl-js-react@npm:0.0.77"
+  dependencies:
+    "@midl-xyz/midl-js-core": ^0.0.77
+    zustand: ^5.0.1
+  peerDependencies:
+    "@tanstack/react-query": "*"
+    "@types/react": ^18.3.11
+    react: ^18.3.1
+    react-dom: ^18.3.1
+  checksum: e3fb8fd96aa2e9769ce7bfd8ba24f32b28613e1bd43fe6bdc84041f10a09a93694184d35aba8502a08ba1160ab647ccca529393d9184353fdea75b630462679e
   languageName: node
   linkType: hard
 
@@ -7029,21 +7116,6 @@ __metadata:
     zod:
       optional: true
   checksum: d7d887f29d6821e3f7a400de9620511b80ead3f85c5c87308aaec97965d3493e6687ed816e88722b4f512249bd66dee9e69231b49af0e1db8f69400a62c87cf6
-  languageName: node
-  linkType: hard
-
-"abitype@npm:1.0.0":
-  version: 1.0.0
-  resolution: "abitype@npm:1.0.0"
-  peerDependencies:
-    typescript: ">=5.0.4"
-    zod: ^3 >=3.22.0
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-    zod:
-      optional: true
-  checksum: ea2c0548c3ba58c37a6de7483d63389074da498e63d803b742bbe94eb4eaa1f51a35d000c424058b2583aef56698cf07c696eb3bc4dd0303bc20c6f0826a241a
   languageName: node
   linkType: hard
 
@@ -26215,27 +26287,6 @@ __metadata:
     typescript:
       optional: true
   checksum: 6e32423899b816e9ab976f032ff39ca85f147daaceb96e1139d82889b28cb2d476d43b933b4330e02575c11b15dffcc6c934353d83ead5dbddd22f9aaca48dcd
-  languageName: node
-  linkType: hard
-
-"viem@npm:^2.7.15":
-  version: 2.7.15
-  resolution: "viem@npm:2.7.15"
-  dependencies:
-    "@adraffy/ens-normalize": 1.10.0
-    "@noble/curves": 1.2.0
-    "@noble/hashes": 1.3.2
-    "@scure/bip32": 1.3.2
-    "@scure/bip39": 1.2.1
-    abitype: 1.0.0
-    isows: 1.0.3
-    ws: 8.13.0
-  peerDependencies:
-    typescript: ">=5.0.4"
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: d0d3a9b48fcf64298c08d57dd782fdf6f21538c6472ebc87953928d860f5fd6296a7e22f46f230d68b667df6505fa472414cc3d8e7a041ea2a7f1fd45bc013de
   languageName: node
   linkType: hard
 

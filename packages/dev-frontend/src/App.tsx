@@ -5,6 +5,9 @@ import { injected } from "wagmi/connectors";
 import { mainnet, goerli, sepolia, localhost } from "wagmi/chains";
 import { ConnectKitProvider, getDefaultConfig, getDefaultConnectors } from "connectkit";
 import { Flex, Heading, ThemeUIProvider, Paragraph, Link } from "theme-ui";
+import { WagmiMidlProvider } from "@midl-xyz/midl-js-executor-react";
+import { MidlProvider } from "@midl-xyz/midl-js-react";
+import { midlConfig } from "./config/midlConfig";
 
 import { LiquityProvider } from "./hooks/LiquityContext";
 import { WalletConnector } from "./components/WalletConnector";
@@ -152,8 +155,9 @@ const App = () => {
             })
           )}
         >
-          <QueryClientProvider client={queryClient}>
-            <ConnectKitProvider options={{ hideBalance: true }}>
+          <MidlProvider config={midlConfig}>
+            <QueryClientProvider client={queryClient}>
+              <WagmiMidlProvider />
               <WalletConnector loader={loader}>
                 <LiquityProvider
                   loader={loader}
@@ -165,8 +169,8 @@ const App = () => {
                   </TransactionProvider>
                 </LiquityProvider>
               </WalletConnector>
-            </ConnectKitProvider>
-          </QueryClientProvider>
+            </QueryClientProvider>
+          </MidlProvider>
         </WagmiProvider>
       )}
     </ThemeUIProvider>
