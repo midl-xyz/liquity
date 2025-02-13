@@ -39,6 +39,32 @@ export const isOwnershipRenounced = async (contractAddress: any) => {
   }
 };
 
+export const lqtyTokenCheck = async (contractAddress: any) => {
+  try {
+    // Set up provider and wallet
+    const provider = new ethers.JsonRpcProvider("https://evm-rpc.regtest.midl.xyz");
+
+    // Connect to contract
+    const contract = new ethers.Contract(
+      contractAddress,
+      ["function getLpRewardsEntitlement() external view returns (uint256)"],
+      provider,
+      7
+    );
+
+    // Call owner function
+    const getLpRewardsEntitlement = await contract.getLpRewardsEntitlement();
+
+    console.log(getLpRewardsEntitlement);
+
+    // Check if ownership is renounced
+    return getLpRewardsEntitlement;
+  } catch (error) {
+    console.error("Error checking ownership renouncement:", error);
+    return false;
+  }
+};
+
 export const timeValues = {
   SECONDS_IN_ONE_MINUTE: 60,
   SECONDS_IN_ONE_HOUR: 60 * 60,
