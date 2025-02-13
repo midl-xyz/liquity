@@ -2,7 +2,7 @@ import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider, createConfig, fallback, http } from "wagmi";
 import { injected } from "wagmi/connectors";
-import { mainnet, goerli, sepolia, localhost } from "wagmi/chains";
+import { mainnet, goerli, sepolia, localhost, Chain } from "wagmi/chains";
 import { ConnectKitProvider, getDefaultConfig, getDefaultConnectors } from "connectkit";
 import { Flex, Heading, ThemeUIProvider, Paragraph, Link } from "theme-ui";
 import { WagmiMidlProvider } from "@midl-xyz/midl-js-executor-react";
@@ -20,6 +20,7 @@ import { DisposableWalletProvider } from "./testUtils/DisposableWalletProvider";
 import { LiquityFrontend } from "./LiquityFrontend";
 import { AppLoader } from "./components/AppLoader";
 import { useAsyncValue } from "./hooks/AsyncValue";
+import { midlRegtest } from "@midl-xyz/midl-js-executor";
 
 const isDemoMode = import.meta.env.VITE_APP_DEMO_MODE === "true";
 
@@ -95,65 +96,21 @@ const App = () => {
     <ThemeUIProvider theme={theme}>
       {config.loaded && (
         <WagmiProvider
-          config={createConfig(
-            getDefaultConfig({
-              appName,
-              appDescription,
-              walletConnectProjectId: config.value.walletConnectProjectId,
-
-              chains:
-                isDemoMode || import.meta.env.MODE === "test"
-                  ? [localhost]
-                  : config.value.testnetOnly
-                  ? [goerli, sepolia]
-                  : [mainnet, goerli, sepolia],
-
-              connectors:
-                isDemoMode || import.meta.env.MODE === "test"
-                  ? [injected()]
-                  : getDefaultConnectors({
-                      app: {
-                        name: appName,
-                        description: appDescription
-                      },
-                      walletConnectProjectId: config.value.walletConnectProjectId
-                    }),
-
-              transports: {
-                [mainnet.id]: fallback([
-                  ...(config.value.infuraApiKey
-                    ? [http(`https://mainnet.infura.io/v3/${config.value.infuraApiKey}`)]
-                    : []),
-                  ...(config.value.alchemyApiKey
-                    ? [http(`https://eth-mainnet.g.alchemy.com/v2/${config.value.alchemyApiKey}`)]
-                    : []),
-                  http()
-                ]),
-
-                [goerli.id]: fallback([
-                  ...(config.value.infuraApiKey
-                    ? [http(`https://goerli.infura.io/v3/${config.value.infuraApiKey}`)]
-                    : []),
-                  ...(config.value.alchemyApiKey
-                    ? [http(`https://eth-goerli.g.alchemy.com/v2/${config.value.alchemyApiKey}`)]
-                    : []),
-                  http()
-                ]),
-
-                [sepolia.id]: fallback([
-                  ...(config.value.infuraApiKey
-                    ? [http(`https://sepolia.infura.io/v3/${config.value.infuraApiKey}`)]
-                    : []),
-                  ...(config.value.alchemyApiKey
-                    ? [http(`https://eth-sepolia.g.alchemy.com/v2/${config.value.alchemyApiKey}`)]
-                    : []),
-                  http()
-                ]),
-
-                [localhost.id]: http()
-              }
-            })
-          )}
+          config={createConfig({
+            chains: [
+              {
+                ...midlRegtest,
+                rpcUrls: {
+                  default: {
+                    http: [midlRegtest.rpcUrls.default.http[0]]
+                  }
+                }
+              } as Chain
+            ],
+            transports: {
+              [midlRegtest.id]: http(midlRegtest.rpcUrls.default.http[0])
+            }
+          })}
         >
           <MidlProvider config={midlConfig}>
             <QueryClientProvider client={queryClient}>

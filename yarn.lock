@@ -1935,6 +1935,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": 5.15.2
     "@fortawesome/react-fontawesome": 0.1.14
     "@liquity/chicken-bonds": "file:.yalc/@liquity/chicken-bonds"
+    "@liquity/lib-ethers": "workspace:*"
     "@metamask/eth-sig-util": 5.0.1
     "@midl-xyz/midl-js-core": 0.0.77
     "@midl-xyz/midl-js-executor": 0.0.77
@@ -2024,7 +2025,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@liquity/lib-ethers@workspace:packages/lib-ethers":
+"@liquity/lib-ethers@workspace:*, @liquity/lib-ethers@workspace:packages/lib-ethers":
   version: 0.0.0-use.local
   resolution: "@liquity/lib-ethers@workspace:packages/lib-ethers"
   dependencies:
