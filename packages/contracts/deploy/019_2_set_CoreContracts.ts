@@ -138,7 +138,33 @@ const deploy: DeployFunction = async ({ midl }) => {
     });
     console.log("HintHelpers is set");
   }
+  /** (
+  address _lqtyTokenAddress,
+  address _lusdTokenAddress,
+  address _troveManagerAddress, 
+  address _borrowerOperationsAddress,
+  address _activePoolAddress
+) 
+  external 
+  onlyOwner 
+  override 
+{
+  */
 
+  if (!(await isOwnershipRenounced(LQTYStaking?.address))) {
+    console.log("Setting up LQTYStaking..");
+
+    await midl.callContract("LQTYStaking", "setAddresses", {
+      args: [
+        LQTY?.address,
+        LUSDToken?.address,
+        TroveManager?.address,
+        BorrowerOperations?.address,
+        ActivePool?.address
+      ]
+    });
+    console.log("LQTYStaking set transaction queued");
+  }
   await midl.execute();
 };
 
@@ -157,7 +183,8 @@ deploy.dependencies = [
   "HOGToken",
   "HOGStaking",
   "CommunityIssuance",
-  "HintHelpers"
+  "HintHelpers",
+  "LQTYStaking"
 ];
 
 export default deploy;

@@ -19,7 +19,7 @@ const deploy: DeployFunction = async ({ midl }) => {
 
   await midl.execute();
 };
-deploy.tags = ["main", "updateHogTokenContracts"];
-deploy.dependencies = ["StabilityPool", "HOGToken", "CommunityIssuance", "FeesRouter"];
+deploy.tags = ["main", "updateLQTYTokenContracts"];
+deploy.dependencies = ["StabilityPool", "LQTYToken", "CommunityIssuance", "FeesRouter"];
 
 export default deploy;
