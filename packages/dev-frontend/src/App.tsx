@@ -1,26 +1,24 @@
-import React from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WagmiProvider, createConfig, fallback, http } from "wagmi";
-import { injected } from "wagmi/connectors";
-import { mainnet, goerli, sepolia, localhost, Chain } from "wagmi/chains";
-import { ConnectKitProvider, getDefaultConfig, getDefaultConnectors } from "connectkit";
-import { Flex, Heading, ThemeUIProvider, Paragraph, Link } from "theme-ui";
 import { WagmiMidlProvider } from "@midl-xyz/midl-js-executor-react";
 import { MidlProvider } from "@midl-xyz/midl-js-react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React from "react";
+import { Flex, Heading, Link, Paragraph, ThemeUIProvider } from "theme-ui";
+import { WagmiProvider, createConfig, http } from "wagmi";
+import { Chain } from "wagmi/chains";
 import { midlConfig } from "./config/midlConfig";
 
-import { LiquityProvider } from "./hooks/LiquityContext";
-import { WalletConnector } from "./components/WalletConnector";
-import { TransactionProvider } from "./components/Transaction";
 import { Icon } from "./components/Icon";
+import { TransactionProvider } from "./components/Transaction";
+import { WalletConnector } from "./components/WalletConnector";
 import { getConfig } from "./config";
+import { LiquityProvider } from "./hooks/LiquityContext";
 import theme from "./theme";
 
-import { DisposableWalletProvider } from "./testUtils/DisposableWalletProvider";
+import { midlRegtest } from "@midl-xyz/midl-js-executor";
 import { LiquityFrontend } from "./LiquityFrontend";
 import { AppLoader } from "./components/AppLoader";
 import { useAsyncValue } from "./hooks/AsyncValue";
-import { midlRegtest } from "@midl-xyz/midl-js-executor";
+import { DisposableWalletProvider } from "./testUtils/DisposableWalletProvider";
 
 const isDemoMode = import.meta.env.VITE_APP_DEMO_MODE === "true";
 
