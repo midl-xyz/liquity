@@ -14,7 +14,7 @@ const deploy: DeployFunction = async ({ midl }) => {
     await lqtyTokenCheck(LQTY?.address);
 
     await midl.callContract("Unipool", "setParams", {
-      args: [LQTY?.address, swapTokenAddress, BigInt("1333333333333333333333334")]
+      args: [LQTY?.address, swapTokenAddress, 250000000]
     });
   }
   console.log("Unipool setting is queued");
