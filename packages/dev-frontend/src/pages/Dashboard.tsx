@@ -10,10 +10,10 @@ import { BondsTable } from "../components/Bonds/BondsTable";
 export const Dashboard: React.FC = () => (
   <Container variant="columns">
     <Container variant="left">
-      <BondsTable />
+      {/* <BondsTable /> */}
       <Trove />
-      <Stability />
-      <Staking />
+      {/* <Stability /> */}
+      {/* <Staking /> */}
     </Container>
 
     <Container variant="right">

@@ -18,6 +18,7 @@ type ExpensiveTroveChangeWarningParams = {
   setGasEstimationState: (newState: GasEstimationState) => void;
 };
 
+// TODO: replace with estimateGas with stateOverride
 export const ExpensiveTroveChangeWarning: React.FC<ExpensiveTroveChangeWarningParams> = ({
   troveChange,
   maxBorrowingRate,

@@ -4,6 +4,7 @@ import { Decimal, TroveChange } from "@liquity/lib-base";
 
 import { useLiquity } from "../../hooks/LiquityContext";
 import { useTransactionFunction } from "../Transaction";
+import { useAdjustTrove } from "./hooks/useAdjustTrove";
 
 type TroveActionProps = React.PropsWithChildren<{
   transactionId: string;
@@ -11,6 +12,8 @@ type TroveActionProps = React.PropsWithChildren<{
   maxBorrowingRate: Decimal;
   borrowingFeeDecayToleranceMinutes: number;
 }>;
+
+// TODO: rewrite to MIDL.
 
 export const TroveAction: React.FC<TroveActionProps> = ({
   children,
@@ -20,21 +23,24 @@ export const TroveAction: React.FC<TroveActionProps> = ({
   borrowingFeeDecayToleranceMinutes
 }) => {
   const { liquity } = useLiquity();
+  const adjustTrove = useAdjustTrove();
 
-  const [sendTransaction] = useTransactionFunction(
-    transactionId,
-    change.type === "creation"
-      ? liquity.send.openTrove.bind(liquity.send, change.params, {
-          maxBorrowingRate,
-          borrowingFeeDecayToleranceMinutes
-        })
-      : change.type === "closure"
-      ? liquity.send.closeTrove.bind(liquity.send)
-      : liquity.send.adjustTrove.bind(liquity.send, change.params, {
-          maxBorrowingRate,
-          borrowingFeeDecayToleranceMinutes
-        })
-  );
+  // const [sendTransaction] = useTransactionFunction(
+  //   transactionId,
+  //   change.type === "creation"
+  //     ? liquity.send.openTrove.bind(liquity.send, change.params, {
+  //         maxBorrowingRate,
+  //         borrowingFeeDecayToleranceMinutes
+  //       })
+  //     : change.type === "closure"
+  //     ? liquity.send.closeTrove.bind(liquity.send)
+  //     : liquity.send.adjustTrove.bind(liquity.send, change.params, {
+  //         maxBorrowingRate,
+  //         borrowingFeeDecayToleranceMinutes
+  //       })
+  // );
 
-  return <Button onClick={sendTransaction}>{children}</Button>;
+  return <Button onClick={() => {
+    adjustTrove();
+  }}>{children}</Button>;
 };

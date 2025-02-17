@@ -11,6 +11,7 @@ import { shortenAddress } from "../utils/shortenAddress";
 import { Icon } from "./Icon";
 import { useBondView } from "./Bonds/context/BondViewContext";
 import { useBondAddresses } from "./Bonds/context/BondAddressesContext";
+import { useAccounts, useBalance } from "@midl-xyz/midl-js-react";
 
 const select = ({ accountBalance, lusdBalance, lqtyBalance }: LiquityStoreState) => ({
   accountBalance,
@@ -23,6 +24,9 @@ export const UserAccount: React.FC = () => {
   const { accountBalance, lusdBalance: realLusdBalance, lqtyBalance } = useLiquitySelector(select);
   const { bLusdBalance, lusdBalance: customLusdBalance } = useBondView();
   const { LUSD_OVERRIDE_ADDRESS } = useBondAddresses();
+  const { ordinalsAccount } = useAccounts();
+
+  const { balance } = useBalance({ address: ordinalsAccount!.address });
 
   const lusdBalance = LUSD_OVERRIDE_ADDRESS === null ? realLusdBalance : customLusdBalance;
 
@@ -44,10 +48,10 @@ export const UserAccount: React.FC = () => {
         <Icon name="wallet" size="lg" />
 
         {([
-          ["ETH", accountBalance],
+          ["BTC", Decimal.from(balance)],
           [COIN, Decimal.from(lusdBalance || 0)],
-          [GT, Decimal.from(lqtyBalance)],
-          ["bLUSD", Decimal.from(bLusdBalance || 0)]
+          [GT, Decimal.from(lqtyBalance)]
+          // ["bLUSD", Decimal.from(bLusdBalance || 0)]
         ] as const).map(([currency, balance], i) => (
           <Flex key={i} sx={{ ml: 3, flexDirection: "column" }}>
             <Heading sx={{ fontSize: 1 }}>{currency}</Heading>
