@@ -7,8 +7,8 @@ type WalletConnectorProps = React.PropsWithChildren<{
   loader?: React.ReactNode;
 }>;
 
-export const WalletConnector: React.FC<WalletConnectorProps> = ({ children }) => {
-  const { isConnected } = useAccounts();
+export const WalletConnector = ({ children }: WalletConnectorProps) => {
+  const { accounts } = useAccounts();
   const { connectors, connect } = useConnect({
     purposes: [AddressPurpose.Ordinals]
   });
@@ -17,9 +17,11 @@ export const WalletConnector: React.FC<WalletConnectorProps> = ({ children }) =>
     connect({ id: connectors[0].id });
   };
 
-  return isConnected ? (
-    children
-  ) : (
+  if (accounts) {
+    return children;
+  }
+
+  return (
     <Flex sx={{ height: "100vh", justifyContent: "center", alignItems: "center" }}>
       <Button onClick={onConnect}>
         <Icon name="plug" size="lg" />

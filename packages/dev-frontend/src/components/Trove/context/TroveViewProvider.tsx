@@ -97,7 +97,9 @@ export const TroveViewProvider: React.FC<React.PropsWithChildren> = props => {
   }, []);
 
   useEffect(() => {
-    viewRef.current = view;
+    if (viewRef.current !== view) {
+      viewRef.current = view;
+    }
   }, [view]);
 
   useEffect(() => {

@@ -29,6 +29,9 @@ import {
   validateTroveChange
 } from "./validation/validateTroveChange";
 import { LearnMoreLink } from "../Tooltip";
+import { useAccounts, useBalance } from "@midl-xyz/midl-js-react";
+import { BigNumber } from "ethers";
+import { convertBTCtoETH } from "@midl-xyz/midl-js-executor";
 
 const selector = (state: LiquityStoreState) => {
   const { fees, price, accountBalance } = state;
@@ -42,11 +45,20 @@ const selector = (state: LiquityStoreState) => {
 
 const EMPTY_TROVE = new Trove(Decimal.ZERO, Decimal.ZERO);
 const TRANSACTION_ID = "trove-creation";
-const GAS_ROOM_ETH = Decimal.from(0.1);
+const GAS_ROOM_ETH = Decimal.from(0.0000001);
 
 export const Opening: React.FC = () => {
   const { dispatchEvent } = useTroveView();
-  const { fees, price, accountBalance, validationContext } = useLiquitySelector(selector);
+  const { fees, price, validationContext } = useLiquitySelector(selector);
+  const { ordinalsAccount } = useAccounts();
+  const { balance } = useBalance({
+    address: ordinalsAccount!.address
+  });
+
+  const accountBalance = Decimal.fromBigNumberString(
+    BigNumber.from(convertBTCtoETH(balance)).toHexString()
+  );
+
   const borrowingRate = fees.borrowingRate();
   const editingState = useState<string>();
 
@@ -67,12 +79,10 @@ export const Opening: React.FC = () => {
   const collateralRatio =
     !collateral.isZero && !borrowAmount.isZero ? trove.collateralRatio(price) : undefined;
 
-  const [troveChange, description] = validateTroveChange(
-    EMPTY_TROVE,
-    trove,
-    borrowingRate,
-    validationContext
-  );
+  const [troveChange, description] = validateTroveChange(EMPTY_TROVE, trove, borrowingRate, {
+    ...validationContext,
+    accountBalance
+  });
 
   const stableTroveChange = useStableTroveChange(troveChange);
   const [gasEstimationState, setGasEstimationState] = useState<GasEstimationState>({ type: "idle" });
@@ -116,7 +126,7 @@ export const Opening: React.FC = () => {
           maxAmount={maxCollateral.toString()}
           maxedOut={collateralMaxedOut}
           editingState={editingState}
-          unit="ETH"
+          unit="BTC"
           editedAmount={collateral.toString(4)}
           setEditedAmount={(amount: string) => setCollateral(Decimal.from(amount))}
         />

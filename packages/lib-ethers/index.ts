@@ -3,8 +3,11 @@ export {
   EthersLiquityConnection,
   EthersLiquityConnectionOptionalParams,
   EthersLiquityStoreOption,
-  UnsupportedNetworkError
+  UnsupportedNetworkError,
+  deployments
 } from "./src/EthersLiquityConnection";
+
+export { getAbi } from "./src/contracts";
 
 export * from "./src/types";
 export * from "./src/ReadableEthersLiquity";

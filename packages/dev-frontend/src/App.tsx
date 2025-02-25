@@ -1,7 +1,7 @@
 import { WagmiMidlProvider } from "@midl-xyz/midl-js-executor-react";
 import { MidlProvider } from "@midl-xyz/midl-js-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import React from "react";
+import React, { useMemo } from "react";
 import { Flex, Heading, Link, Paragraph, ThemeUIProvider } from "theme-ui";
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { Chain } from "wagmi/chains";
@@ -17,7 +17,6 @@ import theme from "./theme";
 import { midlRegtest } from "@midl-xyz/midl-js-executor";
 import { LiquityFrontend } from "./LiquityFrontend";
 import { AppLoader } from "./components/AppLoader";
-import { useAsyncValue } from "./hooks/AsyncValue";
 import { DisposableWalletProvider } from "./testUtils/DisposableWalletProvider";
 
 const isDemoMode = import.meta.env.VITE_APP_DEMO_MODE === "true";
@@ -81,53 +80,48 @@ const UnsupportedNetworkFallback: React.FC = () => (
   </Flex>
 );
 
-const queryClient = new QueryClient();
-
-const appName = "Liquity";
-const appDescription = "Decentralized borrowing protocol";
+const loader = <AppLoader />;
 
 const App = () => {
-  const config = useAsyncValue(getConfig);
-  const loader = <AppLoader />;
+  const queryClient = useMemo(() => new QueryClient(), []);
+  const wagmiConfig = useMemo(() => {
+    return createConfig({
+      chains: [
+        {
+          ...midlRegtest,
+          rpcUrls: {
+            default: {
+              http: [midlRegtest.rpcUrls.default.http[0]]
+            }
+          }
+        } as Chain
+      ],
+      transports: {
+        [midlRegtest.id]: http(midlRegtest.rpcUrls.default.http[0])
+      }
+    });
+  }, []);
 
   return (
     <ThemeUIProvider theme={theme}>
-      {config.loaded && (
-        <WagmiProvider
-          config={createConfig({
-            chains: [
-              {
-                ...midlRegtest,
-                rpcUrls: {
-                  default: {
-                    http: [midlRegtest.rpcUrls.default.http[0]]
-                  }
-                }
-              } as Chain
-            ],
-            transports: {
-              [midlRegtest.id]: http(midlRegtest.rpcUrls.default.http[0])
-            }
-          })}
-        >
-          <MidlProvider config={midlConfig}>
-            <QueryClientProvider client={queryClient}>
-              <WagmiMidlProvider />
-              <WalletConnector loader={loader}>
-                <LiquityProvider
-                  loader={loader}
-                  unsupportedNetworkFallback={<UnsupportedNetworkFallback />}
-                  unsupportedMainnetFallback={<UnsupportedMainnetFallback />}
-                >
-                  <TransactionProvider>
-                    <LiquityFrontend loader={loader} />
-                  </TransactionProvider>
-                </LiquityProvider>
-              </WalletConnector>
-            </QueryClientProvider>
-          </MidlProvider>
+      <MidlProvider config={midlConfig}>
+        <WagmiProvider config={wagmiConfig}>
+          <QueryClientProvider client={queryClient}>
+            <WagmiMidlProvider />
+            <WalletConnector loader={loader}>
+              <LiquityProvider
+                loader={loader}
+                unsupportedNetworkFallback={<UnsupportedNetworkFallback />}
+                unsupportedMainnetFallback={<UnsupportedMainnetFallback />}
+              >
+                <TransactionProvider>
+                  <LiquityFrontend loader={loader} />
+                </TransactionProvider>
+              </LiquityProvider>
+            </WalletConnector>
+          </QueryClientProvider>
         </WagmiProvider>
-      )}
+      </MidlProvider>
     </ThemeUIProvider>
   );
 };

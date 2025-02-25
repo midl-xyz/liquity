@@ -215,7 +215,7 @@ const validateTroveCreation = (
     return (
       <ErrorDescription>
         The amount you're trying to deposit exceeds your balance by{" "}
-        <Amount>{depositCollateral.sub(accountBalance).prettify()} ETH</Amount>.
+        <Amount>{depositCollateral.sub(accountBalance).prettify()} BTC</Amount>.
       </ErrorDescription>
     );
   }
@@ -311,7 +311,7 @@ const validateTroveAdjustment = (
     return (
       <ErrorDescription>
         The amount you're trying to deposit exceeds your balance by{" "}
-        <Amount>{depositCollateral.sub(accountBalance).prettify()} ETH</Amount>.
+        <Amount>{depositCollateral.sub(accountBalance).prettify()} BTC</Amount>.
       </ErrorDescription>
     );
   }

@@ -5,6 +5,7 @@ import { Decimal, TroveChange } from "@liquity/lib-base";
 import { useLiquity } from "../../hooks/LiquityContext";
 import { useTransactionFunction } from "../Transaction";
 import { useAdjustTrove } from "./hooks/useAdjustTrove";
+import { useOpenTrove } from "./hooks/useOpenTrove";
 
 type TroveActionProps = React.PropsWithChildren<{
   transactionId: string;
@@ -24,6 +25,10 @@ export const TroveAction: React.FC<TroveActionProps> = ({
 }) => {
   const { liquity } = useLiquity();
   const adjustTrove = useAdjustTrove();
+  const { mutate } = useOpenTrove({
+    maxBorrowingRate,
+    borrowingFeeDecayToleranceMinutes
+  });
 
   // const [sendTransaction] = useTransactionFunction(
   //   transactionId,
@@ -40,7 +45,13 @@ export const TroveAction: React.FC<TroveActionProps> = ({
   //       })
   // );
 
-  return <Button onClick={() => {
-    adjustTrove();
-  }}>{children}</Button>;
+  return (
+    <Button
+      onClick={() => {
+        mutate();
+      }}
+    >
+      {children}
+    </Button>
+  );
 };

@@ -1,17 +1,17 @@
-import React from "react";
-import { Text, Flex, Box, Heading, Button } from "theme-ui";
-
+import React, { useRef } from "react";
+import { Box, Button, Flex, Heading, Text } from "theme-ui";
 import { Decimal, LiquityStoreState } from "@liquity/lib-base";
 import { useLiquitySelector } from "@liquity/lib-react";
-
 import { COIN, GT } from "../strings";
-import { useLiquity } from "../hooks/LiquityContext";
 import { shortenAddress } from "../utils/shortenAddress";
-
-import { Icon } from "./Icon";
-import { useBondView } from "./Bonds/context/BondViewContext";
+import { useAccounts, useBalance, useDisconnect } from "@midl-xyz/midl-js-react";
 import { useBondAddresses } from "./Bonds/context/BondAddressesContext";
-import { useAccounts, useBalance } from "@midl-xyz/midl-js-react";
+import { useBondView } from "./Bonds/context/BondViewContext";
+import { Icon } from "./Icon";
+import { formatUnits } from "viem";
+import { useOnClickOutside } from "usehooks-ts";
+import { useQueryClient } from "@tanstack/react-query";
+import { useWalletClient } from "wagmi";
 
 const select = ({ accountBalance, lusdBalance, lqtyBalance }: LiquityStoreState) => ({
   accountBalance,
@@ -20,24 +20,68 @@ const select = ({ accountBalance, lusdBalance, lqtyBalance }: LiquityStoreState)
 });
 
 export const UserAccount: React.FC = () => {
-  const { account } = useLiquity();
-  const { accountBalance, lusdBalance: realLusdBalance, lqtyBalance } = useLiquitySelector(select);
-  const { bLusdBalance, lusdBalance: customLusdBalance } = useBondView();
+  const { lusdBalance: realLusdBalance, lqtyBalance } = useLiquitySelector(select);
+  const { lusdBalance: customLusdBalance } = useBondView();
   const { LUSD_OVERRIDE_ADDRESS } = useBondAddresses();
   const { ordinalsAccount } = useAccounts();
-
-  const { balance } = useBalance({ address: ordinalsAccount!.address });
+  const { disconnectAsync } = useDisconnect();
+  const { balance } = useBalance({ address: ordinalsAccount?.address ?? "" });
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useOnClickOutside(ref, () => setMenuOpen(false));
+  const queryClient = useQueryClient();
 
   const lusdBalance = LUSD_OVERRIDE_ADDRESS === null ? realLusdBalance : customLusdBalance;
 
+  const { data } = useWalletClient();
+
+  console.log(data);
+
+  if (!ordinalsAccount) {
+    return null;
+  }
+
+  const handleDisconnect = async () => {
+    await disconnectAsync();
+    queryClient.refetchQueries();
+  };
+
   return (
     <Flex>
-      <Button variant="outline" sx={{ alignItems: "center", p: 2, mr: 3 }}>
-        <Icon name="user-circle" size="lg" />
-        <Text as="span" sx={{ ml: 2, fontSize: 1 }}>
-          {shortenAddress(account)}
-        </Text>
-      </Button>
+      <Box sx={{ position: "relative" }}>
+        <Button
+          variant="outline"
+          sx={{ alignItems: "center", p: 2, mr: 3 }}
+          onClick={() => {
+            setMenuOpen(!menuOpen);
+          }}
+        >
+          <Icon name="user-circle" size="lg" />
+          <Text as="span" sx={{ ml: 2, fontSize: 1 }}>
+            {shortenAddress(ordinalsAccount!.address)}
+          </Text>
+        </Button>
+        {menuOpen && (
+          <Box
+            ref={ref}
+            sx={{
+              position: "absolute",
+              mt: 2,
+              bg: "white",
+              p: 4,
+              boxShadow: "0 0 8px rgba(0, 0, 0, 0.125)",
+              borderRadius: 4,
+              zIndex: 1000,
+              right: 0,
+              width: "300px"
+            }}
+          >
+            <Button variant="ghost" onClick={handleDisconnect} sx={{ width: "100%" }}>
+              Disconnect
+            </Button>
+          </Box>
+        )}
+      </Box>
 
       <Box
         sx={{
@@ -48,7 +92,7 @@ export const UserAccount: React.FC = () => {
         <Icon name="wallet" size="lg" />
 
         {([
-          ["BTC", Decimal.from(balance)],
+          ["BTC", Decimal.from(formatUnits(BigInt(balance), 8))],
           [COIN, Decimal.from(lusdBalance || 0)],
           [GT, Decimal.from(lqtyBalance)]
           // ["bLUSD", Decimal.from(bLusdBalance || 0)]
