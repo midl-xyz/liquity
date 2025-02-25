@@ -201,7 +201,10 @@ export type _LiquityContractAddresses = Record<LiquityContractsKey, string>;
 
 type LiquityContractAbis = Record<LiquityContractsKey, JsonFragment[]>;
 
-const getAbi = (priceFeedIsTestnet: boolean, uniTokenIsMock: boolean): LiquityContractAbis => ({
+export const getAbi = (
+  priceFeedIsTestnet: boolean,
+  uniTokenIsMock: boolean
+): LiquityContractAbis => ({
   activePool: activePoolAbi,
   borrowerOperations: borrowerOperationsAbi,
   troveManager: troveManagerAbi,

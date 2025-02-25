@@ -43,3 +43,14 @@ __pycache__
 build/
 reports/
 tests/simulation.csv
+
+node_modules
+.env
+coverage
+coverage.json
+typechain
+typechain-types
+
+# Hardhat files
+cache
+artifacts

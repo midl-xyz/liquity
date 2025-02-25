@@ -26,6 +26,9 @@ import {
   selectForTroveChangeValidation,
   validateTroveChange
 } from "./validation/validateTroveChange";
+import { useAccounts, useBalance } from "@midl-xyz/midl-js-react";
+import { BigNumber } from "ethers";
+import { convertBTCtoETH } from "@midl-xyz/midl-js-executor";
 
 const selector = (state: LiquityStoreState) => {
   const { trove, fees, price, accountBalance } = state;
@@ -39,7 +42,7 @@ const selector = (state: LiquityStoreState) => {
 };
 
 const TRANSACTION_ID = "trove-adjustment";
-const GAS_ROOM_ETH = Decimal.from(0.1);
+const GAS_ROOM_ETH = Decimal.from(0.001);
 
 const feeFrom = (original: Trove, edited: Trove, borrowingRate: Decimal): Decimal => {
   const change = original.whatChanged(edited, borrowingRate);
@@ -83,7 +86,11 @@ const applyUnsavedNetDebtChanges = (unsavedChanges: Difference, trove: Trove) =>
 
 export const Adjusting: React.FC = () => {
   const { dispatchEvent } = useTroveView();
-  const { trove, fees, price, accountBalance, validationContext } = useLiquitySelector(selector);
+  const { trove, fees, price, validationContext } = useLiquitySelector(selector);
+  const { ordinalsAccount } = useAccounts();
+  const { balance } = useBalance({
+    address: ordinalsAccount!.address
+  });
   const editingState = useState<string>();
   const previousTrove = useRef<Trove>(trove);
   const [collateral, setCollateral] = useState<Decimal>(trove.collateral);
@@ -132,9 +139,11 @@ export const Adjusting: React.FC = () => {
   const maxBorrowingRate = borrowingRate.add(0.005);
   const updatedTrove = isDirty ? new Trove(collateral, totalDebt) : trove;
   const feePct = new Percent(borrowingRate);
-  const availableEth = accountBalance.gt(GAS_ROOM_ETH)
-    ? accountBalance.sub(GAS_ROOM_ETH)
-    : Decimal.ZERO;
+
+  const availableEth = Decimal.fromBigNumberString(
+    BigNumber.from(convertBTCtoETH(balance)).toHexString()
+  );
+
   const maxCollateral = trove.collateral.add(availableEth);
   const collateralMaxedOut = collateral.eq(maxCollateral);
   const collateralRatio =
@@ -145,7 +154,10 @@ export const Adjusting: React.FC = () => {
     trove,
     updatedTrove,
     borrowingRate,
-    validationContext
+    {
+      ...validationContext,
+      accountBalance: availableEth
+    }
   );
 
   const stableTroveChange = useStableTroveChange(troveChange);
@@ -178,7 +190,7 @@ export const Adjusting: React.FC = () => {
           maxAmount={maxCollateral.toString()}
           maxedOut={collateralMaxedOut}
           editingState={editingState}
-          unit="ETH"
+          unit="BTC"
           editedAmount={collateral.toString(4)}
           setEditedAmount={(amount: string) => setCollateral(Decimal.from(amount))}
         />

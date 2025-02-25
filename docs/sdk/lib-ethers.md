@@ -33,6 +33,13 @@
 |  [EthersTransactionOverrides](./lib-ethers.etherstransactionoverrides.md) | Optional parameters taken by [EthersLiquity](./lib-ethers.ethersliquity.md) transaction functions. |
 |  [ReadableEthersLiquityWithStore](./lib-ethers.readableethersliquitywithstore.md) | Variant of [ReadableEthersLiquity](./lib-ethers.readableethersliquity.md) that exposes a [LiquityStore](./lib-base.liquitystore.md)<!-- -->. |
 
+## Variables
+
+|  Variable | Description |
+|  --- | --- |
+|  [deployments](./lib-ethers.deployments.md) |  |
+|  [getAbi](./lib-ethers.getabi.md) |  |
+
 ## Type Aliases
 
 |  Type Alias | Description |

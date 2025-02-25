@@ -1,14 +1,12 @@
 import React, { useEffect } from "react";
 
 import { Decimal, TroveChange } from "@liquity/lib-base";
-import { PopulatedEthersLiquityTransaction } from "@liquity/lib-ethers";
 
+import { useWalletClient } from "wagmi";
 import { useLiquity } from "../../hooks/LiquityContext";
 import { WarningBubble } from "../WarningBubble";
 
-export type GasEstimationState =
-  | { type: "idle" | "inProgress" }
-  | { type: "complete"; populatedTx: PopulatedEthersLiquityTransaction };
+export type GasEstimationState = { type: "idle" | "inProgress" } | { type: "complete"; gas: bigint };
 
 type ExpensiveTroveChangeWarningParams = {
   troveChange?: Exclude<TroveChange<Decimal>, { type: "invalidCreation" }>;
@@ -26,6 +24,7 @@ export const ExpensiveTroveChangeWarning: React.FC<ExpensiveTroveChangeWarningPa
   setGasEstimationState
 }) => {
   const { liquity } = useLiquity();
+  const { data: walletClient } = useWalletClient();
 
   useEffect(() => {
     if (troveChange && troveChange.type !== "closure") {
@@ -34,22 +33,10 @@ export const ExpensiveTroveChangeWarning: React.FC<ExpensiveTroveChangeWarningPa
       let cancelled = false;
 
       const timeoutId = setTimeout(async () => {
-        const populatedTx = await (troveChange.type === "creation"
-          ? liquity.populate.openTrove(troveChange.params, {
-              maxBorrowingRate,
-              borrowingFeeDecayToleranceMinutes
-            })
-          : liquity.populate.adjustTrove(troveChange.params, {
-              maxBorrowingRate,
-              borrowingFeeDecayToleranceMinutes
-            }));
-
         if (!cancelled) {
-          setGasEstimationState({ type: "complete", populatedTx });
-          console.log(
-            "Estimated TX cost: " +
-              Decimal.from(`${populatedTx.rawPopulatedTransaction.gasLimit}`).prettify(0)
-          );
+          // TODO: replace with estimateGas with stateOverride
+
+          setGasEstimationState({ type: "complete", gas: 10000n });
         }
       }, 333);
 
@@ -66,8 +53,8 @@ export const ExpensiveTroveChangeWarning: React.FC<ExpensiveTroveChangeWarningPa
   if (
     troveChange &&
     gasEstimationState.type === "complete" &&
-    gasEstimationState.populatedTx.gasHeadroom !== undefined &&
-    gasEstimationState.populatedTx.gasHeadroom >= 200000
+    gasEstimationState.gas !== undefined &&
+    gasEstimationState.gas >= 200000n
   ) {
     return troveChange.type === "creation" ? (
       <WarningBubble>

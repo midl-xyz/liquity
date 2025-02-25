@@ -14,6 +14,8 @@ import { Tooltip } from "./Tooltip";
 import type { TooltipProps } from "./Tooltip";
 
 import { TransactionStatus } from "./TransactionStatus";
+import { useWalletClient } from "wagmi";
+import { waitForTransactionReceipt } from "viem/actions";
 
 type TransactionIdle = {
   type: "idle";
@@ -41,6 +43,12 @@ type TransactionWaitingForConfirmations = {
   tx: SentTransaction;
 };
 
+type TransactionWaitingForConfirmationsMidl = {
+  type: "waitingForConfirmationMidl";
+  id: string;
+  tx: string;
+};
+
 type TransactionConfirmed = {
   type: "confirmed";
   id: string;
@@ -58,7 +66,8 @@ export type TransactionState =
   | TransactionCancelled
   | TransactionWaitingForConfirmations
   | TransactionConfirmed
-  | TransactionConfirmedOneShot;
+  | TransactionConfirmedOneShot
+  | TransactionWaitingForConfirmationsMidl;
 
 const TransactionContext = React.createContext<
   [TransactionState, (state: TransactionState) => void] | undefined
@@ -71,7 +80,7 @@ export const TransactionProvider: React.FC<React.PropsWithChildren> = ({ childre
   );
 };
 
-const useTransactionState = () => {
+export const useTransactionState = () => {
   const transactionState = useContext(TransactionContext);
 
   if (!transactionState) {
@@ -228,9 +237,13 @@ const tryToGetRevertReason = async (provider: Provider, tx: TransactionReceipt) 
 export const TransactionMonitor: React.FC = () => {
   const { provider } = useLiquity();
   const [transactionState, setTransactionState] = useTransactionState();
+  const { data: walletClient } = useWalletClient();
 
   const id = transactionState.type !== "idle" ? transactionState.id : undefined;
   const tx = transactionState.type === "waitingForConfirmation" ? transactionState.tx : undefined;
+
+  const txId =
+    transactionState.type === "waitingForConfirmationMidl" ? transactionState.tx : undefined;
 
   useEffect(() => {
     if (id && tx) {
@@ -312,7 +325,78 @@ export const TransactionMonitor: React.FC = () => {
         }
       };
     }
-  }, [provider, id, tx, setTransactionState]);
+
+    if (id && txId) {
+      let cancelled = false;
+      let finished = false;
+
+      const waitForConfirmation = async () => {
+        try {
+          const receipt = await waitForTransactionReceipt(walletClient!, {
+            hash: txId as `0x${string}`
+          });
+
+          if (cancelled) {
+            return;
+          }
+
+          finished = true;
+
+          if (receipt.status === "success") {
+            console.log(`${receipt}`);
+
+            setTransactionState({
+              type: "confirmedOneShot",
+              id
+            });
+          } else {
+            if (cancelled) {
+              return;
+            }
+
+            console.error(`Tx ${txId} failed`);
+
+            setTransactionState({
+              type: "failed",
+              id,
+              error: new Error("Failed")
+            });
+          }
+        } catch (rawError) {
+          if (cancelled) {
+            return;
+          }
+
+          finished = true;
+
+          if (rawError instanceof EthersTransactionCancelledError) {
+            console.log(`Cancelled tx ${txId}`);
+            setTransactionState({ type: "cancelled", id });
+          } else {
+            console.error(`Failed to get receipt for tx ${txId}`);
+            console.error(rawError);
+
+            setTransactionState({
+              type: "failed",
+              id,
+              error: new Error("Failed")
+            });
+          }
+        }
+      };
+
+      console.log(`Start monitoring tx ${txId}`);
+      waitForConfirmation();
+
+      return () => {
+        if (!finished) {
+          setTransactionState({ type: "idle" });
+          console.log(`Cancel monitoring tx ${txId}`);
+          cancelled = true;
+        }
+      };
+    }
+  }, [provider, id, tx, setTransactionState, txId, walletClient]);
 
   useEffect(() => {
     if (transactionState.type === "confirmedOneShot" && id) {

@@ -10,6 +10,7 @@ import rinkeby from "../deployments/rinkeby.json";
 import ropsten from "../deployments/ropsten.json";
 import mainnet from "../deployments/mainnet.json";
 import kiln from "../deployments/kiln.json";
+import midlRegtest from "../deployments/midlRegtest.json";
 import sepolia from "../deployments/sepolia.json";
 
 import { numberify, panic } from "./_utils";
@@ -26,7 +27,7 @@ import { _connectToMulticall, _Multicall } from "./_Multicall";
 
 const dev = devOrNull as _LiquityDeploymentJSON | null;
 
-const deployments: {
+export const deployments: {
   [chainId: number]: _LiquityDeploymentJSON | undefined;
 } = {
   [mainnet.chainId]: mainnet,
@@ -36,6 +37,7 @@ const deployments: {
   [kovan.chainId]: kovan,
   [kiln.chainId]: kiln,
   [sepolia.chainId]: sepolia,
+  [777]: midlRegtest,
 
   ...(dev !== null ? { [dev.chainId]: dev } : {})
 };

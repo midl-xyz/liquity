@@ -59,20 +59,7 @@
   },
   {
     "inputs": [],
-    "name": "ETHUSD_TELLOR_REQ_ID",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "MAX_PRICE_DEVIATION_FROM_PREVIOUS_ROUND",
+    "name": "MAX_PRICE_DEVIATION_PERCENTAGE_FROM_PREVIOUS_ROUND",
     "outputs": [
       {
         "internalType": "uint256",
@@ -124,7 +111,7 @@
   },
   {
     "inputs": [],
-    "name": "TELLOR_DIGITS",
+    "name": "TIMEOUT",
     "outputs": [
       {
         "internalType": "uint256",
@@ -137,12 +124,12 @@
   },
   {
     "inputs": [],
-    "name": "TIMEOUT",
+    "name": "backupOracle",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "contract IBTCOracle",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -163,12 +150,12 @@
   },
   {
     "inputs": [],
-    "name": "isOwner",
+    "name": "lastGoodPrice",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -176,12 +163,12 @@
   },
   {
     "inputs": [],
-    "name": "lastGoodPrice",
+    "name": "mainOracle",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "contract IBTCOracle",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -202,27 +189,21 @@
   },
   {
     "inputs": [],
-    "name": "priceAggregator",
-    "outputs": [
-      {
-        "internalType": "contract AggregatorV3Interface",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
       {
         "internalType": "address",
-        "name": "_priceAggregatorAddress",
+        "name": "_mainOracleAddress",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "_tellorCallerAddress",
+        "name": "_backupOracleAddress",
         "type": "address"
       }
     ],
@@ -245,16 +226,16 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "tellorCaller",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "contract ITellorCaller",
-        "name": "",
+        "internalType": "address",
+        "name": "newOwner",
         "type": "address"
       }
     ],
-    "stateMutability": "view",
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

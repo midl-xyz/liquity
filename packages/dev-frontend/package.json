@@ -12,7 +12,12 @@
     "@fortawesome/free-solid-svg-icons": "5.15.2",
     "@fortawesome/react-fontawesome": "0.1.14",
     "@liquity/chicken-bonds": "file:.yalc/@liquity/chicken-bonds",
+    "@liquity/lib-ethers": "workspace:*",
     "@metamask/eth-sig-util": "5.0.1",
+    "@midl-xyz/midl-js-core": "0.0.80",
+    "@midl-xyz/midl-js-executor": "0.0.80",
+    "@midl-xyz/midl-js-executor-react": "0.0.80",
+    "@midl-xyz/midl-js-react": "0.0.80",
     "@tanstack/react-query": "^5.24.1",
     "@tippyjs/react": "^4.2.6",
     "connectkit": "^1.7.3",
@@ -26,8 +31,9 @@
     "react-router-dom": "^5.3.4",
     "recharts": "^2.12.1",
     "theme-ui": "^0.16.2",
-    "viem": "^2.7.15",
-    "wagmi": "^2.5.7"
+    "usehooks-ts": "^3.1.1",
+    "viem": "npm:@midl-xyz/midl-viem@2.21.36",
+    "wagmi": "^2.14.12"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.3.4",
@@ -78,5 +84,8 @@
     "firefox >= 68",
     "opera >= 54",
     "safari >= 14"
-  ]
+  ],
+  "overrides": {
+    "viem": "npm:@midl-xyz/midl-viem"
+  }
 }

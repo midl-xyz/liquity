@@ -1,22 +1,23 @@
-import React from "react";
+import { WagmiMidlProvider } from "@midl-xyz/midl-js-executor-react";
+import { MidlProvider } from "@midl-xyz/midl-js-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WagmiProvider, createConfig, fallback, http } from "wagmi";
-import { injected } from "wagmi/connectors";
-import { mainnet, goerli, sepolia, localhost } from "wagmi/chains";
-import { ConnectKitProvider, getDefaultConfig, getDefaultConnectors } from "connectkit";
-import { Flex, Heading, ThemeUIProvider, Paragraph, Link } from "theme-ui";
+import React, { useMemo } from "react";
+import { Flex, Heading, Link, Paragraph, ThemeUIProvider } from "theme-ui";
+import { WagmiProvider, createConfig, http } from "wagmi";
+import { Chain } from "wagmi/chains";
+import { midlConfig } from "./config/midlConfig";
 
-import { LiquityProvider } from "./hooks/LiquityContext";
-import { WalletConnector } from "./components/WalletConnector";
-import { TransactionProvider } from "./components/Transaction";
 import { Icon } from "./components/Icon";
+import { TransactionProvider } from "./components/Transaction";
+import { WalletConnector } from "./components/WalletConnector";
 import { getConfig } from "./config";
+import { LiquityProvider } from "./hooks/LiquityContext";
 import theme from "./theme";
 
-import { DisposableWalletProvider } from "./testUtils/DisposableWalletProvider";
+import { midlRegtest } from "@midl-xyz/midl-js-executor";
 import { LiquityFrontend } from "./LiquityFrontend";
 import { AppLoader } from "./components/AppLoader";
-import { useAsyncValue } from "./hooks/AsyncValue";
+import { DisposableWalletProvider } from "./testUtils/DisposableWalletProvider";
 
 const isDemoMode = import.meta.env.VITE_APP_DEMO_MODE === "true";
 
@@ -79,96 +80,48 @@ const UnsupportedNetworkFallback: React.FC = () => (
   </Flex>
 );
 
-const queryClient = new QueryClient();
-
-const appName = "Liquity";
-const appDescription = "Decentralized borrowing protocol";
+const loader = <AppLoader />;
 
 const App = () => {
-  const config = useAsyncValue(getConfig);
-  const loader = <AppLoader />;
+  const queryClient = useMemo(() => new QueryClient(), []);
+  const wagmiConfig = useMemo(() => {
+    return createConfig({
+      chains: [
+        {
+          ...midlRegtest,
+          rpcUrls: {
+            default: {
+              http: [midlRegtest.rpcUrls.default.http[0]]
+            }
+          }
+        } as Chain
+      ],
+      transports: {
+        [midlRegtest.id]: http(midlRegtest.rpcUrls.default.http[0])
+      }
+    });
+  }, []);
 
   return (
     <ThemeUIProvider theme={theme}>
-      {config.loaded && (
-        <WagmiProvider
-          config={createConfig(
-            getDefaultConfig({
-              appName,
-              appDescription,
-              walletConnectProjectId: config.value.walletConnectProjectId,
-
-              chains:
-                isDemoMode || import.meta.env.MODE === "test"
-                  ? [localhost]
-                  : config.value.testnetOnly
-                  ? [goerli, sepolia]
-                  : [mainnet, goerli, sepolia],
-
-              connectors:
-                isDemoMode || import.meta.env.MODE === "test"
-                  ? [injected()]
-                  : getDefaultConnectors({
-                      app: {
-                        name: appName,
-                        description: appDescription
-                      },
-                      walletConnectProjectId: config.value.walletConnectProjectId
-                    }),
-
-              transports: {
-                [mainnet.id]: fallback([
-                  ...(config.value.infuraApiKey
-                    ? [http(`https://mainnet.infura.io/v3/${config.value.infuraApiKey}`)]
-                    : []),
-                  ...(config.value.alchemyApiKey
-                    ? [http(`https://eth-mainnet.g.alchemy.com/v2/${config.value.alchemyApiKey}`)]
-                    : []),
-                  http()
-                ]),
-
-                [goerli.id]: fallback([
-                  ...(config.value.infuraApiKey
-                    ? [http(`https://goerli.infura.io/v3/${config.value.infuraApiKey}`)]
-                    : []),
-                  ...(config.value.alchemyApiKey
-                    ? [http(`https://eth-goerli.g.alchemy.com/v2/${config.value.alchemyApiKey}`)]
-                    : []),
-                  http()
-                ]),
-
-                [sepolia.id]: fallback([
-                  ...(config.value.infuraApiKey
-                    ? [http(`https://sepolia.infura.io/v3/${config.value.infuraApiKey}`)]
-                    : []),
-                  ...(config.value.alchemyApiKey
-                    ? [http(`https://eth-sepolia.g.alchemy.com/v2/${config.value.alchemyApiKey}`)]
-                    : []),
-                  http()
-                ]),
-
-                [localhost.id]: http()
-              }
-            })
-          )}
-        >
+      <MidlProvider config={midlConfig}>
+        <WagmiProvider config={wagmiConfig}>
           <QueryClientProvider client={queryClient}>
-            <ConnectKitProvider options={{ hideBalance: true }}>
-              <WalletConnector loader={loader}>
-                <LiquityProvider
-                  loader={loader}
-                  unsupportedNetworkFallback={<UnsupportedNetworkFallback />}
-                  unsupportedMainnetFallback={<UnsupportedMainnetFallback />}
-                >
-                  <TransactionProvider>
-                    <LiquityFrontend loader={loader} />
-                  </TransactionProvider>
-                </LiquityProvider>
-              </WalletConnector>
-            </ConnectKitProvider>
+            <WagmiMidlProvider />
+            <WalletConnector loader={loader}>
+              <LiquityProvider
+                loader={loader}
+                unsupportedNetworkFallback={<UnsupportedNetworkFallback />}
+                unsupportedMainnetFallback={<UnsupportedMainnetFallback />}
+              >
+                <TransactionProvider>
+                  <LiquityFrontend loader={loader} />
+                </TransactionProvider>
+              </LiquityProvider>
+            </WalletConnector>
           </QueryClientProvider>
         </WagmiProvider>
-      )}
+      </MidlProvider>
     </ThemeUIProvider>
   );
 };
