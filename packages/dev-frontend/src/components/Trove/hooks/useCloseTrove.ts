@@ -1,28 +1,17 @@
-import { Decimal, TroveCreationParams } from "@liquity/lib-base";
 import {
   useAddTxIntention,
   useClearTxIntentions,
   useEVMAddress,
   useFinalizeTxIntentions
 } from "@midl-xyz/midl-js-executor-react";
-import { useBroadcastTransaction } from "@midl-xyz/midl-js-react";
+import { useBroadcastTransaction, useMidlContext } from "@midl-xyz/midl-js-react";
 import { useMutation } from "@tanstack/react-query";
 import { Address } from "viem";
 import { useWalletClient } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
 
-type OpenTroveParams = {
-  maxBorrowingRate: Decimal;
-  borrowingFeeDecayToleranceMinutes: number;
-  transactionId: string;
-};
-
-export const useOpenTrove = ({
-  maxBorrowingRate,
-  borrowingFeeDecayToleranceMinutes,
-  transactionId
-}: OpenTroveParams) => {
+export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
   const { addTxIntentionAsync } = useAddTxIntention();
   const clearTxIntentions = useClearTxIntentions();
   const { liquity } = useLiquity();
@@ -31,6 +20,7 @@ export const useOpenTrove = ({
   const { data: walletClient } = useWalletClient();
   const { broadcastTransactionAsync } = useBroadcastTransaction();
   const [, setTransactionState] = useTransactionState();
+  const { store } = useMidlContext();
 
   return useMutation({
     onError: error => {
@@ -40,38 +30,41 @@ export const useOpenTrove = ({
         error: new Error("Failed to send transaction (try again)")
       });
     },
-    mutationFn: async (params: TroveCreationParams<Decimal>) => {
+    mutationFn: async () => {
       setTransactionState({ type: "waitingForApproval", id: transactionId });
 
-      const { rawPopulatedTransaction } = await liquity.populate.openTrove(
-        params,
-        {
-          maxBorrowingRate,
-          borrowingFeeDecayToleranceMinutes
-        },
-        { gasLimit: 100000000n }
-      );
+      const { rawPopulatedTransaction } = await liquity.populate.closeTrove({
+        gasLimit: 100000000n
+      });
 
       clearTxIntentions();
 
-      const intention = await addTxIntentionAsync({
+      await addTxIntentionAsync({
         intention: {
-          hasDeposit: true,
+          hasWithdraw: true,
           evmTransaction: {
             to: rawPopulatedTransaction.to as Address,
-            data: rawPopulatedTransaction.data as `0x${string}`,
-            value: rawPopulatedTransaction.value?.toBigInt()
+            data: rawPopulatedTransaction.data as `0x${string}`
           }
         }
       });
 
       const btcTx = await finalizeBTCTransactionAsync({
         feeRateMultiplier: 4,
+        shouldComplete: true,
         stateOverride: [{ balance: 100000000000000000000000000n, address: evmAddress }]
       });
 
-      const signed = await signIntentionAsync({ intention, txId: btcTx.tx.id });
-      const txId = await walletClient?.sendRawTransaction({ serializedTransaction: signed });
+      let txId;
+
+      for (const it of store.getState().intentions ?? []) {
+        const signed = await signIntentionAsync({ intention: it, txId: btcTx.tx.id });
+        const hash = await walletClient?.sendRawTransaction({ serializedTransaction: signed });
+
+        if (!txId) {
+          txId = hash;
+        }
+      }
 
       setTransactionState({
         type: "waitingForConfirmationMidl",

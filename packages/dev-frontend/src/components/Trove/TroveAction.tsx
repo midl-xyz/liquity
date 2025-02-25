@@ -3,9 +3,10 @@ import { Button } from "theme-ui";
 import { Decimal, TroveChange } from "@liquity/lib-base";
 
 import { useLiquity } from "../../hooks/LiquityContext";
-import { useTransactionFunction } from "../Transaction";
+import { useTransactionState } from "../Transaction";
 import { useAdjustTrove } from "./hooks/useAdjustTrove";
 import { useOpenTrove } from "./hooks/useOpenTrove";
+import { useCloseTrove } from "./hooks/useCloseTrove";
 
 type TroveActionProps = React.PropsWithChildren<{
   transactionId: string;
@@ -23,32 +24,35 @@ export const TroveAction: React.FC<TroveActionProps> = ({
   maxBorrowingRate,
   borrowingFeeDecayToleranceMinutes
 }) => {
-  const { liquity } = useLiquity();
-  const adjustTrove = useAdjustTrove();
-  const { mutate } = useOpenTrove({
+  const adjustTrove = useAdjustTrove({
     maxBorrowingRate,
-    borrowingFeeDecayToleranceMinutes
+    borrowingFeeDecayToleranceMinutes,
+    transactionId
+  });
+  const openTrove = useOpenTrove({
+    maxBorrowingRate,
+    borrowingFeeDecayToleranceMinutes,
+    transactionId
   });
 
-  // const [sendTransaction] = useTransactionFunction(
-  //   transactionId,
-  //   change.type === "creation"
-  //     ? liquity.send.openTrove.bind(liquity.send, change.params, {
-  //         maxBorrowingRate,
-  //         borrowingFeeDecayToleranceMinutes
-  //       })
-  //     : change.type === "closure"
-  //     ? liquity.send.closeTrove.bind(liquity.send)
-  //     : liquity.send.adjustTrove.bind(liquity.send, change.params, {
-  //         maxBorrowingRate,
-  //         borrowingFeeDecayToleranceMinutes
-  //       })
-  // );
+  const closeTrove = useCloseTrove({
+    transactionId
+  });
 
   return (
     <Button
       onClick={() => {
-        mutate();
+        if (change.type === "creation") {
+          openTrove.mutate(change.params);
+        }
+
+        if (change.type === "adjustment") {
+          adjustTrove.mutate(change.params);
+        }
+
+        if (change.type === "closure") {
+          closeTrove.mutate();
+        }
       }}
     >
       {children}

@@ -1,17 +1,16 @@
-import React, { useRef } from "react";
-import { Box, Button, Flex, Heading, Text } from "theme-ui";
 import { Decimal, LiquityStoreState } from "@liquity/lib-base";
 import { useLiquitySelector } from "@liquity/lib-react";
+import { useAccounts, useBalance, useDisconnect } from "@midl-xyz/midl-js-react";
+import { useQueryClient } from "@tanstack/react-query";
+import React, { useRef } from "react";
+import { Box, Button, Flex, Heading, Text } from "theme-ui";
+import { useOnClickOutside } from "usehooks-ts";
+import { formatUnits } from "viem";
 import { COIN, GT } from "../strings";
 import { shortenAddress } from "../utils/shortenAddress";
-import { useAccounts, useBalance, useDisconnect } from "@midl-xyz/midl-js-react";
 import { useBondAddresses } from "./Bonds/context/BondAddressesContext";
 import { useBondView } from "./Bonds/context/BondViewContext";
 import { Icon } from "./Icon";
-import { formatUnits } from "viem";
-import { useOnClickOutside } from "usehooks-ts";
-import { useQueryClient } from "@tanstack/react-query";
-import { useWalletClient } from "wagmi";
 
 const select = ({ accountBalance, lusdBalance, lqtyBalance }: LiquityStoreState) => ({
   accountBalance,
@@ -32,14 +31,6 @@ export const UserAccount: React.FC = () => {
   const queryClient = useQueryClient();
 
   const lusdBalance = LUSD_OVERRIDE_ADDRESS === null ? realLusdBalance : customLusdBalance;
-
-  const { data } = useWalletClient();
-
-  console.log(data);
-
-  if (!ordinalsAccount) {
-    return null;
-  }
 
   const handleDisconnect = async () => {
     await disconnectAsync();
