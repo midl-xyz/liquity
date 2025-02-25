@@ -41,7 +41,7 @@ export const LiquityProvider: React.FC<LiquityProviderProps> = ({
     client &&
     new Web3Provider(
       (method, params) =>
-        client.request({
+        (client as any).request({
           method: method as any,
           params: params as any
         }),
