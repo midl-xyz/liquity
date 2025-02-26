@@ -1,9 +1,13 @@
 import { useAccounts, useConnect } from "@midl-xyz/midl-js-react";
-import { Box, Button, Flex } from "theme-ui";
+import { Box, Button, Container, Flex } from "theme-ui";
 import { Icon } from "./Icon";
 import { AddressPurpose } from "@midl-xyz/midl-js-core";
 import { useState } from "react";
 import useKeypress from "../hooks/useKeyPress";
+import { Header } from "./Header";
+import { LiquityLogo } from "./LiquityLogo";
+import { Nav } from "./Nav";
+import { SideNav } from "./SideNav";
 
 type WalletConnectorProps = React.PropsWithChildren<{
   loader?: React.ReactNode;
@@ -11,7 +15,7 @@ type WalletConnectorProps = React.PropsWithChildren<{
 
 export const WalletConnector = ({ children }: WalletConnectorProps) => {
   const { accounts } = useAccounts();
-  const { connectors, connect } = useConnect({
+  const { connectors, connectAsync } = useConnect({
     purposes: [AddressPurpose.Ordinals]
   });
 
@@ -27,15 +31,37 @@ export const WalletConnector = ({ children }: WalletConnectorProps) => {
 
   return (
     <>
-      <Flex sx={{ height: "100vh", justifyContent: "center", alignItems: "center" }}>
-        <Button
-          onClick={() => {
-            setModalOpen(true);
-          }}
-        >
-          <Icon name="plug" size="lg" />
-          <Box sx={{ ml: 2 }}>Connect wallet</Box>
-        </Button>
+      <Flex sx={{ height: "100vh", flexDirection: "column" }}>
+        <Container variant="header" sx={{ height: 62 }}>
+          <Flex sx={{ alignItems: "center", flex: 1 }}>
+            <LiquityLogo height={32} />
+
+            <Box
+              sx={{
+                mx: [2, 3],
+                width: "0px",
+                height: "100%",
+                borderLeft: ["none", "1px solid lightgrey"]
+              }}
+            />
+
+            <>
+              <SideNav hideLinks />
+              <Nav hideLinks />
+            </>
+          </Flex>
+        </Container>
+
+        <Box sx={{ flex: 1, justifyContent: "center", alignItems: "center", display: "flex" }}>
+          <Button
+            onClick={() => {
+              setModalOpen(true);
+            }}
+          >
+            <Icon name="plug" size="lg" />
+            <Box sx={{ ml: 2 }}>Connect wallet</Box>
+          </Button>
+        </Box>
       </Flex>
 
       {modalOpen && (
@@ -53,6 +79,11 @@ export const WalletConnector = ({ children }: WalletConnectorProps) => {
             alignItems: "center"
           }}
         >
+          <div
+            onClick={() => setModalOpen(false)}
+            style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%" }}
+          />
+
           <Box
             sx={{
               bg: "white",
@@ -70,8 +101,9 @@ export const WalletConnector = ({ children }: WalletConnectorProps) => {
             {connectors.map(connector => (
               <Button
                 key={connector.id}
-                onClick={() => {
-                  connect({ id: connector.id });
+                onClick={async () => {
+                  await connectAsync({ id: connector.id });
+                  setModalOpen(false);
                 }}
                 sx={{ mb: 2, width: "100%" }}
               >

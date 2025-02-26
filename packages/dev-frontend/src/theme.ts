@@ -13,7 +13,7 @@ const baseColors = {
 const colors = {
   primary: "#1a1a1a",
   secondary: "#2E2E2E",
-  accent: baseColors.cyan,
+  accent: "#DC7520",
 
   success: baseColors.green,
   warning: baseColors.yellow,

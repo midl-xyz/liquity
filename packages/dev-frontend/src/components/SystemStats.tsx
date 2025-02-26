@@ -102,12 +102,12 @@ export const SystemStats: React.FC<SystemStatsProps> = ({ variant = "info", show
       </Statistic>
       <Statistic lexicon={l.TROVES}>{Decimal.from(numberOfTroves).prettify(0)}</Statistic>
       <Statistic lexicon={l.LUSD_SUPPLY}>{total.debt.shorten()}</Statistic>
-      {lusdInStabilityPoolPct && (
+      {/* {lusdInStabilityPoolPct && (
         <Statistic lexicon={l.STABILITY_POOL_LUSD}>
           {lusdInStabilityPool.shorten()}
           <Text sx={{ fontSize: 1 }}>&nbsp;({lusdInStabilityPoolPct.toString(1)})</Text>
         </Statistic>
-      )}
+      )} */}
       <Statistic lexicon={l.STAKED_LQTY}>{totalStakedLQTY.shorten()}</Statistic>
       <Statistic lexicon={l.TCR}>{totalCollateralRatioPct.prettify()}</Statistic>
       <Statistic lexicon={l.RECOVERY_MODE}>
@@ -119,21 +119,6 @@ export const SystemStats: React.FC<SystemStatsProps> = ({ variant = "info", show
         Frontend
       </Heading>
       {kickbackRatePct && <Statistic lexicon={l.KICKBACK_RATE}>{kickbackRatePct}%</Statistic>}
-
-      <Box sx={{ mt: 3, opacity: 0.66 }}>
-        <Box sx={{ fontSize: 0 }}>
-          Contracts version: <GitHubCommit>{contractsVersion}</GitHubCommit>
-        </Box>
-        <Box sx={{ fontSize: 0 }}>Deployed: {deploymentDate.toLocaleString()}</Box>
-        <Box sx={{ fontSize: 0 }}>
-          Frontend version:{" "}
-          {import.meta.env.DEV ? (
-            "development"
-          ) : (
-            <GitHubCommit>{import.meta.env.VITE_APP_VERSION}</GitHubCommit>
-          )}
-        </Box>
-      </Box>
     </Card>
   );
 };

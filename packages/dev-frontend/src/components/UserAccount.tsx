@@ -19,7 +19,7 @@ const select = ({ accountBalance, lusdBalance, lqtyBalance }: LiquityStoreState)
 });
 
 export const UserAccount: React.FC = () => {
-  const { lusdBalance: realLusdBalance, lqtyBalance } = useLiquitySelector(select);
+  const { lusdBalance: realLusdBalance } = useLiquitySelector(select);
   const { lusdBalance: customLusdBalance } = useBondView();
   const { LUSD_OVERRIDE_ADDRESS } = useBondAddresses();
   const { ordinalsAccount } = useAccounts();
@@ -36,6 +36,10 @@ export const UserAccount: React.FC = () => {
     await disconnectAsync();
     queryClient.refetchQueries();
   };
+
+  if (!ordinalsAccount) {
+    return null;
+  }
 
   return (
     <Flex>
@@ -84,7 +88,7 @@ export const UserAccount: React.FC = () => {
 
         {([
           ["BTC", Decimal.from(formatUnits(BigInt(balance), 8))],
-          [COIN, Decimal.from(lusdBalance || 0)],
+          [COIN, Decimal.from(lusdBalance || 0)]
           // [GT, Decimal.from(lqtyBalance)]
           // ["bLUSD", Decimal.from(bLusdBalance || 0)]
         ] as const).map(([currency, balance], i) => (

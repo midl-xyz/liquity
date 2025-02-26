@@ -14,7 +14,7 @@ export const InfoBubble: React.FC<React.PropsWithChildren> = ({ children }) => (
 
       border: 1,
       borderRadius: "8px",
-      borderColor: "accent",
+      borderColor: "#2eb6ea",
       boxShadow: 2,
       bg: "rgba(46, 182, 234, 0.05)"
     }}

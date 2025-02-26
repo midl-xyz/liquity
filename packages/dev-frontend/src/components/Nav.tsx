@@ -1,4 +1,4 @@
-import { Flex, Box, Badge, Text } from "theme-ui";
+import { Flex, Box, Badge, Text, NavLink } from "theme-ui";
 import { Link } from "./Link";
 
 const TemporaryNewBadge = () => {
@@ -11,11 +11,16 @@ const TemporaryNewBadge = () => {
   );
 };
 
-export const Nav: React.FC = () => {
+export const Nav: React.FC<{
+  hideLinks?: boolean;
+}> = ({ hideLinks = false }) => {
   return (
     <Box as="nav" sx={{ display: ["none", "flex"], alignItems: "center", flex: 1 }}>
       <Flex>
-        <Link to="/">Dashboard</Link>
+        {!hideLinks && <Link to="/">Dashboard</Link>}
+        <NavLink href="https://devnet.midl.xyz">Devnet Portal</NavLink>
+        <NavLink href="https://blockscout.regtest.midl.xyz">Explorer</NavLink>
+
         {/* <Link to="/bonds">
           <Flex sx={{ alignItems: "center" }}>
             <Text>Bonds</Text>
@@ -23,11 +28,13 @@ export const Nav: React.FC = () => {
           </Flex>
         </Link> */}
       </Flex>
-      <Flex sx={{ justifyContent: "flex-end", mr: 3, flex: 1 }}>
-        <Link sx={{ fontSize: 1 }} to="/risky-troves">
-          Risky Troves
-        </Link>
-      </Flex>
+      {!hideLinks && (
+        <Flex sx={{ justifyContent: "flex-end", mr: 3, flex: 1 }}>
+          <Link sx={{ fontSize: 1 }} to="/risky-troves">
+            Risky Troves
+          </Link>
+        </Flex>
+      )}
     </Box>
   );
 };

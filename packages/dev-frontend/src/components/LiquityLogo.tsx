@@ -6,7 +6,9 @@ type LiquityLogoProps = React.ComponentProps<typeof Box> & {
 };
 
 export const LiquityLogo: React.FC<LiquityLogoProps> = ({ height, ...boxProps }) => (
-  <Box sx={{ lineHeight: 0 }} {...boxProps}>
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  <Box sx={{ lineHeight: 0 }} {...boxProps} as="a" href="https://midl.xyz">
     <Image src="./midl.svg" sx={{ height }} />
   </Box>
 );

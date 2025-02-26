@@ -6,7 +6,9 @@ import { Link } from "./Link";
 
 const logoHeight = "32px";
 
-export const SideNav: React.FC = () => {
+export const SideNav: React.FC<{
+  hideLinks?: boolean;
+}> = ({ hideLinks = false }) => {
   const [isVisible, setIsVisible] = useState(false);
   const overlay = useRef<HTMLDivElement>(null);
 
@@ -36,11 +38,13 @@ export const SideNav: React.FC = () => {
           <Icon name="times" size="2x" />
         </Button>
         <LiquityLogo height={logoHeight} p={2} />
-        <Box as="nav" sx={{ m: 3, mt: 1, p: 0 }} onClick={() => setIsVisible(false)}>
-          <Link to="/">Dashboard</Link>
-          <Link to="/bonds">Bonds</Link>
-          <Link to="/risky-troves">Risky Troves</Link>
-        </Box>
+        {!hideLinks && (
+          <Box as="nav" sx={{ m: 3, mt: 1, p: 0 }} onClick={() => setIsVisible(false)}>
+            <Link to="/">Dashboard</Link>
+
+            <Link to="/risky-troves">Risky Troves</Link>
+          </Box>
+        )}
       </Flex>
     </Container>
   );
