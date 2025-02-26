@@ -128,7 +128,7 @@ type TransactionProps<C> = {
   tooltipPlacement?: TooltipProps["placement"];
   showFailure?: "asTooltip" | "asChildText";
   requires?: readonly (readonly [boolean, string])[];
-  send: () => any;
+  send: any;
   children: C;
 };
 
@@ -233,7 +233,6 @@ export function TransactionMidl<C extends React.ReactElement<ButtonlikeProps>>({
 }: TransactionProps<C>) {
   const transactionState = useMyTransactionState(id);
   const trigger = React.Children.only<C>(children);
-  
 
   const failureReasons = (requires || [])
     .filter(([requirement]) => !requirement)
