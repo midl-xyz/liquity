@@ -18,9 +18,10 @@ import { COIN } from "../strings";
 
 import { Icon } from "./Icon";
 import { LoadingOverlay } from "./LoadingOverlay";
-import { Transaction } from "./Transaction";
+import { Transaction, TransactionMidl } from "./Transaction";
 import { Tooltip } from "./Tooltip";
 import { Abbreviation } from "./Abbreviation";
+import { useLiquidate } from "./Trove/hooks/useLiquidate";
 
 const rowHeight = "40px";
 
@@ -316,25 +317,7 @@ export const RiskyTroves: React.FC<RiskyTrovesProps> = ({ pageSize }) => {
                         ))(trove.collateralRatio(price))}
                       </td>
                       <td>
-                        <Transaction
-                          id={`liquidate-${trove.ownerAddress}`}
-                          tooltip="Liquidate"
-                          requires={[
-                            recoveryMode
-                              ? liquidatableInRecoveryMode(
-                                  trove,
-                                  price,
-                                  totalCollateralRatio,
-                                  lusdInStabilityPool
-                                )
-                              : liquidatableInNormalMode(trove, price)
-                          ]}
-                          send={liquity.send.liquidate.bind(liquity.send, trove.ownerAddress)}
-                        >
-                          <Button variant="dangerIcon">
-                            <Icon name="trash" />
-                          </Button>
-                        </Transaction>
+                        <TroveAction trove={trove} recoveryMode={recoveryMode} price={price} totalCollateralRatio={totalCollateralRatio} lusdInStabilityPool={lusdInStabilityPool} />
                       </td>
                     </tr>
                   )
@@ -346,5 +329,42 @@ export const RiskyTroves: React.FC<RiskyTrovesProps> = ({ pageSize }) => {
 
       {loading && <LoadingOverlay />}
     </Card>
+  );
+};
+
+const TroveAction = ({trove,
+  recoveryMode,
+  price,
+  totalCollateralRatio,
+  lusdInStabilityPool
+
+}: {
+  trove: UserTrove
+  recoveryMode: boolean
+  price: Decimal
+  totalCollateralRatio: Decimal
+  lusdInStabilityPool: Decimal
+}) => {
+
+  
+  const {mutate} = useLiquidate({transactionId: `liquidate-${trove.ownerAddress}`});
+
+  return (
+    <TransactionMidl
+      id={`liquidate-${trove.ownerAddress}`}
+      tooltip="Liquidate"
+      requires={[
+        recoveryMode
+          ? liquidatableInRecoveryMode(trove, price, totalCollateralRatio, lusdInStabilityPool)
+          : liquidatableInNormalMode(trove, price)
+      ]}
+      send={() => {
+        mutate(trove.ownerAddress);
+      }}
+    >
+      <Button variant="dangerIcon">
+        <Icon name="trash" />
+      </Button>
+    </TransactionMidl>
   );
 };

@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { Card, Box, Heading, Flex, Button, Label, Input } from "theme-ui";
+import { Box, Button, Card, Flex, Heading, Input, Label } from "theme-ui";
 
-import { useLiquity } from "../hooks/LiquityContext";
 
 import { Icon } from "./Icon";
-import { Transaction } from "./Transaction";
+import { TransactionMidl } from "./Transaction";
+import { useLiquidateUpTo } from "./Trove/hooks/useLiquidateUpTo";
 
 export const LiquidationManager: React.FC = () => {
-  const {
-    liquity: { send: liquity }
-  } = useLiquity();
   const [numberOfTrovesToLiquidate, setNumberOfTrovesToLiquidate] = useState("90");
+
+  const {mutate} = useLiquidateUpTo({
+    transactionId: "batch-liquidate"
+  });
 
   return (
     <Card>
@@ -31,21 +32,22 @@ export const LiquidationManager: React.FC = () => {
           <Label>Troves</Label>
 
           <Flex sx={{ ml: 2, alignItems: "center" }}>
-            <Transaction
+            <TransactionMidl
               id="batch-liquidate"
               tooltip="Liquidate"
               tooltipPlacement="bottom"
-              send={overrides => {
+              send={() => {
                 if (!numberOfTrovesToLiquidate) {
                   throw new Error("Invalid number");
                 }
-                return liquity.liquidateUpTo(parseInt(numberOfTrovesToLiquidate, 10), overrides);
+
+                return mutate(parseInt(numberOfTrovesToLiquidate, 10));
               }}
             >
               <Button variant="dangerIcon">
                 <Icon name="trash" size="lg" />
               </Button>
-            </Transaction>
+            </TransactionMidl>
           </Flex>
         </Flex>
       </Box>
