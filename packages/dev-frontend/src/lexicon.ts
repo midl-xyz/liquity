@@ -13,7 +13,7 @@ export const BORROW_FEE: Lexicon = {
 export const TVL: Lexicon = {
   term: "TVL",
   description:
-    "The Total Value Locked (TVL) is the total value of Ether locked as collateral in the system, given in ETH and USD."
+    "The Total Value Locked (TVL) is the total value of Ether locked as collateral in the system, given in BTC and USD."
 };
 
 export const STAKED_LQTY: Lexicon = {
@@ -24,7 +24,7 @@ export const STAKED_LQTY: Lexicon = {
 export const TCR: Lexicon = {
   term: "Total Collateral Ratio",
   description:
-    "The ratio of the Dollar value of the entire system collateral at the current ETH:USD price, to the entire system debt."
+    "The ratio of the Dollar value of the entire system collateral at the current BTC:USD price, to the entire system debt."
 };
 
 export const RECOVERY_MODE: Lexicon = {
@@ -46,7 +46,7 @@ export const KICKBACK_RATE: Lexicon = {
 };
 
 export const ETH: Lexicon = {
-  term: "ETH"
+  term: "BTC"
 };
 
 export const LUSD: Lexicon = {

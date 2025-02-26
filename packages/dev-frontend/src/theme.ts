@@ -11,8 +11,8 @@ const baseColors = {
 };
 
 const colors = {
-  primary: baseColors.blue,
-  secondary: baseColors.purple,
+  primary: "#1a1a1a",
+  secondary: "#2E2E2E",
   accent: baseColors.cyan,
 
   success: baseColors.green,
@@ -43,6 +43,7 @@ const button: ThemeUIStyleObject = {
   py: "12px",
 
   color: "white",
+  borderRadius: 0,
   border: 1,
 
   fontWeight: "bold",
@@ -96,9 +97,9 @@ const infoCard: ThemeUIStyleObject = {
 
   padding: 3,
 
-  borderColor: "rgba(122,199,240,0.4)",
-  background: "linear-gradient(200deg, #d4d9fc, #cae9f9)",
-
+  borderColor: "rgba(23, 23, 23, 0.4)",
+  background: "linear-gradient(200deg,rgba(69, 69, 69),rgb(41, 41, 41))",
+  color: "#fff",
   h2: {
     mb: 2,
     fontSize: cardHeadingFontSize
@@ -493,8 +494,7 @@ const theme: Theme = {
       py: 1,
       fontWeight: "medium",
       fontSize: 2,
-      textTransform: "uppercase",
-      letterSpacing: "2px",
+      // textTransform: "uppercase",
       width: ["100%", "auto"],
       mt: [3, "auto"]
     }

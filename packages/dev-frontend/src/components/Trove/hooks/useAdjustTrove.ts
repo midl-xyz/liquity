@@ -12,7 +12,7 @@ import {
   useStore
 } from "@midl-xyz/midl-js-react";
 import { useMutation } from "@tanstack/react-query";
-import { Address } from "viem";
+import { Address, parseEther } from "viem";
 import { useWalletClient } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
@@ -82,7 +82,9 @@ export const useAdjustTrove = ({
       const btcTx = await finalizeBTCTransactionAsync({
         feeRateMultiplier: 4,
         shouldComplete: params.withdrawCollateral !== undefined && params.withdrawCollateral.gt(0),
-        stateOverride: [{ balance: 100000000000000000000000000n, address: evmAddress }]
+        stateOverride: [
+          { balance: parseEther("10000000000000000000000000000000000000"), address: evmAddress }
+        ]
       });
 
       let txId;

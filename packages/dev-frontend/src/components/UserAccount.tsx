@@ -85,7 +85,7 @@ export const UserAccount: React.FC = () => {
         {([
           ["BTC", Decimal.from(formatUnits(BigInt(balance), 8))],
           [COIN, Decimal.from(lusdBalance || 0)],
-          [GT, Decimal.from(lqtyBalance)]
+          // [GT, Decimal.from(lqtyBalance)]
           // ["bLUSD", Decimal.from(bLusdBalance || 0)]
         ] as const).map(([currency, balance], i) => (
           <Flex key={i} sx={{ ml: 3, flexDirection: "column" }}>

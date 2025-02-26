@@ -217,7 +217,7 @@ export const Opening: React.FC = () => {
 
         {description ?? (
           <InfoBubble>
-            Start by entering the amount of ETH you'd like to deposit as collateral.
+            Start by entering the amount of BTC you'd like to deposit as collateral.
           </InfoBubble>
         )}
 
