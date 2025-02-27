@@ -94,7 +94,7 @@ export const UserAccount: React.FC = () => {
         ] as const).map(([currency, balance], i) => (
           <Flex key={i} sx={{ ml: 3, flexDirection: "column" }}>
             <Heading sx={{ fontSize: 1 }}>{currency}</Heading>
-            <Text sx={{ fontSize: 1 }}>{balance.prettify()}</Text>
+            <Text sx={{ fontSize: 1 }}>{balance.prettify(4)}</Text>
           </Flex>
         ))}
       </Box>

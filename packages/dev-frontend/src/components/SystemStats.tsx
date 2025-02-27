@@ -20,7 +20,7 @@ const Balances: React.FC = () => {
   return (
     <Box sx={{ mb: 3 }}>
       <Heading>My Account Balances</Heading>
-      <Statistic lexicon={l.ETH}>{accountBalance.prettify(4)}</Statistic>
+      <Statistic lexicon={l.ETH}>{accountBalance.prettify(5)}</Statistic>
       <Statistic lexicon={l.LUSD}>{lusdBalance.prettify()}</Statistic>
       <Statistic lexicon={l.LQTY}>{lqtyBalance.prettify()}</Statistic>
     </Box>

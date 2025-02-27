@@ -317,7 +317,13 @@ export const RiskyTroves: React.FC<RiskyTrovesProps> = ({ pageSize }) => {
                         ))(trove.collateralRatio(price))}
                       </td>
                       <td>
-                        <TroveAction trove={trove} recoveryMode={recoveryMode} price={price} totalCollateralRatio={totalCollateralRatio} lusdInStabilityPool={lusdInStabilityPool} />
+                        <TroveAction
+                          trove={trove}
+                          recoveryMode={recoveryMode}
+                          price={price}
+                          totalCollateralRatio={totalCollateralRatio}
+                          lusdInStabilityPool={lusdInStabilityPool}
+                        />
                       </td>
                     </tr>
                   )
@@ -332,22 +338,20 @@ export const RiskyTroves: React.FC<RiskyTrovesProps> = ({ pageSize }) => {
   );
 };
 
-const TroveAction = ({trove,
+const TroveAction = ({
+  trove,
   recoveryMode,
   price,
   totalCollateralRatio,
   lusdInStabilityPool
-
 }: {
-  trove: UserTrove
-  recoveryMode: boolean
-  price: Decimal
-  totalCollateralRatio: Decimal
-  lusdInStabilityPool: Decimal
+  trove: UserTrove;
+  recoveryMode: boolean;
+  price: Decimal;
+  totalCollateralRatio: Decimal;
+  lusdInStabilityPool: Decimal;
 }) => {
-
-  
-  const {mutate} = useLiquidate({transactionId: `liquidate-${trove.ownerAddress}`});
+  const { mutate } = useLiquidate({ transactionId: `liquidate-${trove.ownerAddress}` });
 
   return (
     <TransactionMidl
