@@ -2,7 +2,6 @@ import { DeployFunction } from "hardhat-deploy/types";
 
 const deploy: DeployFunction = async ({ midl }) => {
   await midl.initialize();
-
   await midl.callContract("BorrowerOperations", "openTrove", {
     args: [
       "1000000000000000000",
@@ -12,9 +11,7 @@ const deploy: DeployFunction = async ({ midl }) => {
     ],
     value: BigInt("1500000000000000000")
   });
-
   console.log("Open Position Queued");
-
   await midl.execute();
 };
 
