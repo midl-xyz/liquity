@@ -5,13 +5,14 @@ import {
   useEVMAddress,
   useFinalizeTxIntentions
 } from "@midl-xyz/midl-js-executor-react";
-import { useBroadcastTransaction, useMidlContext } from "@midl-xyz/midl-js-react";
+import { useBroadcastTransaction, useConfig, useMidlContext } from "@midl-xyz/midl-js-react";
 import { useMutation } from "@tanstack/react-query";
-import { Address } from "viem";
+import { Address, encodeFunctionData, erc20Abi, maxUint256 } from "viem";
 import { useChainId, useWalletClient } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
 import { deployments } from "@liquity/lib-ethers";
+import { executorAddress } from "@midl-xyz/midl-js-executor";
 
 type OpenTroveParams = {
   maxBorrowingRate: Decimal;
@@ -26,6 +27,7 @@ export const useOpenTrove = ({
 }: OpenTroveParams) => {
   const { addTxIntentionAsync } = useAddTxIntention();
   const clearTxIntentions = useClearTxIntentions();
+  const {network} = useConfig();
   const { liquity } = useLiquity();
   const chainId = useChainId();
   const { finalizeBTCTransactionAsync, signIntentionAsync } = useFinalizeTxIntentions();
@@ -69,6 +71,19 @@ export const useOpenTrove = ({
           }
         }
       });
+
+      await addTxIntentionAsync({
+        intention: {
+          evmTransaction: {
+            to: lusdToken as Address,
+            data: encodeFunctionData({
+              abi: erc20Abi,
+              functionName: "approve",
+              args: [executorAddress[network.id] as Address, maxUint256 - 1n]
+            })
+          }
+        }
+      })
 
       const btcTx = await finalizeBTCTransactionAsync({
         feeRateMultiplier: 4,
