@@ -5,7 +5,7 @@ const deploy: DeployFunction = async ({ midl }) => {
   await midl.initialize();
   const Unipool = await midl.getDeployment("Unipool");
   const LQTY = await midl.getDeployment("LQTYToken");
-  const swapTokenAddress = "0xad0bC7bF20BB0765AA662e776bC6c787B3C5A6A9";
+  const swapTokenAddress = "0x92cCa2AEb504bF82C0412A6Ad94AAC893dcA7120";
   if (!(await isOwnershipRenounced(Unipool?.address))) {
     console.log("Setting up Unipool...");
     console.log(Unipool?.address, LQTY?.address);
