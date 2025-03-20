@@ -63,7 +63,7 @@ export const useAdjustTrove = ({
 
       clearTxIntentions();
 
-      const intention = await addTxIntentionAsync({
+       await addTxIntentionAsync({
         intention: {
           hasDeposit: params.depositCollateral !== undefined && params.depositCollateral.gt(0),
           evmTransaction: {
