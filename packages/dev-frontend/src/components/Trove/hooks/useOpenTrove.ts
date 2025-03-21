@@ -5,12 +5,14 @@ import {
   useEVMAddress,
   useFinalizeTxIntentions
 } from "@midl-xyz/midl-js-executor-react";
-import { useBroadcastTransaction } from "@midl-xyz/midl-js-react";
+import { useBroadcastTransaction, useConfig, useMidlContext } from "@midl-xyz/midl-js-react";
 import { useMutation } from "@tanstack/react-query";
-import { Address } from "viem";
-import { useWalletClient } from "wagmi";
+import { Address, encodeFunctionData, erc20Abi, maxUint256 } from "viem";
+import { useChainId, useWalletClient } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
+import { deployments } from "@liquity/lib-ethers";
+import { executorAddress } from "@midl-xyz/midl-js-executor";
 
 type OpenTroveParams = {
   maxBorrowingRate: Decimal;
@@ -25,12 +27,17 @@ export const useOpenTrove = ({
 }: OpenTroveParams) => {
   const { addTxIntentionAsync } = useAddTxIntention();
   const clearTxIntentions = useClearTxIntentions();
+  const {network} = useConfig();
   const { liquity } = useLiquity();
+  const chainId = useChainId();
   const { finalizeBTCTransactionAsync, signIntentionAsync } = useFinalizeTxIntentions();
   const evmAddress = useEVMAddress();
   const { data: walletClient } = useWalletClient();
   const { broadcastTransactionAsync } = useBroadcastTransaction();
   const [, setTransactionState] = useTransactionState();
+  const {store} = useMidlContext();
+
+  const {lusdToken} = deployments[chainId].addresses;
 
   return useMutation({
     onError: error => {
@@ -54,7 +61,7 @@ export const useOpenTrove = ({
 
       clearTxIntentions();
 
-      const intention = await addTxIntentionAsync({
+      await addTxIntentionAsync({
         intention: {
           hasDeposit: true,
           evmTransaction: {
@@ -65,20 +72,43 @@ export const useOpenTrove = ({
         }
       });
 
+      await addTxIntentionAsync({
+        intention: {
+          evmTransaction: {
+            to: lusdToken as Address,
+            data: encodeFunctionData({
+              abi: erc20Abi,
+              functionName: "approve",
+              args: [executorAddress[network.id] as Address, maxUint256 - 1n]
+            })
+          }
+        }
+      })
+
       const btcTx = await finalizeBTCTransactionAsync({
         feeRateMultiplier: 4,
-        stateOverride: [{ balance: 100000000000000000000000000n, address: evmAddress }]
+        shouldComplete: true,
+        stateOverride: [{ balance: 100000000000000000000000000n, address: evmAddress }],
+        assetsToWithdraw: [lusdToken as Address]
       });
 
-      const signed = await signIntentionAsync({ intention, txId: btcTx.tx.id });
-      const txId = await walletClient?.sendRawTransaction({ serializedTransaction: signed });
+     
+      let txId;
+
+      for (const it of store.getState().intentions ?? []) {
+        const signed = await signIntentionAsync({ intention: it, txId: btcTx.tx.id });
+        const hash = await walletClient?.sendRawTransaction({ serializedTransaction: signed });
+
+        if (!txId) {
+          txId = hash;
+        }
+      }
 
       setTransactionState({
         type: "waitingForConfirmationMidl",
         id: transactionId,
         tx: txId!
       });
-
       await broadcastTransactionAsync({ tx: btcTx.tx.hex });
     }
   });

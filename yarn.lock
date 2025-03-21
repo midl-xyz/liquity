@@ -1930,10 +1930,10 @@ __metadata:
     "@liquity/chicken-bonds": "file:.yalc/@liquity/chicken-bonds"
     "@liquity/lib-ethers": "workspace:*"
     "@metamask/eth-sig-util": 5.0.1
-    "@midl-xyz/midl-js-core": 0.0.80
-    "@midl-xyz/midl-js-executor": 0.0.80
-    "@midl-xyz/midl-js-executor-react": 0.0.80
-    "@midl-xyz/midl-js-react": 0.0.80
+    "@midl-xyz/midl-js-core": 0.0.81
+    "@midl-xyz/midl-js-executor": 0.0.82
+    "@midl-xyz/midl-js-executor-react": 0.0.82
+    "@midl-xyz/midl-js-react": 0.0.81
     "@tanstack/react-query": ^5.24.1
     "@testing-library/dom": ^9.3.4
     "@testing-library/jest-dom": ^6.4.2
@@ -2548,6 +2548,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@midl-xyz/contracts@npm:^0.0.10":
+  version: 0.0.10
+  resolution: "@midl-xyz/contracts@npm:0.0.10"
+  checksum: a8fd617b0f1ae7371ad93f031dcde5072908bef786285de937642a518d2e0dc169947c75e7b1b3611684a71d243ec3366cebcd75df30e95598507b2f9a679d9b
+  languageName: node
+  linkType: hard
+
 "@midl-xyz/contracts@npm:^0.0.6-alpha":
   version: 0.0.6-alpha
   resolution: "@midl-xyz/contracts@npm:0.0.6-alpha"
@@ -2612,9 +2619,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@midl-xyz/midl-js-core@npm:0.0.80, @midl-xyz/midl-js-core@npm:^0.0.80":
-  version: 0.0.80
-  resolution: "@midl-xyz/midl-js-core@npm:0.0.80"
+"@midl-xyz/midl-js-core@npm:0.0.81, @midl-xyz/midl-js-core@npm:^0.0.81":
+  version: 0.0.81
+  resolution: "@midl-xyz/midl-js-core@npm:0.0.81"
   dependencies:
     "@bitcoinerlab/secp256k1": ^1.2.0
     "@leather.io/bitcoin": ^0.19.16
@@ -2631,7 +2638,7 @@ __metadata:
     varuint-bitcoin: 1.1.2
     viem: ^2.18.6
     zustand: ^5.0.1
-  checksum: 7b6f21f99b0edae0cfab515fbf4758cfdbcc46c0cde5141c1097cf5d4fce764b45550cfb170244be633ab8a85d60d67fc2f4e24dc3e66dec3c29d4c63328745b
+  checksum: 670283517509e0aaf485f2b8d9ffd0ca1ef9400ec3b89aaa53ea88dc796c65bd4a75c3720474a9e879ef4b77843654d5085a3e7646a72619aed9f83261eec388
   languageName: node
   linkType: hard
 
@@ -2658,15 +2665,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@midl-xyz/midl-js-executor-react@npm:0.0.80":
-  version: 0.0.80
-  resolution: "@midl-xyz/midl-js-executor-react@npm:0.0.80"
+"@midl-xyz/midl-js-executor-react@npm:0.0.82":
+  version: 0.0.82
+  resolution: "@midl-xyz/midl-js-executor-react@npm:0.0.82"
   dependencies:
-    "@midl-xyz/contracts": ^0.0.6-alpha
-    "@midl-xyz/midl-js-core": ^0.0.80
-    "@midl-xyz/midl-js-executor": ^0.0.80
+    "@midl-xyz/contracts": ^0.0.10
+    "@midl-xyz/midl-js-core": ^0.0.81
+    "@midl-xyz/midl-js-executor": ^0.0.82
   peerDependencies:
-    "@midl-xyz/midl-js-react": ^0.0.80
+    "@midl-xyz/midl-js-react": ^0.0.81
     "@tanstack/react-query": ^5.59.9
     "@types/react": ^18
     bitcoinjs-lib: 7.0.0-rc.0
@@ -2675,24 +2682,24 @@ __metadata:
     viem: "*"
     wagmi: ^2.*
     zustand: ^5.0.1
-  checksum: 6a29a1568a37151811c889600120963160c257b2c58a0a58f595d5d702dbc9f42bd526cbc765b6f1eaf994b2eecfbbef3e6f0d123fac4ab0bc1b0d86dd01b3ec
+  checksum: a551967845c54e806b3db5dbdefaf0bc904d98e165f53f66e3e6c7b9658be8040ecf5878ab02994d086b295360d597be7d4cfc8a1798680d3c2cfe784f2ad2e7
   languageName: node
   linkType: hard
 
-"@midl-xyz/midl-js-executor@npm:0.0.80, @midl-xyz/midl-js-executor@npm:^0.0.80":
-  version: 0.0.80
-  resolution: "@midl-xyz/midl-js-executor@npm:0.0.80"
+"@midl-xyz/midl-js-executor@npm:0.0.82, @midl-xyz/midl-js-executor@npm:^0.0.82":
+  version: 0.0.82
+  resolution: "@midl-xyz/midl-js-executor@npm:0.0.82"
   dependencies:
     "@bitcoinerlab/secp256k1": ^1.2.0
-    "@midl-xyz/contracts": ^0.0.6-alpha
-    "@midl-xyz/midl-js-core": ^0.0.80
-    "@midl-xyz/midl-js-react": ^0.0.80
+    "@midl-xyz/contracts": ^0.0.10
+    "@midl-xyz/midl-js-core": ^0.0.81
+    "@midl-xyz/midl-js-react": ^0.0.81
     zustand: ^5.0.1
   peerDependencies:
     bitcoinjs-lib: 7.0.0-rc.0
     ethers: "*"
     viem: "*"
-  checksum: 87575eb02eb5220e705f39399902231f43fa55adf456bc2ddd3a31cd672b8a06ee9cbb42f554fd3af44c60dbb400049ed305f1f51a042d6b3eefd97b4f00ef70
+  checksum: 759a36a2630046d6187655c595dcac8501ef0e45d66abf55f9052e48164b2611eefaf7ccd367342bd9595de971e311261623538f4f2488f466be9fc539d4b2a4
   languageName: node
   linkType: hard
 
@@ -2713,18 +2720,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@midl-xyz/midl-js-react@npm:0.0.80, @midl-xyz/midl-js-react@npm:^0.0.80":
-  version: 0.0.80
-  resolution: "@midl-xyz/midl-js-react@npm:0.0.80"
+"@midl-xyz/midl-js-react@npm:0.0.81, @midl-xyz/midl-js-react@npm:^0.0.81":
+  version: 0.0.81
+  resolution: "@midl-xyz/midl-js-react@npm:0.0.81"
   dependencies:
-    "@midl-xyz/midl-js-core": ^0.0.80
+    "@midl-xyz/midl-js-core": ^0.0.81
     zustand: ^5.0.1
   peerDependencies:
     "@tanstack/react-query": "*"
     "@types/react": ^18.3.11
     react: ^18.3.1
     react-dom: ^18.3.1
-  checksum: fb5a4023c0785c33849584da150217c6897eafba1faa8f8f845217188b5df5f9e3fb73010a6cc26895d252ae6b3f4b8b1c57d6ae64541a2194a6299d74ecf67e
+  checksum: 8d8e45e58dfa43c8c3bce8037e81890c485e3d72b94acc20c949d8c2e2474e75b024ec6b128fd418d23d2c65832c1cca3c693de34b5735c85e99a4a9d686ac74
   languageName: node
   linkType: hard
 
