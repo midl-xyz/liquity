@@ -76,8 +76,8 @@ const config: HardhatUserConfig = {
     ]
   },
   midl: {
-    mnemonic: "face spike layer label health knee cry taste carpet found elegant october",
-    path: "deployments/midl",
+    mnemonic: process.env.MNEMONIC!,
+    path: `deployments/${packageJson}`,
     confirmationsRequired: 1,
     btcConfirmationsRequired: 1
   },
@@ -95,13 +95,6 @@ const config: HardhatUserConfig = {
     gasPrice: 0.01
   },
 
-  namedAccounts: {
-    deployer: 0
-  },
-
-  paths: {
-    deployments: `deployments/${packageJson.version}`
-  },
   abiExporter: {
     path: "./dist",
     runOnCompile: true,
