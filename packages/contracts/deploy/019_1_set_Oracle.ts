@@ -1,15 +1,15 @@
 import { DeployFunction } from "hardhat-deploy/types";
 
 const deploy: DeployFunction = async ({ midl }) => {
-  // await midl.initialize();
+  await midl.initialize();
   // await midl.callContract("BTCOracle", "feedBaseFeeValue", {
-  //   args: ["95000000000000000000000", 1]
+  //   args: ["95000000000000000000000", 4]
   // });
   // await midl.callContract("BTCOracle", "feedBaseFeeValue", {
-  //   args: ["95000000000000000000000", 2]
+  //   args: ["95000000000000000000000", 5]
   // });
   // await midl.callContract("BTCOracle", "feedBaseFeeValue", {
-  //   args: ["95000000000000000000000", 3]
+  //   args: ["95000000000000000000000", 6]
   // });
   // await midl.callContract("BTCOracle", "grantRole", {
   //   args: [
@@ -17,8 +17,8 @@ const deploy: DeployFunction = async ({ midl }) => {
   //     "0x01C4a9F3E6D3dCf439Ea637DC84dE401B9472b2F"
   //   ]
   // });
-  // console.log("Setting BTCOracle");
-  // await midl.execute();
+  console.log("Setting BTCOracle");
+  await midl.execute();
 };
 
 deploy.tags = ["main", "setOracle"];
