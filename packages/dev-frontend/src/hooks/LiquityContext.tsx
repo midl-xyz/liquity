@@ -64,7 +64,7 @@ export const LiquityProvider: React.FC<LiquityProviderProps> = ({
     ).getSigner(account.address);
 
   const [config, setConfig] = useState<LiquityFrontendConfig>();
-
+    console.log("Config: ", config);
   const connection = useMemo(() => {
     if (config && provider && signer && account.address) {
       const batchedProvider = new BatchedProvider(provider, chainId);
@@ -96,7 +96,7 @@ export const LiquityProvider: React.FC<LiquityProviderProps> = ({
 
   const liquity = EthersLiquity._from(connection);
   liquity.store.logging = true;
-
+  console.log("liquity store: ", liquity.store);
   return (
     <LiquityContext.Provider
       value={{ config, account: account.address, provider: connection.provider, liquity }}

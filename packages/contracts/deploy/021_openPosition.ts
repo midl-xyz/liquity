@@ -5,15 +5,15 @@ import { getDefaultAccount } from "@midl-xyz/midl-js-core";
 const deploy: DeployFunction = async ({ midl }) => {
   await midl.initialize();
   console.log(await midl.getAddress());
-  await midl.callContract("BorrowerOperations", "closeTrove", {
-    args: [
-      // "1000000000000000000",
-      // "1800000000000000000000",
-      // "0x0000000000000000000000000000000000000000",
-      // "0x0000000000000000000000000000000000000000"
-    ],
-    // value: BigInt("1800000000000000000")
-  });
+  // await midl.callContract("BorrowerOperations", "closeTrove", {
+  //   args: [
+  //     // "1000000000000000000",
+  //     // "1800000000000000000000",
+  //     // "0x0000000000000000000000000000000000000000",
+  //     // "0x0000000000000000000000000000000000000000"
+  //   ],
+  //   // value: BigInt("1800000000000000000")
+  // });
 
   // await midl.callContract("LUSDToken", "transfer", {
   //   args: [
