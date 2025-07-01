@@ -91,14 +91,14 @@ export const DepositPane: React.FC = () => {
     setShouldDepositBalanced(toggle => !toggle);
   };
 
-  const handleSetAmount = (token: "bLUSD" | "LUSD", amount: Decimal) => {
+  const handleSetAmount = (token: "bLUSD" | "BUSD", amount: Decimal) => {
     if (shouldDepositBalanced) {
       if (token === "bLUSD") setLusdAmount(poolBalanceRatio.mul(amount));
-      else if (token === "LUSD") setBLusdAmount(amount.div(poolBalanceRatio));
+      else if (token === "BUSD") setBLusdAmount(amount.div(poolBalanceRatio));
     }
 
     if (token === "bLUSD") setBLusdAmount(amount);
-    else if (token === "LUSD") setLusdAmount(amount);
+    else if (token === "BUSD") setLusdAmount(amount);
   };
 
   useEffect(() => {
@@ -141,13 +141,13 @@ export const DepositPane: React.FC = () => {
       />
 
       <EditableRow
-        label="LUSD amount"
+        label="BUSD amount"
         inputId="deposit-lusd"
         amount={lusdAmount.prettify(2)}
-        unit="LUSD"
+        unit="BUSD"
         editingState={editingState}
         editedAmount={lusdAmount.toString()}
-        setEditedAmount={amount => handleSetAmount("LUSD", Decimal.from(amount))}
+        setEditedAmount={amount => handleSetAmount("BUSD", Decimal.from(amount))}
         maxAmount={coalescedLusdBalance.toString()}
         maxedOut={lusdAmount.eq(coalescedLusdBalance)}
       />
@@ -171,8 +171,8 @@ export const DepositPane: React.FC = () => {
             size="xs"
             tooltip={
               <Card variant="tooltip">
-                Tick this box to deposit bLUSD and LUSD-3CRV in the pool's current liquidity ratio.
-                Current ratio = 1 bLUSD : {poolBalanceRatio.prettify(2)} LUSD.
+                Tick this box to deposit bLUSD and BUSD-3CRV in the pool's current liquidity ratio.
+                Current ratio = 1 bLUSD : {poolBalanceRatio.prettify(2)} BUSD.
               </Card>
             }
           />
@@ -208,7 +208,7 @@ export const DepositPane: React.FC = () => {
             </>
           )}
           {isLusdBalanceInsufficient && (
-            <Amount>{lusdAmount.sub(coalescedLusdBalance).prettify(2)} LUSD</Amount>
+            <Amount>{lusdAmount.sub(coalescedLusdBalance).prettify(2)} BUSD</Amount>
           )}
         </ErrorDescription>
       )}

@@ -21,8 +21,8 @@ export const Claim: React.FC = () => {
   return (
     <>
       <ActionDescription>
-        You will receive <Amount>{bond.accrued.prettify(2)} bLUSD</Amount> and forgo your bonded{" "}
-        <Amount>{bond.deposit.prettify(2)} LUSD</Amount>
+        You will receive <Amount>{bond.accrued.prettify(2)} bBUSD</Amount> and forgo your bonded{" "}
+        <Amount>{bond.deposit.prettify(2)} BUSD</Amount>
       </ActionDescription>
 
       <Flex variant="layout.actions">

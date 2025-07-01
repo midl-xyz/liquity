@@ -105,12 +105,12 @@ export const Actioning: React.FC = () => {
         <HorizontalTimeline events={events} />
       </Flex>
       <Grid gap="12px" columns={3} sx={{ my: 4, justifyItems: "center" }}>
-        <Record lexicon={l.BOND_DEPOSIT} value={bond.deposit.prettify(2)} type="LUSD" />
+        <Record lexicon={l.BOND_DEPOSIT} value={bond.deposit.prettify(2)} type="BUSD" />
 
-        <Record lexicon={l.MARKET_VALUE} value={bond.marketValue.prettify(2)} type="LUSD" />
+        <Record lexicon={l.MARKET_VALUE} value={bond.marketValue.prettify(2)} type="BUSD" />
 
         {view === "CLAIMING" && (
-          <Record lexicon={l.BOND_RETURN} value={bond.claimNowReturn.toFixed(2)} type="LUSD" />
+          <Record lexicon={l.BOND_RETURN} value={bond.claimNowReturn.toFixed(2)} type="BUSD" />
         )}
       </Grid>
       <details>
@@ -119,7 +119,7 @@ export const Actioning: React.FC = () => {
           <Record
             lexicon={l.REBOND_RETURN}
             value={bond.rebondAccrual.eq(Decimal.INFINITY) ? "N/A" : bond.rebondReturn.toFixed(2)}
-            type="LUSD"
+            type="BUSD"
           />
 
           <Record

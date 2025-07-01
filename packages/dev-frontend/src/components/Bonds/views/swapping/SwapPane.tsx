@@ -19,7 +19,7 @@ import { BLusdAmmTokenIndex } from "../../context/transitions";
 
 const tokenSymbol: Record<BLusdAmmTokenIndex.BLUSD | BLusdAmmTokenIndex.LUSD, string> = {
   [BLusdAmmTokenIndex.BLUSD]: "bLUSD",
-  [BLusdAmmTokenIndex.LUSD]: "LUSD"
+  [BLusdAmmTokenIndex.LUSD]: "BUSD"
 };
 
 const outputToken: Record<

@@ -142,7 +142,7 @@ export const Details: React.FC<DetailsProps> = ({ onBack }) => {
   return (
     <>
       <Heading as="h2" sx={{ pt: 1, pb: 3, px: 2 }}>
-        <Flex sx={{ justifyContent: "center" }}>Bond LUSD</Flex>
+        <Flex sx={{ justifyContent: "center" }}>Bond BUSD</Flex>
         <Close
           onClick={handleDismiss}
           sx={{
@@ -223,7 +223,7 @@ export const Details: React.FC<DetailsProps> = ({ onBack }) => {
         label={l.BOND_DEPOSIT.term}
         inputId="bond-deposit-amount"
         amount={deposit.prettify(2)}
-        unit="LUSD"
+        unit="BUSD"
         editingState={depositEditingState}
         editedAmount={deposit.toString()}
         setEditedAmount={amount => handleDepositAmountChanged(Decimal.from(amount))}
@@ -235,7 +235,7 @@ export const Details: React.FC<DetailsProps> = ({ onBack }) => {
         <Record
           lexicon={l.REBOND_RETURN}
           value={hasMarketPremium ? rebondReturn.toFixed(2) : "N/A"}
-          type="LUSD"
+          type="BUSD"
         />
 
         <Record
@@ -262,7 +262,7 @@ export const Details: React.FC<DetailsProps> = ({ onBack }) => {
         value={simulatedProtocolInfo.simulatedMarketPrice}
         min={marketPriceMin}
         max={marketPriceMax}
-        type="LUSD"
+        type="BUSD"
         onSliderChange={value => setSimulatedMarketPrice(value)}
         onReset={() => resetSimulatedMarketPrice()}
       />
@@ -277,12 +277,12 @@ export const Details: React.FC<DetailsProps> = ({ onBack }) => {
 
       {!isInfiniteBondApproved && (
         <ActionDescription>
-          <Text>You are approving LUSD for bonding</Text>
+          <Text>You are approving BUSD for bonding</Text>
         </ActionDescription>
       )}
 
       {statuses.APPROVE === "FAILED" && (
-        <WarningBubble>Failed to approve spend of LUSD. Please try again.</WarningBubble>
+        <WarningBubble>Failed to approve spend of BUSD. Please try again.</WarningBubble>
       )}
 
       {statuses.CREATE === "FAILED" && (
@@ -291,19 +291,19 @@ export const Details: React.FC<DetailsProps> = ({ onBack }) => {
 
       {isInfiniteBondApproved && (
         <ActionDescription>
-          You are bonding <Amount>{deposit.prettify(2)} LUSD</Amount>
+          You are bonding <Amount>{deposit.prettify(2)} BUSD</Amount>
         </ActionDescription>
       )}
 
-      {!isDepositEnough && <ErrorDescription>The minimum bond amount is 100 LUSD.</ErrorDescription>}
+      {!isDepositEnough && <ErrorDescription>The minimum bond amount is 100 BUSD.</ErrorDescription>}
       {doesDepositExceedBalance && (
         <ErrorDescription>
-          Amount exceeds your balance by <Amount>{deposit.sub(lusdBalance).prettify(2)} LUSD</Amount>
+          Amount exceeds your balance by <Amount>{deposit.sub(lusdBalance).prettify(2)} BUSD</Amount>
         </ErrorDescription>
       )}
 
       <Flex pb={2} sx={{ fontSize: "15.5px", justifyContent: "center", fontStyle: "italic" }}>
-        You can cancel your bond at any time to recover your deposited LUSD
+        You can cancel your bond at any time to recover your deposited BUSD
       </Flex>
 
       <Flex variant="layout.actions">

@@ -53,7 +53,7 @@ export const PoolDetails: React.FC = () => {
 
           <StaticRow label="bLUSD price">
             <StaticAmounts sx={{ alignItems: "center", justifyContent: "flex-start" }}>
-              <PoolBalance symbol="LUSD">
+              <PoolBalance symbol="BUSD">
                 {(protocolInfo?.marketPrice ?? Decimal.INFINITY).prettify(2)}
               </PoolBalance>{" "}
             </StaticAmounts>

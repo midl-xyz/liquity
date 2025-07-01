@@ -12,7 +12,7 @@ import { PoolDetails } from "./PoolDetails";
 
 const tokenSymbol = new Map([
   [BLusdAmmTokenIndex.BLUSD, "bLUSD"],
-  [BLusdAmmTokenIndex.LUSD, "LUSD"]
+  [BLusdAmmTokenIndex.LUSD, "BUSD"]
 ]);
 
 type WithdrawnAmountProps = React.PropsWithChildren<{
