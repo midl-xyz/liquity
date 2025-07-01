@@ -55,7 +55,7 @@ export const ReadOnlyTrove: React.FC = () => {
           </Button>
 
           <Box sx={{ alignSelf: "end", justifySelf: "end" }}>
-            <NavLink href="https://medium.com/midl-xyz/pioneer-the-midl-testnet-56c412486f08">
+            <NavLink href="https://medium.com/midl-xyz/pioneer-the-midl-testnet-56c412486f08" target="_blank" rel="noopener noreferrer">
               Guide
             </NavLink>
           </Box>
