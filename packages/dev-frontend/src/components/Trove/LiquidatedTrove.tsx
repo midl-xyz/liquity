@@ -33,7 +33,7 @@ export const LiquidatedTrove: React.FC = () => {
           {hasSurplusCollateral && <CollateralSurplusAction />}
           {!hasSurplusCollateral && <Button onClick={handleOpenTrove}>Open Trove</Button>}
 
-          <Box sx={{alignSelf: "end"}}>
+          <Box sx={{alignSelf: "end", justifySelf: "end"}}>
             <NavLink href="https://medium.com/midl-xyz/pioneer-the-midl-testnet-56c412486f08">
               Guide
             </NavLink>

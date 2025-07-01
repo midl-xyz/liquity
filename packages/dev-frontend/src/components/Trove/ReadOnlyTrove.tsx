@@ -54,11 +54,11 @@ export const ReadOnlyTrove: React.FC = () => {
             &nbsp;Adjust
           </Button>
 
-           <Box sx={{alignSelf: "end"}}>
-                      <NavLink href="https://medium.com/midl-xyz/pioneer-the-midl-testnet-56c412486f08">
-                        Guide
-                      </NavLink>
-                    </Box>
+          <Box sx={{ alignSelf: "end", justifySelf: "end" }}>
+            <NavLink href="https://medium.com/midl-xyz/pioneer-the-midl-testnet-56c412486f08">
+              Guide
+            </NavLink>
+          </Box>
         </Flex>
       </Box>
     </Card>
