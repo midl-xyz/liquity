@@ -29,8 +29,8 @@ contract LUSDToken is CheckContract, ILUSDToken {
     using SafeMath for uint256;
 
     uint256 private _totalSupply;
-    string internal constant _NAME = "USDB";
-    string internal constant _SYMBOL = "USDB";
+    string internal constant _NAME = "BUSD";
+    string internal constant _SYMBOL = "BUSD";
     string internal constant _VERSION = "1";
     uint8 internal constant _DECIMALS = 18;
 

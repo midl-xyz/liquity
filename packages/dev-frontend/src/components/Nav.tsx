@@ -17,9 +17,11 @@ export const Nav: React.FC<{
   return (
     <Box as="nav" sx={{ display: ["none", "flex"], alignItems: "center", flex: 1 }}>
       <Flex>
-        {!hideLinks && <Link to="/">Dashboard</Link>}
-        <NavLink href="https://devnet.midl.xyz">Devnet Portal</NavLink>
-        <NavLink href="https://blockscout.regtest.midl.xyz">Explorer</NavLink>
+        {!hideLinks && <Link to="/">Home</Link>}
+        <NavLink href="https://devnet.midl.xyz">Game</NavLink>
+        <NavLink href="https://swap.midl.xyz">Swap</NavLink>
+        <NavLink href="https://medium.com/midl-xyz/pioneer-the-midl-testnet-56c412486f08">Guide</NavLink>
+        <NavLink href="https://bootstrap.midl.xyz">Earn Midl</NavLink>
 
         {/* <Link to="/bonds">
           <Flex sx={{ alignItems: "center" }}>
