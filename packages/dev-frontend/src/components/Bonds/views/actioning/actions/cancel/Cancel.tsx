@@ -21,7 +21,7 @@ export const Cancel: React.FC = () => {
   return (
     <>
       <ActionDescription>
-        You will receive your bonded <Amount>{bond.deposit.prettify(2)} LUSD</Amount> back and forgo{" "}
+        You will receive your bonded <Amount>{bond.deposit.prettify(2)} BUSD</Amount> back and forgo{" "}
         <Amount>{bond.accrued.shorten()} bLUSD</Amount>
       </ActionDescription>
 

@@ -7,7 +7,7 @@ export type Lexicon = {
 export const BORROW_FEE: Lexicon = {
   term: "Borrowing Fee",
   description:
-    "The Borrowing Fee is a one-off fee charged as a percentage of the borrowed amount (in LUSD) and is part of a Trove's debt. The fee varies between 0.5% and 5% depending on LUSD redemption volumes."
+    "The Borrowing Fee is a one-off fee charged as a percentage of the borrowed amount (in BUSD) and is part of a Trove's debt. The fee varies between 0.5% and 5% depending on BUSD redemption volumes."
 };
 
 export const TVL: Lexicon = {

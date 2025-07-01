@@ -13,7 +13,7 @@ export const BONDS: Lexicon = {
 export const NOT_BONDED_YET: Lexicon = {
   term: "You don't have any pending bonds.",
   description:
-    "You can bond LUSD to obtain Boosted LUSD (bLUSD) - a yield-amplified version of LUSD."
+    "You can bond BUSD to obtain Boosted LUSD (bLUSD) - a yield-amplified version of BUSD."
 };
 
 export const BONDS_NAVIGATION: Lexicon = {
