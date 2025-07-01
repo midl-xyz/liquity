@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Card, Heading, Box, Flex, Button } from "theme-ui";
+import { Card, Heading, Box, Flex, Button, NavLink } from "theme-ui";
 import { useLiquitySelector } from "@liquity/lib-react";
 import { LiquityStoreState } from "@liquity/lib-base";
 import { DisabledEditableRow } from "./Editor";
@@ -53,6 +53,12 @@ export const ReadOnlyTrove: React.FC = () => {
             <Icon name="pen" size="sm" />
             &nbsp;Adjust
           </Button>
+
+           <Box sx={{alignSelf: "end"}}>
+                      <NavLink href="https://medium.com/midl-xyz/pioneer-the-midl-testnet-56c412486f08">
+                        Guide
+                      </NavLink>
+                    </Box>
         </Flex>
       </Box>
     </Card>
