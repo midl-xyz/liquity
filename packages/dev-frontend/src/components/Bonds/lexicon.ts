@@ -214,28 +214,28 @@ export const BLUSD_YIELD_AMPLIFICATION: Lexicon = {
 export const TREASURY_TOTAL: Lexicon = {
   term: "Total",
   description:
-    "The total amount of LUSD held by the protocol within the three buckets (Pending, Reserve, Permanent).",
+    "The total amount of BUSD held by the protocol within the three buckets (Pending, Reserve, Permanent).",
   link: "https://docs.chickenbonds.org/faq/technical-design#_ydtvzh456fiz"
 };
 
 export const TREASURY_PENDING: Lexicon = {
   term: "Pending",
   description:
-    "Contains the deposited LUSD of the users while they bond. Pending bonds can be claimed or cancelled any time, moving the LUSD into the Reserve and Permanent buckets, or back to the bonder, respectively.",
+    "Contains the deposited BUSD of the users while they bond. Pending bonds can be claimed or cancelled any time, moving the LUSD into the Reserve and Permanent buckets, or back to the bonder, respectively.",
   link: "https://docs.chickenbonds.org/faq/technical-design#_ydtvzh456fiz"
 };
 
 export const TREASURY_ACQUIRED: Lexicon = {
   term: "Reserve",
   description:
-    "Contains a portion of the LUSD obtained from claimed bonds and captures the yield from the entire Treasury. It acts as a reserve backing the bLUSD supply. bLUSD can be redeemed for a pro-rata share of the LUSD held in the Reserve bucket.",
+    "Contains a portion of the BUSD obtained from claimed bonds and captures the yield from the entire Treasury. It acts as a reserve backing the bLUSD supply. bLUSD can be redeemed for a pro-rata share of the LUSD held in the Reserve bucket.",
   link: "https://docs.chickenbonds.org/faq/technical-design#_ydtvzh456fiz"
 };
 
 export const TREASURY_PERMANENT: Lexicon = {
   term: "Permanent",
   description:
-    "Contains a portion of the LUSD obtained from claimed bonds which contributes a permanent price premium over LUSD. The LUSD in this bucket is not redeemable.",
+    "Contains a portion of the BUSD obtained from claimed bonds which contributes a permanent price premium over LUSD. The LUSD in this bucket is not redeemable.",
   link: "https://docs.chickenbonds.org/faq/technical-design#_ydtvzh456fiz"
 };
 
