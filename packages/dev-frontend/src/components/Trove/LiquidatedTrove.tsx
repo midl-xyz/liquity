@@ -1,10 +1,11 @@
 import React, { useCallback } from "react";
-import { Card, Heading, Box, Button, Flex } from "theme-ui";
+import { Card, Heading, Box, Button, Flex, NavLink } from "theme-ui";
 import { CollateralSurplusAction } from "../CollateralSurplusAction";
 import { LiquityStoreState } from "@liquity/lib-base";
 import { useLiquitySelector } from "@liquity/lib-react";
 import { useTroveView } from "./context/TroveViewContext";
 import { InfoMessage } from "../InfoMessage";
+import { Link } from "../Link";
 
 const select = ({ collateralSurplusBalance }: LiquityStoreState) => ({
   hasSurplusCollateral: !collateralSurplusBalance.isZero
@@ -31,6 +32,12 @@ export const LiquidatedTrove: React.FC = () => {
         <Flex variant="layout.actions">
           {hasSurplusCollateral && <CollateralSurplusAction />}
           {!hasSurplusCollateral && <Button onClick={handleOpenTrove}>Open Trove</Button>}
+
+          <Box sx={{alignSelf: "end"}}>
+            <NavLink href="https://medium.com/midl-xyz/pioneer-the-midl-testnet-56c412486f08">
+              Guide
+            </NavLink>
+          </Box>
         </Flex>
       </Box>
     </Card>
