@@ -18,7 +18,7 @@ export const Nav: React.FC<{
     <Box as="nav" sx={{ display: ["none", "flex"], alignItems: "center", flex: 1 }}>
       <Flex>
         {!hideLinks && <Link to="/">Home</Link>}
-        <NavLink href="https://devnet.midl.xyz" rel="noopener noreferrer" target="_blank">Game</NavLink>
+        <NavLink href="https://game.midl.xyz" rel="noopener noreferrer" target="_blank">Game</NavLink>
         <NavLink href="https://swap.midl.xyz" rel="noopener noreferrer" target="_blank">Swap</NavLink>
         <NavLink href="https://medium.com/midl-xyz/pioneer-the-midl-testnet-56c412486f08" rel="noopener noreferrer" target="_blank">Guide</NavLink>
         <NavLink href="https://bootstrap.midl.xyz" rel="noopener noreferrer" target="_blank">Earn Midl</NavLink>
