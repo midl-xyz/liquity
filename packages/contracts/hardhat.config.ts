@@ -6,6 +6,7 @@ import "hardhat-abi-exporter";
 import exportDeployment from "./tasks/export";
 
 import * as dotenv from "dotenv";
+import { MempoolSpaceProvider } from "@midl-xyz/midl-js-core";
 dotenv.config();
 
 const packageJson = require("./package.json");
@@ -76,14 +77,28 @@ const config: HardhatUserConfig = {
     ]
   },
   midl: {
-    mnemonic: process.env.MNEMONIC!,
-    path: `deployments/${packageJson}`,
-    confirmationsRequired: 1,
-    btcConfirmationsRequired: 1
+    path: "deployments",
+    networks: {
+      default: {
+        mnemonic: "face spike layer label health knee cry taste carpet found elegant october",
+        confirmationsRequired: 1,
+        btcConfirmationsRequired: 1,
+        hardhatNetwork: "default",
+        network: {
+          explorerUrl: "https://mempool.etna.midl.xyz",
+          id: "regtest",
+          network: "regtest"
+        },
+        provider: new MempoolSpaceProvider({
+          "regtest": "https://mempool.etna.midl.xyz",
+        } as any)
+      },
+    }
+
   },
   networks: {
     default: {
-      url: "https://evm-rpc.regtest.midl.xyz",
+      url: "https://rpc.etna.midl.xyz",
       chainId: 777
     }
   },
