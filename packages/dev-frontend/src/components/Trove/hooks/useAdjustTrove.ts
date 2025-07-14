@@ -3,13 +3,13 @@ import {
   useAddTxIntention,
   useClearTxIntentions,
   useEVMAddress,
-  useFinalizeTxIntentions
+  useFinalizeTxIntentions,
 } from "@midl-xyz/midl-js-executor-react";
 import {
   useBroadcastTransaction,
   useConfig,
   useMidlContext,
-  useStore
+  useStore,
 } from "@midl-xyz/midl-js-react";
 import { useMutation } from "@tanstack/react-query";
 import { Address, parseEther } from "viem";
@@ -26,12 +26,13 @@ type OpenTroveParams = {
 export const useAdjustTrove = ({
   maxBorrowingRate,
   borrowingFeeDecayToleranceMinutes,
-  transactionId
+  transactionId,
 }: OpenTroveParams) => {
   const { addTxIntentionAsync } = useAddTxIntention();
   const clearTxIntentions = useClearTxIntentions();
   const { liquity } = useLiquity();
-  const { finalizeBTCTransactionAsync, signIntentionAsync } = useFinalizeTxIntentions();
+  const { finalizeBTCTransactionAsync, signIntentionAsync } =
+    useFinalizeTxIntentions();
   const evmAddress = useEVMAddress();
   const { data: walletClient } = useWalletClient();
   const { broadcastTransactionAsync } = useBroadcastTransaction();
@@ -40,13 +41,13 @@ export const useAdjustTrove = ({
   const { store } = useMidlContext();
 
   return useMutation({
-    onError: error => {
+    onError: (error) => {
       console.error(error);
 
       setTransactionState({
         type: "failed",
         id: transactionId,
-        error: new Error("Failed to send transaction (try again)")
+        error: new Error("Failed to send transaction (try again)"),
       });
     },
     mutationFn: async (params: TroveAdjustmentParams<Decimal>) => {
@@ -56,42 +57,53 @@ export const useAdjustTrove = ({
         params,
         {
           maxBorrowingRate,
-          borrowingFeeDecayToleranceMinutes
+          borrowingFeeDecayToleranceMinutes,
         },
-        { gasLimit: 100000000n }
+        { gasLimit: 100000000n },
       );
 
       clearTxIntentions();
 
-       await addTxIntentionAsync({
+      await addTxIntentionAsync({
         intention: {
-          hasDeposit: params.depositCollateral !== undefined && params.depositCollateral.gt(0),
+          hasDeposit: params.depositCollateral !== undefined &&
+            params.depositCollateral.gt(0),
           evmTransaction: {
             to: rawPopulatedTransaction.to as Address,
             data: rawPopulatedTransaction.data as `0x${string}`,
-            value: rawPopulatedTransaction.value?.toBigInt()
-          }
-        }
+            value: rawPopulatedTransaction.value?.toBigInt(),
+          },
+        },
       });
 
       console.log(
         "shouldcomplete",
-        params.withdrawCollateral !== undefined && params.withdrawCollateral.gt(0)
+        params.withdrawCollateral !== undefined &&
+          params.withdrawCollateral.gt(0),
       );
 
       const btcTx = await finalizeBTCTransactionAsync({
         feeRateMultiplier: 4,
-        shouldComplete: params.withdrawCollateral !== undefined && params.withdrawCollateral.gt(0),
+        shouldComplete: params.withdrawCollateral !== undefined &&
+          params.withdrawCollateral.gt(0),
         stateOverride: [
-          { balance: parseEther("10000000000000000000000000000000000000"), address: evmAddress }
-        ]
+          {
+            balance: parseEther("10000000000000000000000000000000000000"),
+            address: evmAddress,
+          },
+        ],
       });
 
       let txId;
 
       for (const it of store.getState().intentions ?? []) {
-        const signed = await signIntentionAsync({ intention: it, txId: btcTx.tx.id });
-        const hash = await walletClient?.sendRawTransaction({ serializedTransaction: signed });
+        const signed = await signIntentionAsync({
+          intention: it,
+          txId: btcTx.tx.id,
+        });
+        const hash = await walletClient?.sendRawTransaction({
+          serializedTransaction: signed,
+        });
 
         if (!txId) {
           txId = hash;
@@ -101,9 +113,9 @@ export const useAdjustTrove = ({
       setTransactionState({
         type: "waitingForConfirmationMidl",
         id: transactionId,
-        tx: txId!
+        tx: txId!,
       });
       await broadcastTransactionAsync({ tx: btcTx.tx.hex });
-    }
+    },
   });
 };

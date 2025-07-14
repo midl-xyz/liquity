@@ -18,7 +18,7 @@ export const createExecuteWithLog = (execute: DeploymentsExtension["execute"]) =
 export const isOwnershipRenounced = async (contractAddress: any) => {
   try {
     // Set up provider and wallet
-    const provider = new ethers.JsonRpcProvider("https://evm-rpc.regtest.midl.xyz");
+    const provider = new ethers.JsonRpcProvider("https://rpc.etna.midl.xyz");
 
     // Connect to contract
     const contract = new ethers.Contract(
@@ -42,7 +42,7 @@ export const isOwnershipRenounced = async (contractAddress: any) => {
 export const lqtyTokenCheck = async (contractAddress: any) => {
   try {
     // Set up provider and wallet
-    const provider = new ethers.JsonRpcProvider("https://evm-rpc.regtest.midl.xyz");
+    const provider = new ethers.JsonRpcProvider("https://rpc.etna.midl.xyz");
 
     // Connect to contract
     const contract = new ethers.Contract(
