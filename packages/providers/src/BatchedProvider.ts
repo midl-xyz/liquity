@@ -5,7 +5,6 @@ import { BaseProvider } from "@ethersproject/providers";
 import { BytesLike } from "@ethersproject/bytes";
 import { Contract } from "@ethersproject/contracts";
 import { Deferrable, resolveProperties } from "@ethersproject/properties";
-
 import { WebSocketAugmentedWeb3Provider } from "./WebSocketAugmentedProvider";
 
 const multicallAddress = {
@@ -145,7 +144,7 @@ const batchedProviders: any[] = [];
 export const isBatchedProvider = (provider: Provider): provider is BatchedProvider =>
   batchedProviders.some(batchedProvider => provider instanceof batchedProvider);
 
-export const Batched = <T extends new (...args: any[]) => BaseProvider>(Base: T) => {
+export const Batched = <T extends new (...args: any[]) => BaseProvider>(Base: T): BatchedProvider => {
   const batchedProvider = class extends Base implements BatchedProvider {
     batchingDelayMs = 10;
 
@@ -282,7 +281,7 @@ export const Batched = <T extends new (...args: any[]) => BaseProvider>(Base: T)
 
   batchedProviders.push(batchedProvider);
 
-  return batchedProvider;
+  return batchedProvider as unknown as BatchedProvider;
 };
 
-export const BatchedWebSocketAugmentedWeb3Provider = Batched(WebSocketAugmentedWeb3Provider);
+export const BatchedWebSocketAugmentedWeb3Provider = Batched(WebSocketAugmentedWeb3Provider as any);

@@ -33,3 +33,5 @@ ngrok.config.yml
 !/.yarn/releases
 !/.yarn/sdks
 !/.yarn/versions
+
+.turbo

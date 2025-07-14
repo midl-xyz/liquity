@@ -85,7 +85,7 @@ const defer = <T>(f: (t: T) => void) => (t: T) => {
   }, 0);
 };
 
-export const WebSocketAugmented = <T extends new (...args: any[]) => BaseProvider>(Base: T) => {
+export const WebSocketAugmented = <T extends new (...args: any[]) => BaseProvider>(Base: T): WebSocketAugmentedProvider => {
   let webSocketAugmentedProvider = class extends Base implements WebSocketAugmentedProvider {
     _wsProvider?: WebSocketProvider;
     _wsParams?: [string, Networkish];
@@ -383,7 +383,7 @@ export const WebSocketAugmented = <T extends new (...args: any[]) => BaseProvide
 
   webSocketAugmentedProviders.push(webSocketAugmentedProvider);
 
-  return webSocketAugmentedProvider;
+  return webSocketAugmentedProvider as unknown as WebSocketAugmentedProvider;
 };
 
 export const WebSocketAugmentedWeb3Provider = WebSocketAugmented(Web3Provider);

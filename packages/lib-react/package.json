@@ -16,12 +16,12 @@
   "repository": "https://github.com/liquity/dev",
   "scripts": {
     "eslint": "eslint",
-    "prepare": "run-s 'prepare:*'",
+    "build": "run-s 'build:*'",
     "prepare:eslint": "eslint src",
-    "prepare:tsc": "tsc --project tsconfig.dist.json"
+    "build:tsc": "tsc --project tsconfig.dist.json"
   },
   "peerDependencies": {
-    "@liquity/lib-base": "^3.0.0",
+    "@liquity/lib-base": "workspace:*",
     "react": "^16.13.1"
   },
   "devDependencies": {
