@@ -17377,7 +17377,7 @@ __metadata:
     "@midl-xyz/hardhat-deploy": ^0.0.7
     fs-extra: ^9.1.0
     npm-run-all: ^4.1.5
-    prettier: ^2.1.2
+    prettier: ^3.3.3
     semantic-release: ^17.4.2
     semantic-release-monorepo: ^7.0.4
   languageName: unknown
@@ -21221,12 +21221,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.1.2":
-  version: 2.2.1
-  resolution: "prettier@npm:2.2.1"
+"prettier@npm:^3.3.3":
+  version: 3.3.3
+  resolution: "prettier@npm:3.3.3"
   bin:
-    prettier: bin-prettier.js
-  checksum: 800de2df3d37067ab24478c7f32c60ca0c57b01742133287829feeb4a70d239a7bf6bccb56196784777af591ad80fb9ba70c1a49b0fcecf9f5622a764d513edb
+    prettier: bin/prettier.cjs
+  checksum: bc8604354805acfdde6106852d14b045bb20827ad76a5ffc2455b71a8257f94de93f17f14e463fe844808d2ccc87248364a5691488a3304f1031326e62d9276e
   languageName: node
   linkType: hard
 
