@@ -14,10 +14,11 @@
     "@liquity/chicken-bonds": "file:.yalc/@liquity/chicken-bonds",
     "@liquity/lib-ethers": "workspace:*",
     "@metamask/eth-sig-util": "5.0.1",
-    "@midl-xyz/midl-js-core": "2.0.0-next.2",
-    "@midl-xyz/midl-js-executor": "2.0.0-next.4",
-    "@midl-xyz/midl-js-executor-react": "2.0.0-next.5",
-    "@midl-xyz/midl-js-react": "2.0.0-next.2",
+    "@midl-xyz/midl-js-connectors": "next",
+    "@midl-xyz/midl-js-core": "next",
+    "@midl-xyz/midl-js-executor": "next",
+    "@midl-xyz/midl-js-executor-react": "next",
+    "@midl-xyz/midl-js-react": "next",
     "@tanstack/react-query": "^5.24.1",
     "@tippyjs/react": "^4.2.6",
     "connectkit": "^1.7.3",
@@ -34,6 +35,13 @@
     "usehooks-ts": "^3.1.1",
     "viem": "npm:@midl-xyz/midl-viem@2.21.37",
     "wagmi": "^2.14.12"
+  },
+  "resolutions": {
+    "@midl-xyz/midl-js-connectors/viem": "npm:@midl-xyz/midl-viem@2.21.37",
+    "@midl-xyz/midl-js-core/viem": "npm:@midl-xyz/midl-viem@2.21.37",
+    "@midl-xyz/midl-js-executor/viem": "npm:@midl-xyz/midl-viem@2.21.37",
+    "@midl-xyz/midl-js-executor-react/viem": "npm:@midl-xyz/midl-viem@2.21.37",
+    "@midl-xyz/midl-js-react/viem": "npm:@midl-xyz/midl-viem@2.21.37"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.3.4",
@@ -84,8 +92,5 @@
     "firefox >= 68",
     "opera >= 54",
     "safari >= 14"
-  ],
-  "overrides": {
-    "viem": "npm:@midl-xyz/midl-viem"
-  }
+  ]
 }

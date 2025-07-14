@@ -1,10 +1,11 @@
-import { createConfig, regtest, leather } from "@midl-xyz/midl-js-core";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore yarn doesn't like this import
-import { satsConnect } from '@midl-xyz/midl-js-core/connectors/sats-connect';
+import { leatherConnector, xverseConnector } from '@midl-xyz/midl-js-connectors';
+import { createConfig, MempoolSpaceProvider, regtest } from '@midl-xyz/midl-js-core';
 
 export const midlConfig = createConfig({
   networks: [regtest],
-  connectors: [satsConnect(), leather()],
   persist: true,
+  provider: new MempoolSpaceProvider({
+    regtest: 'https://mempool.etna.midl.xyz',
+  } as any), // Any is used coz we don't wanna give mainnet links
+  connectors: [leatherConnector(), xverseConnector()],
 });
