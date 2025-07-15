@@ -107,7 +107,7 @@ export const WalletConnector = ({ children }: WalletConnectorProps) => {
                 }}
                 sx={{ mb: 2, width: "100%" }}
               >
-                {connector.name}
+                {connector.metadata.name}
               </Button>
             ))}
           </Box>

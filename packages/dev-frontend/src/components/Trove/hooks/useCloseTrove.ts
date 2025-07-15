@@ -1,9 +1,10 @@
 import {
+  useAddCompleteTxIntention,
   useAddTxIntention,
   useClearTxIntentions,
   useEVMAddress,
-  useFinalizeTxIntentions
-} from "@midl-xyz/midl-js-executor-react";
+  useFinalizeBTCTransaction,
+  useSignIntention} from "@midl-xyz/midl-js-executor-react";
 import { useBroadcastTransaction, useMidlContext } from "@midl-xyz/midl-js-react";
 import { useMutation } from "@tanstack/react-query";
 import { Address } from "viem";
@@ -15,7 +16,9 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
   const { addTxIntentionAsync } = useAddTxIntention();
   const clearTxIntentions = useClearTxIntentions();
   const { liquity } = useLiquity();
-  const { finalizeBTCTransactionAsync, signIntentionAsync } = useFinalizeTxIntentions();
+  const { finalizeBTCTransactionAsync } = useFinalizeBTCTransaction();
+  const { signIntentionAsync} = useSignIntention();
+  const {addCompleteTxIntention} = useAddCompleteTxIntention();
   const evmAddress = useEVMAddress();
   const { data: walletClient } = useWalletClient();
   const { broadcastTransactionAsync } = useBroadcastTransaction();
@@ -51,9 +54,10 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
 
       const btcTx = await finalizeBTCTransactionAsync({
         feeRateMultiplier: 4,
-        shouldComplete: true,
         stateOverride: [{ balance: 100000000000000000000000000n, address: evmAddress }]
       });
+
+      addCompleteTxIntention({assetsToWithdraw: [] as any});
 
       let txId;
 

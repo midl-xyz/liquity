@@ -115,7 +115,7 @@ const reduce = (state: TroveManagerState, action: TroveManagerAction): TroveMana
       };
 
       if (changePending && changeCommitted) {
-        return finishChange(revert(newState));
+        return finishChange(revert(newState as any));
       }
 
       const change = original.whatChanged(edited, 0);
@@ -124,10 +124,10 @@ const reduce = (state: TroveManagerState, action: TroveManagerAction): TroveMana
         (change?.type === "creation" && !trove.isEmpty) ||
         (change?.type === "closure" && trove.isEmpty)
       ) {
-        return revert(newState);
+        return revert(newState as any);
       }
 
-      return { ...newState, edited: trove.apply(change, 0) };
+      return { ...newState, edited: trove.apply(change as any, 0) as any} as any;
     }
   }
 };
@@ -157,7 +157,7 @@ type TroveManagerProps = {
 
 // XXX Only used for closing Troves now
 export const TroveManager: React.FC<TroveManagerProps> = ({ collateral, debt }) => {
-  const [{ original, edited, changePending }, dispatch] = useLiquityReducer(reduce, init);
+  const [{ original, edited, changePending }, dispatch] = useLiquityReducer(reduce, init as any);
   const { fees, validationContext } = useLiquitySelector(select);
 
   useEffect(() => {

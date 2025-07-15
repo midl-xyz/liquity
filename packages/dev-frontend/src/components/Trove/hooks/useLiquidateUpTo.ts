@@ -2,8 +2,7 @@ import {
   useAddTxIntention,
   useClearTxIntentions,
   useEVMAddress,
-  useFinalizeTxIntentions
-} from "@midl-xyz/midl-js-executor-react";
+  useSignIntention} from "@midl-xyz/midl-js-executor-react";
 import { useBroadcastTransaction, useMidlContext } from "@midl-xyz/midl-js-react";
 import { useMutation } from "@tanstack/react-query";
 import { Address } from "viem";
@@ -19,7 +18,7 @@ export const useLiquidateUpTo = ({ transactionId }: OpenTroveParams) => {
   const { addTxIntentionAsync } = useAddTxIntention();
   const clearTxIntentions = useClearTxIntentions();
   const { liquity } = useLiquity();
-  const { finalizeBTCTransactionAsync, signIntentionAsync } = useFinalizeTxIntentions();
+  const {signIntentionAsync} = useSignIntention();
   const evmAddress = useEVMAddress();
   const { data: walletClient } = useWalletClient();
   const { broadcastTransactionAsync } = useBroadcastTransaction();
@@ -59,31 +58,31 @@ export const useLiquidateUpTo = ({ transactionId }: OpenTroveParams) => {
           }
         }
       });
+      // TODO: Update
+      // const btcTx = await finalizeBTCTransactionAsync({
+      //   feeRateMultiplier: 4,
+      //   shouldComplete: true,
+      //   stateOverride: [{ balance: 100000000000000000000000000n, address: evmAddress }]
+      // });
 
-      const btcTx = await finalizeBTCTransactionAsync({
-        feeRateMultiplier: 4,
-        shouldComplete: true,
-        stateOverride: [{ balance: 100000000000000000000000000n, address: evmAddress }]
-      });
+    //   let txId;
 
-      let txId;
+    //   for (const it of store.getState().intentions ?? []) {
+    //     const signed = await signIntentionAsync({ intention: it, txId: btcTx.tx.id });
+    //     const hash = await walletClient?.sendRawTransaction({ serializedTransaction: signed });
 
-      for (const it of store.getState().intentions ?? []) {
-        const signed = await signIntentionAsync({ intention: it, txId: btcTx.tx.id });
-        const hash = await walletClient?.sendRawTransaction({ serializedTransaction: signed });
+    //     if (!txId) {
+    //       txId = hash;
+    //     }
+    //   }
 
-        if (!txId) {
-          txId = hash;
-        }
-      }
+    //   setTransactionState({
+    //     type: "waitingForConfirmationMidl",
+    //     id: transactionId,
+    //     tx: txId!
+    //   });
 
-      setTransactionState({
-        type: "waitingForConfirmationMidl",
-        id: transactionId,
-        tx: txId!
-      });
-
-      await broadcastTransactionAsync({ tx: btcTx.tx.hex });
+    //   await broadcastTransactionAsync({ tx: btcTx.tx.hex });
     }
   });
 };

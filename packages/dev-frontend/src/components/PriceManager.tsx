@@ -54,7 +54,7 @@ export const PriceManager: React.FC = () => {
                   if (!editedPrice) {
                     throw new Error("Invalid price");
                   }
-                  return liquity.setPrice(Decimal.from(editedPrice), overrides);
+                  return liquity.setPrice(Decimal.from(editedPrice) as any, overrides);
                 }}
               >
                 <Button variant="icon">

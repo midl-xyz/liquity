@@ -72,19 +72,19 @@ const reduce = (
       const newState = { ...state, originalDeposit: updatedDeposit };
 
       const changeCommitted =
-        !updatedDeposit.initialLUSD.eq(originalDeposit.initialLUSD) ||
-        updatedDeposit.currentLUSD.gt(originalDeposit.currentLUSD) ||
-        updatedDeposit.collateralGain.lt(originalDeposit.collateralGain) ||
-        updatedDeposit.lqtyReward.lt(originalDeposit.lqtyReward);
+        !updatedDeposit.initialLUSD.eq(originalDeposit.initialLUSD as any) ||
+        updatedDeposit.currentLUSD.gt(originalDeposit.currentLUSD as any) ||
+        updatedDeposit.collateralGain.lt(originalDeposit.collateralGain as any) ||
+        updatedDeposit.lqtyReward.lt(originalDeposit.lqtyReward as any);
 
       if (changePending && changeCommitted) {
-        return finishChange(revert(newState));
+        return finishChange(revert(newState as any));
       }
 
       return {
         ...newState,
-        editedLUSD: updatedDeposit.apply(originalDeposit.whatChanged(editedLUSD))
-      };
+        editedLUSD: updatedDeposit.apply(originalDeposit.whatChanged(editedLUSD) as any) as any
+      } as any;
     }
   }
 };
@@ -92,7 +92,7 @@ const reduce = (
 const transactionId = "stability-deposit";
 
 export const StabilityDepositManager: React.FC = () => {
-  const [{ originalDeposit, editedLUSD, changePending }, dispatch] = useLiquityReducer(reduce, init);
+  const [{ originalDeposit, editedLUSD, changePending }, dispatch] = useLiquityReducer(reduce, init as any);
   const validationContext = useLiquitySelector(selectForStabilityDepositChangeValidation);
   const { dispatchEvent } = useStabilityView();
 

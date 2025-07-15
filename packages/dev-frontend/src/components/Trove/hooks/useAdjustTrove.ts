@@ -1,15 +1,17 @@
 import { Decimal, TroveAdjustmentParams } from "@liquity/lib-base";
 import {
+  useAddCompleteTxIntention,
   useAddTxIntention,
   useClearTxIntentions,
   useEVMAddress,
-  useFinalizeTxIntentions,
+  useFinalizeBTCTransaction,
+  useSendBTCTransactions,
+  useSignIntention,
 } from "@midl-xyz/midl-js-executor-react";
 import {
   useBroadcastTransaction,
-  useConfig,
   useMidlContext,
-  useStore,
+  useWaitForTransaction
 } from "@midl-xyz/midl-js-react";
 import { useMutation } from "@tanstack/react-query";
 import { Address, parseEther } from "viem";
@@ -28,17 +30,25 @@ export const useAdjustTrove = ({
   borrowingFeeDecayToleranceMinutes,
   transactionId,
 }: OpenTroveParams) => {
-  const { addTxIntentionAsync } = useAddTxIntention();
+  const { addTxIntentionAsync, txIntentions } = useAddTxIntention();
   const clearTxIntentions = useClearTxIntentions();
   const { liquity } = useLiquity();
-  const { finalizeBTCTransactionAsync, signIntentionAsync } =
-    useFinalizeTxIntentions();
+  const {signIntentionAsync} = useSignIntention();
+
+  const { finalizeBTCTransactionAsync } =
+  useFinalizeBTCTransaction();
   const evmAddress = useEVMAddress();
   const { data: walletClient } = useWalletClient();
   const { broadcastTransactionAsync } = useBroadcastTransaction();
   const [, setTransactionState] = useTransactionState();
+  const { waitForTransaction, isPending, isSuccess } = useWaitForTransaction();
 
   const { store } = useMidlContext();
+  const {addCompleteTxIntention} = useAddCompleteTxIntention();
+
+  const { sendBTCTransactionsAsync, isSuccess: isBroadcasted } = useSendBTCTransactions({
+   
+  });
 
   return useMutation({
     onError: (error) => {
@@ -54,9 +64,9 @@ export const useAdjustTrove = ({
       setTransactionState({ type: "waitingForApproval", id: transactionId });
 
       const { rawPopulatedTransaction } = await liquity.populate.adjustTrove(
-        params,
+        params as any,
         {
-          maxBorrowingRate,
+          maxBorrowingRate: maxBorrowingRate as any,
           borrowingFeeDecayToleranceMinutes,
         },
         { gasLimit: 100000000n },
@@ -84,8 +94,7 @@ export const useAdjustTrove = ({
 
       const btcTx = await finalizeBTCTransactionAsync({
         feeRateMultiplier: 4,
-        shouldComplete: params.withdrawCollateral !== undefined &&
-          params.withdrawCollateral.gt(0),
+     
         stateOverride: [
           {
             balance: parseEther("10000000000000000000000000000000000000"),
@@ -93,29 +102,18 @@ export const useAdjustTrove = ({
           },
         ],
       });
+      if(params.withdrawCollateral !== undefined &&
+          params.withdrawCollateral.gt(0)) {
+            addCompleteTxIntention({assetsToWithdraw: [] as any})
+          }
 
-      let txId;
 
-      for (const it of store.getState().intentions ?? []) {
-        const signed = await signIntentionAsync({
-          intention: it,
-          txId: btcTx.tx.id,
-        });
-        const hash = await walletClient?.sendRawTransaction({
-          serializedTransaction: signed,
-        });
+      const serializedTransactions = txIntentions
+      .filter((it) => it.signedEvmTransaction)
+      .map((it) => it.signedEvmTransaction);
+      sendBTCTransactionsAsync({btcTransaction: btcTx?.tx.hex, serializedTransactions: serializedTransactions})
+    },      
+  
 
-        if (!txId) {
-          txId = hash;
-        }
-      }
-
-      setTransactionState({
-        type: "waitingForConfirmationMidl",
-        id: transactionId,
-        tx: txId!,
-      });
-      await broadcastTransactionAsync({ tx: btcTx.tx.hex });
-    },
   });
 };
