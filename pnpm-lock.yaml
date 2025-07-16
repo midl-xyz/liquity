@@ -388,6 +388,9 @@ importers:
         specifier: '*'
         version: 2.23.5(bufferutil@4.0.8)(typescript@4.1.5)(utf-8-validate@5.0.4)(zod@3.23.8)
     devDependencies:
+      '@liquity/contracts':
+        specifier: workspace:*
+        version: link:../contracts
       '@microsoft/api-extractor':
         specifier: 7.13.2
         version: 7.13.2
@@ -2451,7 +2454,7 @@ packages:
     resolution: {integrity: sha512-MytSmJJn+gs7Mqrpt/gWkTCOpOQ6ZDfRrRT2gtZL0rfGe4QrU4x9ZdW15fFbVM/XTa+5EsKiOMYXhRABibNeng==}
     peerDependencies:
       '@typechain/ethers-v6': ^0.4.3
-      ethers: '@midl-xyz/ethers'
+      ethers: ^6.1.0
       hardhat: ^2.9.9
       typechain: ^8.3.1
 
