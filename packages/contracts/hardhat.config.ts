@@ -80,7 +80,7 @@ const config: HardhatUserConfig = {
     path: "deployments",
     networks: {
       default: {
-        mnemonic: "face spike layer label health knee cry taste carpet found elegant october",
+        mnemonic: process.env.MNEMONIC1!,
         confirmationsRequired: 1,
         btcConfirmationsRequired: 1,
         hardhatNetwork: "default",

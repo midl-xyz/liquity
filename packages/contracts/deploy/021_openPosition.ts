@@ -17,7 +17,7 @@ const deploy: DeployFunction = async ({ midl }) => {
 
   // await midl.callContract("LUSDToken", "transfer", {
   //   args: [
-  //     "0x28AF4A718995D5B523b2607d146232B72391C2AF",
+  //     "0xB903d817E32C9352E4aE7e369bB1ab1c7065a1B5",
   //     "1000000000000000000000"
   //   ],
   // });
