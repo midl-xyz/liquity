@@ -558,6 +558,9 @@ importers:
       '@graphprotocol/graph-ts':
         specifier: 0.32.0
         version: 0.32.0
+      '@liquity/lib-ethers':
+        specifier: workspace:*
+        version: link:../lib-ethers
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5
