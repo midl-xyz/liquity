@@ -111,7 +111,7 @@ const App = () => {
 
             rpcUrls: {
               default: {
-                http: ['https://rpc.etna.midl.xyz'],
+                http: ['https://rpc.regtest.midl.xyz'],
               },
             },
           }}
