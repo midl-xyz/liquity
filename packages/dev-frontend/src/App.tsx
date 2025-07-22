@@ -17,6 +17,7 @@ import { midlRegtest } from "@midl-xyz/midl-js-executor";
 import { AppLoader } from "./components/AppLoader";
 import { DisposableWalletProvider } from "./testUtils/DisposableWalletProvider";
 import { LiquityFrontend } from "./LiquityFrontend";
+import { WalletConnector } from "./components/WalletConnector";
 
 const isDemoMode = import.meta.env.VITE_APP_DEMO_MODE === "true";
 
@@ -116,6 +117,7 @@ const App = () => {
             },
           }}
         >
+          <WalletConnector loader={loader}>
               <LiquityProvider
                 loader={loader}
                 unsupportedNetworkFallback={<UnsupportedNetworkFallback />}
@@ -125,6 +127,7 @@ const App = () => {
                   <LiquityFrontend loader={loader} />
                 </TransactionProvider>
               </LiquityProvider>
+              </WalletConnector>
             </WagmiMidlProvider>
         </QueryClientProvider>
       </MidlProvider>
