@@ -116,7 +116,6 @@ const App = () => {
             },
           }}
         >
-              <WagmiMidlProvider />
               <LiquityProvider
                 loader={loader}
                 unsupportedNetworkFallback={<UnsupportedNetworkFallback />}
@@ -129,7 +128,7 @@ const App = () => {
             </WagmiMidlProvider>
         </QueryClientProvider>
       </MidlProvider>
-    </ThemeUIProvider>
+    </ThemeUIProvider> 
   );
 };
 

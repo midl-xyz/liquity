@@ -516,8 +516,8 @@ importers:
         specifier: ^5.4.0
         version: 5.7.0
       '@liquity/lib-base':
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: workspace:*
+        version: link:../lib-base
       cross-fetch:
         specifier: ~3.0.6
         version: 3.0.6
@@ -1052,9 +1052,6 @@ packages:
   '@ethersproject/basex@5.7.0':
     resolution: {integrity: sha512-ywlh43GwZLv2Voc2gQVTKBoVQ1mti3d8HK5aMxsfu/nRDnMmNqaSJ3r3n85HBByT8OpoY96SXM1FogC533T4zw==}
 
-  '@ethersproject/bignumber@5.0.15':
-    resolution: {integrity: sha512-MTADqnyacvdRwtKh7o9ujwNDSM1SDJjYDMYAzjIgjoi9rh6TY4suMbhCa3i2vh3SUXiXSICyTI8ui+NPdrZ9Lw==}
-
   '@ethersproject/bignumber@5.7.0':
     resolution: {integrity: sha512-n1CAdIHRWjSucQO3MC1zPSVgV/6dy/fjL9pMrPP9peL+QxEg9wOsVqwD4+818B6LUEtaXzVHQiuivzRoxPxUGw==}
 
@@ -1232,9 +1229,6 @@ packages:
 
   '@liquity/chicken-bonds@file:packages/dev-frontend/.yalc/@liquity/chicken-bonds':
     resolution: {directory: packages/dev-frontend/.yalc/@liquity/chicken-bonds, type: directory}
-
-  '@liquity/lib-base@3.0.0':
-    resolution: {integrity: sha512-iSSTb8eAK50zBEaM4bP48rFzARwlqohMXtNWKQZUrjqFvpTwZF4OZp1o0LxAU8CcbFAm7SLv4IVzSsmK4t3xFw==}
 
   '@lit-labs/ssr-dom-shim@1.1.1':
     resolution: {integrity: sha512-kXOeFbfCm4fFf2A3WwVEeQj55tMZa8c8/f9AKHMobQMkzNUfUj+antR3fRPaZJawsa1aZiP/Da3ndpZrwEe4rQ==}
@@ -10627,12 +10621,6 @@ snapshots:
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/properties': 5.7.0
 
-  '@ethersproject/bignumber@5.0.15':
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      bn.js: 4.12.0
-
   '@ethersproject/bignumber@5.7.0':
     dependencies:
       '@ethersproject/bytes': 5.7.0
@@ -10987,10 +10975,6 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.4.15
 
   '@liquity/chicken-bonds@file:packages/dev-frontend/.yalc/@liquity/chicken-bonds': {}
-
-  '@liquity/lib-base@3.0.0':
-    dependencies:
-      '@ethersproject/bignumber': 5.0.15
 
   '@lit-labs/ssr-dom-shim@1.1.1': {}
 

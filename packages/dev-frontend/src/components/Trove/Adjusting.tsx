@@ -135,7 +135,7 @@ export const Adjusting: React.FC = () => {
   const fee = isDebtIncrease
     ? feeFrom(trove, new Trove(trove.collateral, trove.debt.add(debtIncreaseAmount)), borrowingRate)
     : Decimal.ZERO;
-  const totalDebt = netDebt.add(LUSD_LIQUIDATION_RESERVE).add(fee);
+  const totalDebt = netDebt.add(LUSD_LIQUIDATION_RESERVE.toString()).add(fee.toString());
   const maxBorrowingRate = borrowingRate.add(0.005);
   const updatedTrove = isDirty ? new Trove(collateral, totalDebt) : trove;
   const feePct = new Percent(borrowingRate);
@@ -143,7 +143,7 @@ export const Adjusting: React.FC = () => {
   const availableEth = Decimal.fromBigNumberString(
     BigNumber.from(convertBTCtoETH(balance)).toHexString()
   );
-
+console.log(availableEth, trove.collateral)
   const maxCollateral = trove.collateral.add(availableEth);
   const collateralMaxedOut = collateral.eq(maxCollateral);
   const collateralRatio =
