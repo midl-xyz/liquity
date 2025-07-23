@@ -55,9 +55,9 @@ export const useOpenTrove = ({
       setTransactionState({ type: "waitingForApproval", id: transactionId });
 
       const { rawPopulatedTransaction } = await liquity.populate.openTrove(
-        params as any,
+        params,
         {
-          maxBorrowingRate: maxBorrowingRate as any,
+          maxBorrowingRate,
           borrowingFeeDecayToleranceMinutes
         },
         { gasLimit: 100000000n }

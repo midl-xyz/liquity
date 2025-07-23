@@ -1,4 +1,5 @@
 import { Decimal, TroveAdjustmentParams } from "@liquity/lib-base";
+import { deployments } from "@liquity/lib-ethers";
 import {
   useAddCompleteTxIntention,
   useAddTxIntention,
@@ -6,16 +7,11 @@ import {
   useEVMAddress,
   useFinalizeBTCTransaction,
   useSendBTCTransactions,
-  useSignIntention,
+  useSignIntention
 } from "@midl-xyz/midl-js-executor-react";
-import {
-  useBroadcastTransaction,
-  useMidlContext,
-  useWaitForTransaction
-} from "@midl-xyz/midl-js-react";
 import { useMutation } from "@tanstack/react-query";
-import { Address, parseEther } from "viem";
-import { useWalletClient } from "wagmi";
+import { Address } from "viem";
+import { useChainId } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
 
@@ -28,92 +24,89 @@ type OpenTroveParams = {
 export const useAdjustTrove = ({
   maxBorrowingRate,
   borrowingFeeDecayToleranceMinutes,
-  transactionId,
+  transactionId
 }: OpenTroveParams) => {
   const { addTxIntentionAsync, txIntentions } = useAddTxIntention();
   const clearTxIntentions = useClearTxIntentions();
   const { liquity } = useLiquity();
-  const {signIntentionAsync} = useSignIntention();
-
-  const { finalizeBTCTransactionAsync } =
-  useFinalizeBTCTransaction();
+  const { signIntentionAsync, error: intentError } = useSignIntention();
+  const { finalizeBTCTransactionAsync } = useFinalizeBTCTransaction();
   const evmAddress = useEVMAddress();
-  const { data: walletClient } = useWalletClient();
-  const { broadcastTransactionAsync } = useBroadcastTransaction();
   const [, setTransactionState] = useTransactionState();
-  const { waitForTransaction, isPending, isSuccess } = useWaitForTransaction();
-
-  const { store } = useMidlContext();
-  const {addCompleteTxIntention} = useAddCompleteTxIntention();
-
-  const { sendBTCTransactionsAsync, isSuccess: isBroadcasted } = useSendBTCTransactions({
-   
-  });
+  const { addCompleteTxIntentionAsync } = useAddCompleteTxIntention();
+  const chainId = useChainId();
+  const { lusdToken } = deployments[chainId].addresses;
+  const { sendBTCTransactionsAsync } = useSendBTCTransactions({});
 
   return useMutation({
-    onError: (error) => {
+    onError: error => {
       console.error(error);
 
       setTransactionState({
         type: "failed",
         id: transactionId,
-        error: new Error("Failed to send transaction (try again)"),
+        error: new Error("Failed to send transaction (try again)")
       });
     },
     mutationFn: async (params: TroveAdjustmentParams<Decimal>) => {
       setTransactionState({ type: "waitingForApproval", id: transactionId });
 
       const { rawPopulatedTransaction } = await liquity.populate.adjustTrove(
-        params as any,
+        params,
         {
-          maxBorrowingRate: maxBorrowingRate as any,
-          borrowingFeeDecayToleranceMinutes,
+          maxBorrowingRate,
+          borrowingFeeDecayToleranceMinutes
         },
-        { gasLimit: 100000000n },
+        { gasLimit: 100000000n }
       );
 
       clearTxIntentions();
 
       await addTxIntentionAsync({
         intention: {
-          hasDeposit: params.depositCollateral !== undefined &&
-            params.depositCollateral.gt(0),
+          hasDeposit: params.depositCollateral !== undefined && params.depositCollateral.gt(0),
           evmTransaction: {
             to: rawPopulatedTransaction.to as Address,
             data: rawPopulatedTransaction.data as `0x${string}`,
-            value: rawPopulatedTransaction.value?.toBigInt(),
-          },
-        },
+            value: rawPopulatedTransaction.value?.toBigInt()
+          }
+        }
       });
 
       console.log(
         "shouldcomplete",
-        params.withdrawCollateral !== undefined &&
-          params.withdrawCollateral.gt(0),
+        params.withdrawCollateral !== undefined && params.withdrawCollateral.gt(0)
       );
+
+      if (params.withdrawCollateral !== undefined && params.withdrawCollateral.gt(0)) {
+        await addCompleteTxIntentionAsync({ assetsToWithdraw: [lusdToken as Address] });
+      }
 
       const btcTx = await finalizeBTCTransactionAsync({
         feeRateMultiplier: 4,
-     
-        stateOverride: [
-          {
-            balance: parseEther("10000000000000000000000000000000000000"),
-            address: evmAddress,
-          },
-        ],
+        stateOverride: [{ balance: 100000000000000000000000000n, address: evmAddress }]
       });
-      if(params.withdrawCollateral !== undefined &&
-          params.withdrawCollateral.gt(0)) {
-            addCompleteTxIntention({assetsToWithdraw: [] as any})
-          }
 
+      console.log("signing intentions: ");
+      console.log(txIntentions);
+      for (const intention of txIntentions) {
+        try {
+          await signIntentionAsync({
+            intention: intention,
+            txId: btcTx.tx.id
+          });
+        } catch (e) {
+          console.error("error on intent signing: ", intentError, e);
+        }
+      }
 
       const serializedTransactions = txIntentions
-      .filter((it) => it.signedEvmTransaction)
-      .map((it) => it.signedEvmTransaction);
-      sendBTCTransactionsAsync({btcTransaction: btcTx?.tx.hex, serializedTransactions: serializedTransactions})
-    },      
-  
-
+        .filter(it => it.signedEvmTransaction)
+        .map(it => it.signedEvmTransaction);
+      await sendBTCTransactionsAsync({
+        btcTransaction: btcTx?.tx.hex,
+        serializedTransactions: serializedTransactions
+      });
+    }
   });
 };

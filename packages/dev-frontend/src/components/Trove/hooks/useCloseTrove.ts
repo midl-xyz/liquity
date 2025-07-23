@@ -4,26 +4,24 @@ import {
   useClearTxIntentions,
   useEVMAddress,
   useFinalizeBTCTransaction,
-  useSignIntention} from "@midl-xyz/midl-js-executor-react";
-import { useBroadcastTransaction, useMidlContext } from "@midl-xyz/midl-js-react";
+  useSendBTCTransactions,
+  useSignIntention
+} from "@midl-xyz/midl-js-executor-react";
 import { useMutation } from "@tanstack/react-query";
 import { Address } from "viem";
-import { useWalletClient } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
 
 export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
-  const { addTxIntentionAsync } = useAddTxIntention();
+  const { addTxIntentionAsync, txIntentions } = useAddTxIntention();
   const clearTxIntentions = useClearTxIntentions();
   const { liquity } = useLiquity();
   const { finalizeBTCTransactionAsync } = useFinalizeBTCTransaction();
-  const { signIntentionAsync} = useSignIntention();
-  const {addCompleteTxIntention} = useAddCompleteTxIntention();
+  const { signIntentionAsync, error: intentError } = useSignIntention();
+  const { addCompleteTxIntentionAsync } = useAddCompleteTxIntention();
   const evmAddress = useEVMAddress();
-  const { data: walletClient } = useWalletClient();
-  const { broadcastTransactionAsync } = useBroadcastTransaction();
   const [, setTransactionState] = useTransactionState();
-  const { store } = useMidlContext();
+  const { sendBTCTransactionsAsync } = useSendBTCTransactions({});
 
   return useMutation({
     onError: error => {
@@ -52,31 +50,33 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
         }
       });
 
+      await addCompleteTxIntentionAsync({ assetsToWithdraw: [] as any });
+
       const btcTx = await finalizeBTCTransactionAsync({
         feeRateMultiplier: 4,
         stateOverride: [{ balance: 100000000000000000000000000n, address: evmAddress }]
       });
 
-      addCompleteTxIntention({assetsToWithdraw: [] as any});
-
-      let txId;
-
-      for (const it of store.getState().intentions ?? []) {
-        const signed = await signIntentionAsync({ intention: it, txId: btcTx.tx.id });
-        const hash = await walletClient?.sendRawTransaction({ serializedTransaction: signed });
-
-        if (!txId) {
-          txId = hash;
+      console.log("signing intentions: ");
+      console.log(txIntentions);
+      for (const intention of txIntentions) {
+        try {
+          await signIntentionAsync({
+            intention: intention,
+            txId: btcTx.tx.id
+          });
+        } catch (e) {
+          console.error("error on intent signing: ", intentError, e);
         }
       }
 
-      setTransactionState({
-        type: "waitingForConfirmationMidl",
-        id: transactionId,
-        tx: txId!
+      const serializedTransactions = txIntentions
+        .filter(it => it.signedEvmTransaction)
+        .map(it => it.signedEvmTransaction);
+      await sendBTCTransactionsAsync({
+        btcTransaction: btcTx?.tx.hex,
+        serializedTransactions: serializedTransactions
       });
-
-      await broadcastTransactionAsync({ tx: btcTx.tx.hex });
     }
   });
 };
