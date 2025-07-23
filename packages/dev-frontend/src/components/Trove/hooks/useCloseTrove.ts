@@ -40,7 +40,8 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
 
       clearTxIntentions();
 
-      await addTxIntentionAsync({
+      const localUnsignedIntentions = [];
+      localUnsignedIntentions.push(await addTxIntentionAsync({
         intention: {
           hasWithdraw: true,
           evmTransaction: {
@@ -48,9 +49,9 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
             data: rawPopulatedTransaction.data as `0x${string}`
           }
         }
-      });
+      }));
 
-      await addCompleteTxIntentionAsync({ assetsToWithdraw: [] as any });
+      localUnsignedIntentions.push(await addCompleteTxIntentionAsync({ assetsToWithdraw: [] as any }));
 
       const btcTx = await finalizeBTCTransactionAsync({
         feeRateMultiplier: 4,
@@ -59,23 +60,21 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
 
       console.log("signing intentions: ");
       console.log(txIntentions);
-      for (const intention of txIntentions) {
+      const serializedTransactions: Address[] = [];
+      for (const intention of localUnsignedIntentions) {
         try {
-          await signIntentionAsync({
-            intention: intention,
+          serializedTransactions.push(await signIntentionAsync({
+            intention,
             txId: btcTx.tx.id
-          });
+          }));
         } catch (e) {
           console.error("error on intent signing: ", intentError, e);
         }
       }
 
-      const serializedTransactions = txIntentions
-        .filter(it => it.signedEvmTransaction)
-        .map(it => it.signedEvmTransaction);
       await sendBTCTransactionsAsync({
         btcTransaction: btcTx?.tx.hex,
-        serializedTransactions: serializedTransactions
+        serializedTransactions
       });
     }
   });

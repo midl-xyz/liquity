@@ -316,7 +316,6 @@ export const TransactionMonitor: React.FC = () => {
           if (cancelled) {
             return;
           }
-
           const { confirmations } = receipt.rawReceipt;
           const blockNumber = receipt.rawReceipt.blockNumber + confirmations - 1;
           console.log(`Block #${blockNumber} ${confirmations}-confirms tx ${txHash}`);

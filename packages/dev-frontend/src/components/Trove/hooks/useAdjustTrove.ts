@@ -11,9 +11,10 @@ import {
 } from "@midl-xyz/midl-js-executor-react";
 import { useMutation } from "@tanstack/react-query";
 import { Address } from "viem";
-import { useChainId } from "wagmi";
+import { useChainId, usePublicClient, useWalletClient } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
+import { waitForTransactionReceipt } from "viem/actions";
 
 type OpenTroveParams = {
   maxBorrowingRate: Decimal;
@@ -26,7 +27,7 @@ export const useAdjustTrove = ({
   borrowingFeeDecayToleranceMinutes,
   transactionId
 }: OpenTroveParams) => {
-  const { addTxIntentionAsync, txIntentions } = useAddTxIntention();
+  const { addTxIntentionAsync } = useAddTxIntention();
   const clearTxIntentions = useClearTxIntentions();
   const { liquity } = useLiquity();
   const { signIntentionAsync, error: intentError } = useSignIntention();
@@ -37,6 +38,7 @@ export const useAdjustTrove = ({
   const chainId = useChainId();
   const { lusdToken } = deployments[chainId].addresses;
   const { sendBTCTransactionsAsync } = useSendBTCTransactions({});
+  const publicClient = usePublicClient();
 
   return useMutation({
     onError: error => {
@@ -49,7 +51,6 @@ export const useAdjustTrove = ({
       });
     },
     mutationFn: async (params: TroveAdjustmentParams<Decimal>) => {
-      setTransactionState({ type: "waitingForApproval", id: transactionId });
 
       const { rawPopulatedTransaction } = await liquity.populate.adjustTrove(
         params,
@@ -62,16 +63,19 @@ export const useAdjustTrove = ({
 
       clearTxIntentions();
 
-      await addTxIntentionAsync({
-        intention: {
-          hasDeposit: params.depositCollateral !== undefined && params.depositCollateral.gt(0),
-          evmTransaction: {
-            to: rawPopulatedTransaction.to as Address,
-            data: rawPopulatedTransaction.data as `0x${string}`,
-            value: rawPopulatedTransaction.value?.toBigInt()
+      const localUnsignedIntentions = [];
+      localUnsignedIntentions.push(
+        await addTxIntentionAsync({
+          intention: {
+            hasDeposit: params.depositCollateral !== undefined && params.depositCollateral.gt(0),
+            evmTransaction: {
+              to: rawPopulatedTransaction.to as Address,
+              data: rawPopulatedTransaction.data as `0x${string}`,
+              value: rawPopulatedTransaction.value?.toBigInt()
+            }
           }
-        }
-      });
+        })
+      );
 
       console.log(
         "shouldcomplete",
@@ -79,7 +83,9 @@ export const useAdjustTrove = ({
       );
 
       if (params.withdrawCollateral !== undefined && params.withdrawCollateral.gt(0)) {
-        await addCompleteTxIntentionAsync({ assetsToWithdraw: [lusdToken as Address] });
+        localUnsignedIntentions.push(
+          await addCompleteTxIntentionAsync({ assetsToWithdraw: [lusdToken as Address] })
+        );
       }
 
       const btcTx = await finalizeBTCTransactionAsync({
@@ -88,25 +94,28 @@ export const useAdjustTrove = ({
       });
 
       console.log("signing intentions: ");
-      console.log(txIntentions);
-      for (const intention of txIntentions) {
+      console.log(localUnsignedIntentions);
+
+      const serializedTransactions: Address[] = [];
+      for (const intention of localUnsignedIntentions) {
         try {
-          await signIntentionAsync({
-            intention: intention,
-            txId: btcTx.tx.id
-          });
+          serializedTransactions.push(
+            await signIntentionAsync({
+              intention: intention,
+              txId: btcTx.tx.id
+            })
+          );
         } catch (e) {
           console.error("error on intent signing: ", intentError, e);
         }
       }
 
-      const serializedTransactions = txIntentions
-        .filter(it => it.signedEvmTransaction)
-        .map(it => it.signedEvmTransaction);
-      await sendBTCTransactionsAsync({
+      const txHash = await sendBTCTransactionsAsync({
         btcTransaction: btcTx?.tx.hex,
-        serializedTransactions: serializedTransactions
+        serializedTransactions
       });
+
+      setTransactionState({ type: "waitingForConfirmationMidl", id: transactionId, tx: txHash[txHash.length-1] });
     }
   });
 };
