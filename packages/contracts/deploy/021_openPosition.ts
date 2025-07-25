@@ -1,19 +1,20 @@
 import { DeployFunction } from "hardhat-deploy/types";
 import { getDefaultAccount } from "@midl-xyz/midl-js-core";
+import { ethers } from "ethers";
 
 
 const deploy: DeployFunction = async ({ midl }) => {
   await midl.initialize();
   console.log("Openning position from user: ", midl.getEVMAddress());
-  // await midl.callContract("BorrowerOperations", "openTrove", {
-  //   args: [
-  //     "1000000000000000000",
-  //     "1800000000000000000000",
-  //     "0x0000000000000000000000000000000000000000",
-  //     "0x0000000000000000000000000000000000000000"
-  //   ],
-  //   value: BigInt("1800000000000000000")
-  // });
+  await midl.callContract("BorrowerOperations", "openTrove", {
+    args: [
+      "1000000000000000000",
+      ethers.utils.parseEther("30000000"),
+      "0x0000000000000000000000000000000000000000",
+      "0x0000000000000000000000000000000000000000"
+    ],
+    value: BigInt("400000000000000000000")
+  });
 
   // await midl.callContract("LUSDToken", "transfer", {
   //   args: [

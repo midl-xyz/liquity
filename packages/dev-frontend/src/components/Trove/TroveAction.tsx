@@ -2,11 +2,9 @@ import { Button } from "theme-ui";
 
 import { Decimal, TroveChange } from "@liquity/lib-base";
 
-import { useLiquity } from "../../hooks/LiquityContext";
-import { useTransactionState } from "../Transaction";
 import { useAdjustTrove } from "./hooks/useAdjustTrove";
-import { useOpenTrove } from "./hooks/useOpenTrove";
 import { useCloseTrove } from "./hooks/useCloseTrove";
+import { useOpenTrove } from "./hooks/useOpenTrove";
 
 type TroveActionProps = React.PropsWithChildren<{
   transactionId: string;

@@ -15,6 +15,7 @@ import { useChainId, usePublicClient, useWalletClient } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
 import { waitForTransactionReceipt } from "viem/actions";
+import { convertETHtoBTC } from "@midl-xyz/midl-js-executor";
 
 type OpenTroveParams = {
   maxBorrowingRate: Decimal;
@@ -67,12 +68,12 @@ export const useAdjustTrove = ({
       localUnsignedIntentions.push(
         await addTxIntentionAsync({
           intention: {
-            hasDeposit: params.depositCollateral !== undefined && params.depositCollateral.gt(0),
             evmTransaction: {
               to: rawPopulatedTransaction.to as Address,
               data: rawPopulatedTransaction.data as `0x${string}`,
               value: rawPopulatedTransaction.value?.toBigInt()
-            }
+            },
+            satoshis: convertETHtoBTC(rawPopulatedTransaction.value.toBigInt()) * 1.01
           }
         })
       );
@@ -88,10 +89,7 @@ export const useAdjustTrove = ({
         );
       }
 
-      const btcTx = await finalizeBTCTransactionAsync({
-        feeRateMultiplier: 4,
-        stateOverride: [{ balance: 100000000000000000000000000n, address: evmAddress }]
-      });
+      const btcTx = await finalizeBTCTransactionAsync({ assetsToWithdrawSize: 1 });
 
       console.log("signing intentions: ");
       console.log(localUnsignedIntentions);

@@ -1,6 +1,6 @@
 import { Decimal, Decimalish, TroveCreationParams } from "@liquity/lib-base";
 import { deployments } from "@liquity/lib-ethers";
-import { executorAddress, getEVMAddress } from "@midl-xyz/midl-js-executor";
+import { convertETHtoBTC, executorAddress } from "@midl-xyz/midl-js-executor";
 import {
   useAddCompleteTxIntention,
   useAddTxIntention,
@@ -10,7 +10,7 @@ import {
   useSendBTCTransactions,
   useSignIntention
 } from "@midl-xyz/midl-js-executor-react";
-import { useConfig, useConfigInternal, useStoreInternal } from "@midl-xyz/midl-js-react";
+import { useConfig, useStoreInternal } from "@midl-xyz/midl-js-react";
 import { useMutation } from "@tanstack/react-query";
 import { Address, encodeFunctionData, erc20Abi, maxUint256 } from "viem";
 import { useChainId } from "wagmi";
@@ -33,7 +33,7 @@ export const useOpenTrove = ({
   const { network } = useConfig();
   const { liquity } = useLiquity();
   const chainId = useChainId();
-  const { finalizeBTCTransactionAsync } = useFinalizeBTCTransaction();
+  const { finalizeBTCTransactionAsync, error: finilizeBTCError } = useFinalizeBTCTransaction();
   const { signIntentionAsync, error: intentError } = useSignIntention();
   const evmAddress = useEVMAddress();
   const [, setTransactionState] = useTransactionState();
@@ -42,6 +42,7 @@ export const useOpenTrove = ({
   const { lusdToken } = deployments[chainId].addresses;
 
   const { addCompleteTxIntentionAsync } = useAddCompleteTxIntention();
+  const {getState} = useStoreInternal()
 
   return useMutation({
     onError: error => {
@@ -64,15 +65,18 @@ export const useOpenTrove = ({
       );
       clearTxIntentions();
       const localUnsignedIntentions = [];
+
+
+     
       localUnsignedIntentions.push(
         await addTxIntentionAsync({
           intention: {
-            hasDeposit: true,
             evmTransaction: {
               to: rawPopulatedTransaction.to as Address,
               data: rawPopulatedTransaction.data as `0x${string}`,
               value: rawPopulatedTransaction.value?.toBigInt()
-            }
+            },
+            satoshis: convertETHtoBTC(rawPopulatedTransaction.value.toBigInt()),
           }
         })
       );
@@ -96,10 +100,7 @@ export const useOpenTrove = ({
         await addCompleteTxIntentionAsync({ assetsToWithdraw: [lusdToken as Address] })
       );
 
-      const btcTx = await finalizeBTCTransactionAsync({
-        feeRateMultiplier: 4,
-        stateOverride: [{ balance: 100000000000000000000000000n, address: evmAddress }]
-      });
+      const btcTx = await finalizeBTCTransactionAsync({ assetsToWithdrawSize: 1 });
 
       const serializedTransactions: Address[] = [];
       for (const intention of localUnsignedIntentions) {
@@ -114,7 +115,7 @@ export const useOpenTrove = ({
           console.error("error on intent signing: ", intentError, e);
         }
       }
-
+      console.log("ser: ", serializedTransactions);
       try {
         await sendBTCTransactionsAsync({
           btcTransaction: btcTx?.tx.hex,

@@ -41,32 +41,35 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
       clearTxIntentions();
 
       const localUnsignedIntentions = [];
-      localUnsignedIntentions.push(await addTxIntentionAsync({
-        intention: {
-          hasWithdraw: true,
-          evmTransaction: {
-            to: rawPopulatedTransaction.to as Address,
-            data: rawPopulatedTransaction.data as `0x${string}`
+      localUnsignedIntentions.push(
+        await addTxIntentionAsync({
+          intention: {
+            hasWithdraw: true,
+            evmTransaction: {
+              to: rawPopulatedTransaction.to as Address,
+              data: rawPopulatedTransaction.data as `0x${string}`
+            }
           }
-        }
-      }));
+        })
+      );
 
-      localUnsignedIntentions.push(await addCompleteTxIntentionAsync({ assetsToWithdraw: [] as any }));
+      localUnsignedIntentions.push(
+        await addCompleteTxIntentionAsync({ assetsToWithdraw: [] as any })
+      );
 
-      const btcTx = await finalizeBTCTransactionAsync({
-        feeRateMultiplier: 4,
-        stateOverride: [{ balance: 100000000000000000000000000n, address: evmAddress }]
-      });
+      const btcTx = await finalizeBTCTransactionAsync({});
 
       console.log("signing intentions: ");
       console.log(txIntentions);
       const serializedTransactions: Address[] = [];
       for (const intention of localUnsignedIntentions) {
         try {
-          serializedTransactions.push(await signIntentionAsync({
-            intention,
-            txId: btcTx.tx.id
-          }));
+          serializedTransactions.push(
+            await signIntentionAsync({
+              intention,
+              txId: btcTx.tx.id
+            })
+          );
         } catch (e) {
           console.error("error on intent signing: ", intentError, e);
         }

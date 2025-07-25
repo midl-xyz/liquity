@@ -52,7 +52,6 @@ export const useLiquidate = ({ transactionId }: OpenTroveParams) => {
 
       await addTxIntentionAsync({
         intention: {
-          hasDeposit: true,
           evmTransaction: {
             to: rawPopulatedTransaction.to as Address,
             data: rawPopulatedTransaction.data as `0x${string}`
@@ -60,10 +59,7 @@ export const useLiquidate = ({ transactionId }: OpenTroveParams) => {
         }
       });
 
-      const btcTx = await finalizeBTCTransactionAsync({
-        feeRateMultiplier: 4,
-        stateOverride: [{ balance: 100000000000000000000000000n, address: evmAddress }]
-      });
+      const btcTx = await finalizeBTCTransactionAsync({});
 
       let txId;
 

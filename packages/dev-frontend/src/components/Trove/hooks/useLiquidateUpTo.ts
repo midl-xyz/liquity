@@ -2,7 +2,8 @@ import {
   useAddTxIntention,
   useClearTxIntentions,
   useEVMAddress,
-  useSignIntention} from "@midl-xyz/midl-js-executor-react";
+  useSignIntention
+} from "@midl-xyz/midl-js-executor-react";
 import { useBroadcastTransaction, useMidlContext } from "@midl-xyz/midl-js-react";
 import { useMutation } from "@tanstack/react-query";
 import { Address } from "viem";
@@ -51,7 +52,6 @@ export const useLiquidateUpTo = ({ transactionId }: OpenTroveParams) => {
 
       await addTxIntentionAsync({
         intention: {
-          hasDeposit: true,
           evmTransaction: {
             to: rawPopulatedTransaction.to as Address,
             data: rawPopulatedTransaction.data as `0x${string}`
