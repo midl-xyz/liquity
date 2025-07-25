@@ -1,4 +1,4 @@
-# Liquity: Decentralized Borrowing Protocol
+# Liquity: Decentralized Borrowing Protocol - BTC Deployed with Midl
 
 [<img alt="DeFiSafety Badge" width="96px" align="right" src="images/defisafety-badge.png" />](https://www.defisafety.com/app/pqrs/376)
 
