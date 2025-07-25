@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Card, Box, Heading, Flex, Button, Label, Input } from "theme-ui";
+import React, { useEffect, useState } from "react";
+import { Box, Button, Card, Flex, Heading, Input, Label } from "theme-ui";
 
 import { Decimal, LiquityStoreState } from "@liquity/lib-base";
 import { useLiquitySelector } from "@liquity/lib-react";
@@ -54,7 +54,7 @@ export const PriceManager: React.FC = () => {
                   if (!editedPrice) {
                     throw new Error("Invalid price");
                   }
-                  return liquity.setPrice(Decimal.from(editedPrice), overrides);
+                  return liquity.setPrice(Decimal.from(editedPrice) as any, overrides);
                 }}
               >
                 <Button variant="icon">

@@ -111,7 +111,9 @@ export class Decimal {
   static from(decimalish: Decimalish): Decimal {
     switch (typeof decimalish) {
       case "object":
-        if (decimalish instanceof Decimal) {
+        if (BigNumber.isBigNumber(decimalish)) {
+          return Decimal._fromString(decimalish.toString());
+        } else if (decimalish instanceof Decimal) {
           return decimalish;
         } else {
           throw new Error("invalid Decimalish value");

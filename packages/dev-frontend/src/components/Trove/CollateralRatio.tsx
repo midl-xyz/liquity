@@ -30,7 +30,7 @@ export const CollateralRatio: React.FC<CollateralRatioProps> = ({ value, change 
           inputId="trove-collateral-ratio"
           amount={collateralRatioPct.prettify()}
           color={
-            value?.gt(CRITICAL_COLLATERAL_RATIO)
+            value?.gt(CRITICAL_COLLATERAL_RATIO.toString())
               ? "success"
               : value?.gt(1.2)
               ? "warning"

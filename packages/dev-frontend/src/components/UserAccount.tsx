@@ -87,8 +87,8 @@ export const UserAccount: React.FC = () => {
         <Icon name="wallet" size="lg" />
 
         {([
-          ["BTC", Decimal.from(formatUnits(BigInt(balance), 8))],
-          [COIN, Decimal.from(lusdBalance || 0)]
+          ["BTC", Decimal.from(formatUnits(BigInt(balance.toString()), 8))],
+          [COIN, Decimal.from(lusdBalance.toString() || 0)]
           // [GT, Decimal.from(lqtyBalance)]
           // ["bLUSD", Decimal.from(bLusdBalance || 0)]
         ] as const).map(([currency, balance], i) => (

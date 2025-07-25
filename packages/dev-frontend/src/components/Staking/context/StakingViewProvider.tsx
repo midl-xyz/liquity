@@ -58,7 +58,7 @@ const reduce = (
 
         return {
           ...state,
-          lqtyStake: updatedStake,
+          lqtyStake: updatedStake as any,
           adjusting: false,
           changePending: changeCommitted ? false : state.changePending
         };
@@ -71,7 +71,7 @@ const reduce = (
 
 export const StakingViewProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const stakingTransactionState = useMyTransactionState("stake");
-  const [{ adjusting, changePending, lqtyStake }, dispatch] = useLiquityReducer(reduce, init);
+  const [{ adjusting, changePending, lqtyStake }, dispatch] = useLiquityReducer(reduce, init as any);
 
   useEffect(() => {
     if (

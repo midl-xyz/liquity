@@ -51,8 +51,8 @@ const reduce = (state: StakeManagerState, action: StakeManagerAction): StakeMana
 
       if (updatedStake) {
         return {
-          originalStake: updatedStake,
-          editedLQTY: updatedStake.apply(originalStake.whatChanged(editedLQTY))
+          originalStake: updatedStake as any,
+          editedLQTY: updatedStake.apply(originalStake.whatChanged(editedLQTY) as any) as any
         };
       }
     }
@@ -119,7 +119,7 @@ const StakingManagerActionDescription: React.FC<StakingManagerActionDescriptionP
 
 export const StakingManager: React.FC = () => {
   const { dispatch: dispatchStakingViewAction } = useStakingView();
-  const [{ originalStake, editedLQTY }, dispatch] = useLiquityReducer(reduce, init);
+  const [{ originalStake, editedLQTY }, dispatch] = useLiquityReducer(reduce, init as any);
   const lqtyBalance = useLiquitySelector(selectLQTYBalance);
 
   const change = originalStake.whatChanged(editedLQTY);

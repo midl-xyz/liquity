@@ -77,13 +77,14 @@ let configPromise: Promise<LiquityFrontendConfig> | undefined = undefined;
 
 const fetchConfig = async () => {
   try {
-    const response = await fetch("config.json");
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch config.json (status ${response.status})`);
-    }
-
-    return parseConfig(await response.json());
+    const config = {
+      "frontendTag": "0x0000000000000000000000000000000000000000",
+      "infuraApiKey": "",
+      "alchemyApiKey": "",
+      "walletConnectProjectId": "b16efb4fd41473c0f45dbad8efa15a00"
+    };
+    
+    return parseConfig(config);
   } catch (err) {
     console.error(err);
     return { ...defaultConfig };

@@ -120,7 +120,7 @@ export const RiskyTroves: React.FC<RiskyTrovesProps> = ({ pageSize }) => {
       )
       .then(troves => {
         if (mounted) {
-          setTroves(troves);
+          setTroves(troves as any);
           setLoading(false);
         }
       });
@@ -314,15 +314,15 @@ export const RiskyTroves: React.FC<RiskyTrovesProps> = ({ pageSize }) => {
                           >
                             {new Percent(collateralRatio).prettify()}
                           </Text>
-                        ))(trove.collateralRatio(price))}
+                        ))(trove.collateralRatio(price as any))}
                       </td>
                       <td>
                         <TroveAction
                           trove={trove}
                           recoveryMode={recoveryMode}
-                          price={price}
-                          totalCollateralRatio={totalCollateralRatio}
-                          lusdInStabilityPool={lusdInStabilityPool}
+                          price={price as any}
+                          totalCollateralRatio={totalCollateralRatio as any}
+                          lusdInStabilityPool={lusdInStabilityPool as any}
                         />
                       </td>
                     </tr>

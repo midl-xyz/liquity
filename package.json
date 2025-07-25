@@ -93,6 +93,7 @@
     "turbo": "^2.5.4"
   },
   "dependencies": {
-    "@midl-xyz/hardhat-deploy": "^0.0.7"
+    "@midl-xyz/hardhat-deploy": "2.0.0-next.18",
+    "@midl-xyz/midl-js-core": "2.0.0-next.18"
   }
 }

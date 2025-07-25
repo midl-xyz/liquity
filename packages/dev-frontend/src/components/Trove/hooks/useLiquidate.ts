@@ -2,7 +2,8 @@ import {
   useAddTxIntention,
   useClearTxIntentions,
   useEVMAddress,
-  useFinalizeTxIntentions
+  useFinalizeBTCTransaction,
+  useSignIntention
 } from "@midl-xyz/midl-js-executor-react";
 import { useBroadcastTransaction, useMidlContext } from "@midl-xyz/midl-js-react";
 import { useMutation } from "@tanstack/react-query";
@@ -19,7 +20,8 @@ export const useLiquidate = ({ transactionId }: OpenTroveParams) => {
   const { addTxIntentionAsync } = useAddTxIntention();
   const clearTxIntentions = useClearTxIntentions();
   const { liquity } = useLiquity();
-  const { finalizeBTCTransactionAsync, signIntentionAsync } = useFinalizeTxIntentions();
+  const { finalizeBTCTransactionAsync } = useFinalizeBTCTransaction();
+  const { signIntentionAsync } = useSignIntention();
   const evmAddress = useEVMAddress();
   const { data: walletClient } = useWalletClient();
   const { broadcastTransactionAsync } = useBroadcastTransaction();
@@ -50,7 +52,6 @@ export const useLiquidate = ({ transactionId }: OpenTroveParams) => {
 
       await addTxIntentionAsync({
         intention: {
-          hasDeposit: true,
           evmTransaction: {
             to: rawPopulatedTransaction.to as Address,
             data: rawPopulatedTransaction.data as `0x${string}`
@@ -58,13 +59,11 @@ export const useLiquidate = ({ transactionId }: OpenTroveParams) => {
         }
       });
 
-      const btcTx = await finalizeBTCTransactionAsync({
-        feeRateMultiplier: 4,
-        shouldComplete: true,
-        stateOverride: [{ balance: 100000000000000000000000000n, address: evmAddress }]
-      });
+      const btcTx = await finalizeBTCTransactionAsync({});
 
       let txId;
+
+      // TODO: Complete
 
       for (const it of store.getState().intentions ?? []) {
         const signed = await signIntentionAsync({ intention: it, txId: btcTx.tx.id });
