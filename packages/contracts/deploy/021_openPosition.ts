@@ -9,11 +9,11 @@ const deploy: DeployFunction = async ({ midl }) => {
   await midl.callContract("BorrowerOperations", "openTrove", {
     args: [
       "1000000000000000000",
-      ethers.utils.parseEther("30000000"),
+      ethers.utils.parseEther("250"),
       "0x0000000000000000000000000000000000000000",
       "0x0000000000000000000000000000000000000000"
     ],
-    value: BigInt("400000000000000000000")
+    value: ethers.utils.parseEther("0.1").toBigInt()
   });
 
   // await midl.callContract("LUSDToken", "transfer", {
