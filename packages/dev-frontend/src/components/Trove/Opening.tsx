@@ -50,9 +50,7 @@ const GAS_ROOM_ETH = Decimal.from(0.0000001);
 export const Opening: React.FC = () => {
   const { dispatchEvent } = useTroveView();
   const { fees, price, validationContext } = useLiquitySelector(selector);
-  const { ordinalsAccount } = useAccounts();
   const { balance } = useBalance({
-    address: ordinalsAccount!.address
   });
 
   const accountBalance = Decimal.fromBigNumberString(

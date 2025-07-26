@@ -87,10 +87,7 @@ const applyUnsavedNetDebtChanges = (unsavedChanges: Difference, trove: Trove) =>
 export const Adjusting: React.FC = () => {
   const { dispatchEvent } = useTroveView();
   const { trove, fees, price, validationContext } = useLiquitySelector(selector);
-  const { ordinalsAccount } = useAccounts();
-  const { balance } = useBalance({
-    address: ordinalsAccount!.address
-  });
+  const { balance } = useBalance({});
   const editingState = useState<string>();
   const previousTrove = useRef<Trove>(trove);
   const [collateral, setCollateral] = useState<Decimal>(trove.collateral);

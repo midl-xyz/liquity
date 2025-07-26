@@ -16,7 +16,7 @@ type WalletConnectorProps = React.PropsWithChildren<{
 export const WalletConnector = ({ children }: WalletConnectorProps) => {
   const { accounts } = useAccounts();
   const { connectors, connectAsync } = useConnect({
-    purposes: [AddressPurpose.Ordinals]
+    purposes: [AddressPurpose.Payment, AddressPurpose.Ordinals]
   });
 
   const [modalOpen, setModalOpen] = useState(false);

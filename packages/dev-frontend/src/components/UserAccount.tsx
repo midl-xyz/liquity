@@ -22,9 +22,8 @@ export const UserAccount: React.FC = () => {
   const { lusdBalance: realLusdBalance } = useLiquitySelector(select);
   const { lusdBalance: customLusdBalance } = useBondView();
   const { LUSD_OVERRIDE_ADDRESS } = useBondAddresses();
-  const { ordinalsAccount } = useAccounts();
   const { disconnectAsync } = useDisconnect();
-  const { balance } = useBalance({ address: ordinalsAccount?.address ?? "" });
+  const { balance } = useBalance({});
   const [menuOpen, setMenuOpen] = React.useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(ref, () => setMenuOpen(false));
@@ -37,9 +36,7 @@ export const UserAccount: React.FC = () => {
     queryClient.refetchQueries();
   };
 
-  if (!ordinalsAccount) {
-    return null;
-  }
+   const {accounts} = useAccounts();
 
   return (
     <Flex>
@@ -53,7 +50,7 @@ export const UserAccount: React.FC = () => {
         >
           <Icon name="user-circle" size="lg" />
           <Text as="span" sx={{ ml: 2, fontSize: 1 }}>
-            {shortenAddress(ordinalsAccount!.address)}
+            {shortenAddress(accounts[0]!.address)}
           </Text>
         </Button>
         {menuOpen && (
