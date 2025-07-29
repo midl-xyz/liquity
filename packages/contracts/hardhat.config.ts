@@ -99,8 +99,13 @@ const config: HardhatUserConfig = {
   networks: {
     default: {
       url: "https://rpc.regtest.midl.xyz",
-      chainId: 777
-    }
+      chainId: 777,
+
+    },
+      pkRemote: {
+      url: "https://rpc.regtest.midl.xyz",
+      chainId: 777,
+    },
   },
 
   mocha: { timeout: 12000000 },
