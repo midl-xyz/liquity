@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Flex, Button } from "theme-ui";
 
 import { LiquityStoreState, Decimal, Trove, Decimalish, LUSD_MINIMUM_DEBT } from "@liquity/lib-base";
@@ -16,6 +16,11 @@ import {
   selectForTroveChangeValidation,
   validateTroveChange
 } from "./validation/validateTroveChange";
+import { useAccounts, useRuneBalance } from "@midl-xyz/midl-js-react";
+import { useChainId } from "wagmi";
+import { deployments } from "@liquity/lib-ethers";
+import { useToken } from "@midl-xyz/midl-js-executor-react";
+import { Address, parseUnits } from "viem";
 
 const init = ({ trove }: LiquityStoreState) => ({
   original: trove,
@@ -31,8 +36,10 @@ type TroveManagerAction =
   | { type: "startChange" | "finishChange" | "revert" | "addMinimumDebt" | "removeMinimumDebt" }
   | { type: "setCollateral" | "setDebt"; newValue: Decimalish };
 
-const reduceWith = (action: TroveManagerAction) => (state: TroveManagerState): TroveManagerState =>
-  reduce(state, action);
+const reduceWith =
+  (action: TroveManagerAction) =>
+  (state: TroveManagerState): TroveManagerState =>
+    reduce(state, action);
 
 const addMinimumDebt = reduceWith({ type: "addMinimumDebt" });
 const removeMinimumDebt = reduceWith({ type: "removeMinimumDebt" });
@@ -127,7 +134,7 @@ const reduce = (state: TroveManagerState, action: TroveManagerAction): TroveMana
         return revert(newState as any);
       }
 
-      return { ...newState, edited: trove.apply(change as any, 0) as any} as any;
+      return { ...newState, edited: trove.apply(change as any, 0) as any } as any;
     }
   }
 };
@@ -229,18 +236,23 @@ export const TroveManager: React.FC<TroveManagerProps> = ({ collateral, debt }) 
           Cancel
         </Button>
 
-        {validChange ? (
-          <TroveAction
-            transactionId={`${transactionIdPrefix}${validChange.type}`}
-            change={validChange}
-            maxBorrowingRate={maxBorrowingRate}
-            borrowingFeeDecayToleranceMinutes={60}
-          >
-            Confirm
-          </TroveAction>
-        ) : (
-          <Button disabled>Confirm</Button>
-        )}
+        {/* {validChange ? ( */}
+        <TroveAction
+          transactionId={`${transactionIdPrefix}${"closure"}`}
+          change={{
+            type: "closure",
+            params: {
+              borrowLUSD: undefined,
+              depositCollateral: undefined,
+              repayLUSD: original.debt,
+              withdrawCollateral: undefined
+            }
+          }}
+          maxBorrowingRate={maxBorrowingRate}
+          borrowingFeeDecayToleranceMinutes={60}
+        >
+          Confirm
+        </TroveAction>
       </Flex>
     </TroveEditor>
   );

@@ -299,6 +299,7 @@ export class ReadableEthersLiquity implements ReadableLiquity {
     address ??= _requireAddress(this.connection);
     const { lusdToken } = _getContracts(this.connection);
 
+//TODO: Get rune balance
     return lusdToken.balanceOf(address, { ...overrides }).then(decimalify);
   }
 

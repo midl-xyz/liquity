@@ -1,3 +1,4 @@
+import { deployments } from "@liquity/lib-ethers";
 import {
   useAddCompleteTxIntention,
   useAddTxIntention,
@@ -5,24 +6,34 @@ import {
   useEVMAddress,
   useFinalizeBTCTransaction,
   useSendBTCTransactions,
-  useSignIntention
+  useSignIntention,
+  useToken
 } from "@midl-xyz/midl-js-executor-react";
 import { useMutation } from "@tanstack/react-query";
-import { Address } from "viem";
+import { Address, encodeAbiParameters, parseEther, toHex } from "viem";
+import { useChainId, useClient, useConfig } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
+import { Decimal, TroveAdjustmentParams } from "@liquity/lib-base";
+import { createStateOverride } from "@midl-xyz/midl-js-executor";
+import { useConfigInternal } from "@midl-xyz/midl-js-react";
+import { keccak256 } from "viem";
 
 export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
   const { addTxIntentionAsync, txIntentions } = useAddTxIntention();
   const clearTxIntentions = useClearTxIntentions();
   const { liquity } = useLiquity();
-  const { finalizeBTCTransactionAsync } = useFinalizeBTCTransaction();
+  const { finalizeBTCTransactionAsync, error } = useFinalizeBTCTransaction();
   const { signIntentionAsync, error: intentError } = useSignIntention();
   const { addCompleteTxIntentionAsync } = useAddCompleteTxIntention();
   const evmAddress = useEVMAddress();
   const [, setTransactionState] = useTransactionState();
   const { sendBTCTransactionsAsync } = useSendBTCTransactions({});
-
+  const chainId = useChainId();
+  const { lusdToken } = deployments[chainId].addresses;
+  const { rune } = useToken(lusdToken as Address);
+  const config = useConfigInternal();
+  const client = useClient;
   return useMutation({
     onError: error => {
       setTransactionState({
@@ -31,54 +42,88 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
         error: new Error("Failed to send transaction (try again)")
       });
     },
-    mutationFn: async () => {
-      setTransactionState({ type: "waitingForApproval", id: transactionId });
+    mutationFn: async (params: TroveAdjustmentParams<Decimal>) => {
+      try {
+        setTransactionState({ type: "waitingForApproval", id: transactionId });
 
-      const { rawPopulatedTransaction } = await liquity.populate.closeTrove({
-        gasLimit: 100000000n
-      });
+        const { rawPopulatedTransaction } = await liquity.populate.closeTrove({
+          gasLimit: 100000000n
+        });
 
-      clearTxIntentions();
+        clearTxIntentions();
+        console.log("DEBT: ", params.repayLUSD.toString(), rune.id, lusdToken);
+        const localUnsignedIntentions = [];
 
-      const localUnsignedIntentions = [];
-      localUnsignedIntentions.push(
-        await addTxIntentionAsync({
-          intention: {
-            hasWithdraw: true,
-            evmTransaction: {
-              to: rawPopulatedTransaction.to as Address,
-              data: rawPopulatedTransaction.data as `0x${string}`
+        localUnsignedIntentions.push(
+          await addTxIntentionAsync({
+            intention: {
+              evmTransaction: {
+                to: rawPopulatedTransaction.to as Address,
+                data: rawPopulatedTransaction.data as `0x${string}`
+              },
+              hasRunesDeposit: true,
+              runes: [
+                {
+                  address: lusdToken as Address,
+                  id: rune.id,
+                  value: BigInt(parseEther(params.repayLUSD.toString()))
+                }
+              ]
             }
+          })
+        );
+
+        localUnsignedIntentions.push(
+          await addCompleteTxIntentionAsync({ assetsToWithdraw: [] as any })
+        );
+
+        console.log("signing intentions: ");
+        console.log(localUnsignedIntentions);
+        const slot = keccak256(
+          encodeAbiParameters(
+            [
+              {
+                type: "address"
+              },
+              { type: "uint256" }
+            ],
+            [evmAddress, 2n]
+          )
+        );
+        console.log("slot");
+
+        const btcTx = await finalizeBTCTransactionAsync({
+          stateOverride: [
+            {
+              address: lusdToken as Address,
+              stateDiff: [{ slot, value: toHex(BigInt(parseEther(params.repayLUSD.toString())) as any, {size: 32}) }]
+            }
+          ]
+        });
+
+        console.log("signing intentions: ");
+        console.log(txIntentions);
+        const serializedTransactions: Address[] = [];
+        for (const intention of localUnsignedIntentions) {
+          try {
+            serializedTransactions.push(
+              await signIntentionAsync({
+                intention,
+                txId: btcTx.tx.id
+              })
+            );
+          } catch (e) {
+            console.error("error on intent signing: ", intentError, e);
           }
-        })
-      );
-
-      localUnsignedIntentions.push(
-        await addCompleteTxIntentionAsync({ assetsToWithdraw: [] as any })
-      );
-
-      const btcTx = await finalizeBTCTransactionAsync({});
-
-      console.log("signing intentions: ");
-      console.log(txIntentions);
-      const serializedTransactions: Address[] = [];
-      for (const intention of localUnsignedIntentions) {
-        try {
-          serializedTransactions.push(
-            await signIntentionAsync({
-              intention,
-              txId: btcTx.tx.id
-            })
-          );
-        } catch (e) {
-          console.error("error on intent signing: ", intentError, e);
         }
-      }
 
-      await sendBTCTransactionsAsync({
-        btcTransaction: btcTx?.tx.hex,
-        serializedTransactions
-      });
+        await sendBTCTransactionsAsync({
+          btcTransaction: btcTx?.tx.hex,
+          serializedTransactions
+        });
+      } catch (e) {
+        console.error(e);
+      }
     }
   });
 };

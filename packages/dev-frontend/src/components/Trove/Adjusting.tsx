@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useState, useRef, useMemo } from "react";
 import { Flex, Button, Box, Card, Heading } from "theme-ui";
 import {
   LiquityStoreState,
@@ -6,7 +6,8 @@ import {
   Trove,
   LUSD_LIQUIDATION_RESERVE,
   Percent,
-  Difference
+  Difference,
+  Decimalish
 } from "@liquity/lib-base";
 import { useLiquitySelector } from "@liquity/lib-react";
 
@@ -26,9 +27,13 @@ import {
   selectForTroveChangeValidation,
   validateTroveChange
 } from "./validation/validateTroveChange";
-import { useAccounts, useBalance } from "@midl-xyz/midl-js-react";
+import { useAccounts, useBalance, useRuneBalance } from "@midl-xyz/midl-js-react";
 import { BigNumber } from "ethers";
 import { convertBTCtoETH } from "@midl-xyz/midl-js-executor";
+import { useToken } from "@midl-xyz/midl-js-executor-react";
+import { deployments } from "@liquity/lib-ethers";
+import { useChainId } from "wagmi";
+import { Address } from "viem";
 
 const selector = (state: LiquityStoreState) => {
   const { trove, fees, price, accountBalance } = state;
@@ -85,6 +90,7 @@ const applyUnsavedNetDebtChanges = (unsavedChanges: Difference, trove: Trove) =>
 };
 
 export const Adjusting: React.FC = () => {
+  console.log("HAGAGA")
   const { dispatchEvent } = useTroveView();
   const { trove, fees, price, validationContext } = useLiquitySelector(selector);
   const { balance } = useBalance({});
@@ -95,6 +101,26 @@ export const Adjusting: React.FC = () => {
 
   const transactionState = useMyTransactionState(TRANSACTION_ID);
   const borrowingRate = fees.borrowingRate();
+
+  const {ordinalsAccount} = useAccounts();
+  const chainId = useChainId();
+  const { lusdToken } = deployments[chainId].addresses;
+  const { rune } = useToken(lusdToken as Address);
+  const { balance: runeBalance } = useRuneBalance({
+    runeId: rune?.id ?? "17474:2",
+    address: ordinalsAccount?.address || "",
+    query: {
+      enabled: Boolean(ordinalsAccount?.address)
+    }
+  });
+
+  console.log(rune?.id, ordinalsAccount.address, lusdToken, chainId)
+
+  useMemo(() => {
+    if(runeBalance?.balance) {
+          validationContext.lusdBalance = Decimal.from(runeBalance?.balance);
+    }
+  }, [runeBalance?.balance])
 
   useEffect(() => {
     if (transactionState.type === "confirmedOneShot") {
@@ -146,7 +172,7 @@ console.log(availableEth, trove.collateral)
   const collateralRatio =
     !collateral.isZero && !netDebt.isZero ? updatedTrove.collateralRatio(price) : undefined;
   const collateralRatioChange = Difference.between(collateralRatio, trove.collateralRatio(price));
-
+  console.log(validationContext);
   const [troveChange, description] = validateTroveChange(
     trove,
     updatedTrove,

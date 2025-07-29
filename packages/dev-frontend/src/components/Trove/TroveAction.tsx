@@ -1,6 +1,6 @@
 import { Button } from "theme-ui";
 
-import { Decimal, TroveChange } from "@liquity/lib-base";
+import { Decimal, TroveAdjustmentParams, TroveChange } from "@liquity/lib-base";
 
 import { useAdjustTrove } from "./hooks/useAdjustTrove";
 import { useCloseTrove } from "./hooks/useCloseTrove";
@@ -49,7 +49,7 @@ export const TroveAction: React.FC<TroveActionProps> = ({
         }
 
         if (change.type === "closure") {
-          closeTrove.mutate();
+          closeTrove.mutate(change.params as TroveAdjustmentParams<Decimal>);
         }
       }}
     >

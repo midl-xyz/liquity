@@ -15,10 +15,17 @@ import {
   TroveCreationParams
 } from "@liquity/lib-base";
 
+import { useAccounts, useRuneBalance, useToken, useAccounts } from "@midl-xyz/midl-js-react";
+import { useToken } from "@midl-xyz/midl-js-executor-react";
+import { useChainId } from "wagmi";
+import {useMemo} from "react";
+
 import { COIN } from "../../../strings";
 
 import { ActionDescription, Amount } from "../../ActionDescription";
 import { ErrorDescription } from "../../ErrorDescription";
+import { FC, useMemo } from "react";
+import { deployments } from "@liquity/lib-ethers";
 
 const mcrPercent = new Percent(MINIMUM_COLLATERAL_RATIO).toString(0);
 const ccrPercent = new Percent(CRITICAL_COLLATERAL_RATIO).toString(0);
@@ -127,7 +134,7 @@ export const validateTroveChange = (
     .add(resultingTrove)
     .collateralRatioIsBelowCritical(price);
 
-  const context: TroveChangeValidationContext = {
+    const context: TroveChangeValidationContext = {
     ...selectedState,
     originalTrove,
     resultingTrove,
@@ -163,7 +170,7 @@ export const validateTroveChange = (
   return [change, <TroveChangeDescription params={change.params} />];
 };
 
-const validateTroveCreation = (
+const validateTroveCreation: FC = (
   { depositCollateral, borrowLUSD }: TroveCreationParams<Decimal>,
   {
     resultingTrove,
