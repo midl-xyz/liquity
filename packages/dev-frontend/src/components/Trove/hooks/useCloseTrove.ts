@@ -77,8 +77,6 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
           await addCompleteTxIntentionAsync({ assetsToWithdraw: [] as any })
         );
 
-        console.log("signing intentions: ");
-        console.log(localUnsignedIntentions);
         const slot = keccak256(
           encodeAbiParameters(
             [
@@ -90,15 +88,20 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
             [evmAddress, 2n]
           )
         );
-        console.log("slot");
 
+        const customStateOverride = [
+          {
+            address: lusdToken as Address,
+            stateDiff: [
+              {
+                slot,
+                value: toHex(BigInt(parseEther(params.repayLUSD.toString())) as any, { size: 32 })
+              }
+            ]
+          }
+        ];
         const btcTx = await finalizeBTCTransactionAsync({
-          stateOverride: [
-            {
-              address: lusdToken as Address,
-              stateDiff: [{ slot, value: toHex(BigInt(parseEther(params.repayLUSD.toString())) as any, {size: 32}) }]
-            }
-          ]
+          stateOverride: customStateOverride
         });
 
         console.log("signing intentions: ");
