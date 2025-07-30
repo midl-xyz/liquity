@@ -26,15 +26,19 @@ export const LiquidatedTrove: React.FC = () => {
         <InfoMessage title="Your Trove has been liquidated.">
           {hasSurplusCollateral
             ? "Please reclaim your remaining collateral before opening a new Trove."
-            : "You can borrow BUSD by opening a Trove."}
+            : "You can borrow MIDL•RUNE•STABLECOIN by opening a Trove."}
         </InfoMessage>
 
         <Flex variant="layout.actions">
           {hasSurplusCollateral && <CollateralSurplusAction />}
           {!hasSurplusCollateral && <Button onClick={handleOpenTrove}>Open Trove</Button>}
 
-          <Box sx={{alignSelf: "end", justifySelf: "end"}}>
-            <NavLink href="https://medium.com/midl-xyz/pioneer-the-midl-testnet-56c412486f08" target="_blank" rel="noopener noreferrer">
+          <Box sx={{ alignSelf: "end", justifySelf: "end" }}>
+            <NavLink
+              href="https://medium.com/midl-xyz/pioneer-the-midl-testnet-56c412486f08"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Guide
             </NavLink>
           </Box>

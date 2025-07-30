@@ -36,7 +36,7 @@ export const UserAccount: React.FC = () => {
     queryClient.refetchQueries();
   };
 
-   const {accounts} = useAccounts();
+  const { accounts } = useAccounts();
 
   return (
     <Flex>
@@ -83,15 +83,17 @@ export const UserAccount: React.FC = () => {
       >
         <Icon name="wallet" size="lg" />
 
-        {([
-          ["BTC", Decimal.from(formatUnits(BigInt(balance.toString()), 8))],
-          [COIN, Decimal.from(lusdBalance.toString() || 0)]
-          // [GT, Decimal.from(lqtyBalance)]
-          // ["bLUSD", Decimal.from(bLusdBalance || 0)]
-        ] as const).map(([currency, balance], i) => (
+        {(
+          [
+            ["BTC", Decimal.from(formatUnits(BigInt(balance.toString()), 8))],
+            [COIN, Decimal.from(lusdBalance.toString() || 0)]
+            // [GT, Decimal.from(lqtyBalance)]
+            // ["bLUSD", Decimal.from(bLusdBalance || 0)]
+          ] as const
+        ).map(([currency, balance], i) => (
           <Flex key={i} sx={{ ml: 3, flexDirection: "column" }}>
             <Heading sx={{ fontSize: 1 }}>{currency}</Heading>
-            <Text sx={{ fontSize: 1 }}>{balance.prettify(4)}</Text>
+            <Text sx={{ fontSize: 1 }}>{balance.prettify(6)}</Text>
           </Flex>
         ))}
       </Box>

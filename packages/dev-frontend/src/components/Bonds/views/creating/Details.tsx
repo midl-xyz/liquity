@@ -88,11 +88,11 @@ export const Details: React.FC<DetailsProps> = ({ onBack }) => {
     simulatedProtocolInfo.simulatedMarketPrice
   );
   const rebondRoi = rebondReturn / toFloat(deposit) || 0;
-  const marketPriceMin = protocolInfo.floorPrice.mul(1.025).prettify(2); // Enough to display what happens below the 3% chicken in fee
+  const marketPriceMin = protocolInfo.floorPrice.mul(1.025).prettify(6); // Enough to display what happens below the 3% chicken in fee
   const marketPriceMax = Decimal.max(
     protocolInfo.marketPrice.mul(1.1),
     protocolInfo.floorPrice.mul(1.5)
-  ).prettify(2);
+  ).prettify(6);
 
   const rebondDays = getRebondPeriodInDays(
     simulatedProtocolInfo.alphaAccrualFactor,
@@ -194,7 +194,7 @@ export const Details: React.FC<DetailsProps> = ({ onBack }) => {
                   <Label description={l.BREAK_EVEN_TIME.description}>{l.BREAK_EVEN_TIME.term}</Label>
                   <SubLabel>
                     <InfiniteEstimate estimate={breakEvenAccrual}>
-                      {breakEvenAccrual.prettify(2)} bLUSD
+                      {breakEvenAccrual.prettify(6)} bLUSD
                     </InfiniteEstimate>
                   </SubLabel>
                 </>
@@ -209,7 +209,7 @@ export const Details: React.FC<DetailsProps> = ({ onBack }) => {
                   </Label>
                   <SubLabel>
                     <InfiniteEstimate estimate={rebondAccrual}>
-                      {rebondAccrual.prettify(2)} bLUSD
+                      {rebondAccrual.prettify(6)} bLUSD
                     </InfiniteEstimate>
                   </SubLabel>
                 </>
@@ -222,7 +222,7 @@ export const Details: React.FC<DetailsProps> = ({ onBack }) => {
       <EditableRow
         label={l.BOND_DEPOSIT.term}
         inputId="bond-deposit-amount"
-        amount={deposit.prettify(2)}
+        amount={deposit.prettify(6)}
         unit="BUSD"
         editingState={depositEditingState}
         editedAmount={deposit.toString()}
@@ -291,14 +291,14 @@ export const Details: React.FC<DetailsProps> = ({ onBack }) => {
 
       {isInfiniteBondApproved && (
         <ActionDescription>
-          You are bonding <Amount>{deposit.prettify(2)} BUSD</Amount>
+          You are bonding <Amount>{deposit.prettify(6)} BUSD</Amount>
         </ActionDescription>
       )}
 
       {!isDepositEnough && <ErrorDescription>The minimum bond amount is 100 BUSD.</ErrorDescription>}
       {doesDepositExceedBalance && (
         <ErrorDescription>
-          Amount exceeds your balance by <Amount>{deposit.sub(lusdBalance).prettify(2)} BUSD</Amount>
+          Amount exceeds your balance by <Amount>{deposit.sub(lusdBalance).prettify(6)} BUSD</Amount>
         </ErrorDescription>
       )}
 

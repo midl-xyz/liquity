@@ -21,7 +21,7 @@ export const ReadOnlyTrove: React.FC = () => {
 
   const { trove, price } = useLiquitySelector(select);
 
-  // console.log("READONLY TROVE", trove.collateral.prettify(4));
+  // console.log("READONLY TROVE", trove.collateral.prettify(6));
   return (
     <Card>
       <Heading>Trove</Heading>
@@ -30,7 +30,7 @@ export const ReadOnlyTrove: React.FC = () => {
           <DisabledEditableRow
             label="Collateral"
             inputId="trove-collateral"
-            amount={trove.collateral.prettify(4)}
+            amount={trove.collateral.prettify(6)}
             unit="BTC"
           />
 
@@ -55,7 +55,11 @@ export const ReadOnlyTrove: React.FC = () => {
           </Button>
 
           <Box sx={{ alignSelf: "end", justifySelf: "end" }}>
-            <NavLink href="https://medium.com/midl-xyz/pioneer-the-midl-testnet-56c412486f08" target="_blank" rel="noopener noreferrer">
+            <NavLink
+              href="https://medium.com/midl-xyz/pioneer-the-midl-testnet-56c412486f08"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Guide
             </NavLink>
           </Box>

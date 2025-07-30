@@ -76,7 +76,7 @@ export const HorizontalSlider: React.FC<SliderProps> = ({
       </Flex>
       <Flex sx={{ fontWeight: "400", justifyContent: "center", alignItems: "center" }}>
         <Text>
-          {value.prettify(2)} {type}
+          {value.prettify(6)} {type}
         </Text>
       </Flex>
     </Flex>

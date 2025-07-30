@@ -90,7 +90,7 @@ const applyUnsavedNetDebtChanges = (unsavedChanges: Difference, trove: Trove) =>
 };
 
 export const Adjusting: React.FC = () => {
-  console.log("HAGAGA")
+  console.log("HAGAGA");
   const { dispatchEvent } = useTroveView();
   const { trove, fees, price, validationContext } = useLiquitySelector(selector);
   const { balance } = useBalance({});
@@ -102,7 +102,7 @@ export const Adjusting: React.FC = () => {
   const transactionState = useMyTransactionState(TRANSACTION_ID);
   const borrowingRate = fees.borrowingRate();
 
-  const {ordinalsAccount} = useAccounts();
+  const { ordinalsAccount } = useAccounts();
   const chainId = useChainId();
   const { lusdToken } = deployments[chainId].addresses;
   const { rune } = useToken(lusdToken as Address);
@@ -114,13 +114,13 @@ export const Adjusting: React.FC = () => {
     }
   });
 
-  console.log(rune?.id, ordinalsAccount.address, lusdToken, chainId)
+  console.log(rune?.id, ordinalsAccount.address, lusdToken, chainId);
 
   useMemo(() => {
-    if(runeBalance?.balance) {
-          validationContext.lusdBalance = Decimal.from(runeBalance?.balance);
+    if (runeBalance?.balance) {
+      validationContext.lusdBalance = Decimal.from(runeBalance?.balance);
     }
-  }, [runeBalance?.balance])
+  }, [runeBalance?.balance]);
 
   useEffect(() => {
     if (transactionState.type === "confirmedOneShot") {
@@ -166,22 +166,17 @@ export const Adjusting: React.FC = () => {
   const availableEth = Decimal.fromBigNumberString(
     BigNumber.from(convertBTCtoETH(balance)).toHexString()
   );
-console.log(availableEth, trove.collateral)
+  console.log(availableEth, trove.collateral);
   const maxCollateral = trove.collateral.add(availableEth);
   const collateralMaxedOut = collateral.eq(maxCollateral);
   const collateralRatio =
     !collateral.isZero && !netDebt.isZero ? updatedTrove.collateralRatio(price) : undefined;
   const collateralRatioChange = Difference.between(collateralRatio, trove.collateralRatio(price));
   console.log(validationContext);
-  const [troveChange, description] = validateTroveChange(
-    trove,
-    updatedTrove,
-    borrowingRate,
-    {
-      ...validationContext,
-      accountBalance: availableEth
-    }
-  );
+  const [troveChange, description] = validateTroveChange(trove, updatedTrove, borrowingRate, {
+    ...validationContext,
+    accountBalance: availableEth
+  });
 
   const stableTroveChange = useStableTroveChange(troveChange);
   const [gasEstimationState, setGasEstimationState] = useState<GasEstimationState>({ type: "idle" });
@@ -209,12 +204,12 @@ console.log(availableEth, trove.collateral)
         <EditableRow
           label="Collateral"
           inputId="trove-collateral"
-          amount={collateral.prettify(4)}
+          amount={collateral.prettify(6)}
           maxAmount={maxCollateral.toString()}
           maxedOut={collateralMaxedOut}
           editingState={editingState}
           unit="BTC"
-          editedAmount={collateral.toString(4)}
+          editedAmount={collateral.toString(6)}
           setEditedAmount={(amount: string) => setCollateral(Decimal.from(amount))}
         />
 
@@ -249,7 +244,7 @@ console.log(availableEth, trove.collateral)
         <StaticRow
           label="Borrowing Fee"
           inputId="trove-borrowing-fee"
-          amount={fee.prettify(2)}
+          amount={fee.prettify(6)}
           pendingAmount={feePct.toString(2)}
           unit={COIN}
           infoIcon={
@@ -267,18 +262,19 @@ console.log(availableEth, trove.collateral)
         <StaticRow
           label="Total debt"
           inputId="trove-total-debt"
-          amount={totalDebt.prettify(2)}
+          amount={totalDebt.prettify(6)}
           unit={COIN}
           infoIcon={
             <InfoIcon
               tooltip={
                 <Card variant="tooltip" sx={{ width: "240px" }}>
-                  The total amount of BUSD your Trove will hold.{" "}
+                  The total amount of MIDL•RUNE•STABLECOIN your Trove will hold.{" "}
                   {isDirty && (
                     <>
-                      You will need to repay {totalDebt.sub(LUSD_LIQUIDATION_RESERVE).prettify(2)}{" "}
-                      BUSD to reclaim your collateral ({LUSD_LIQUIDATION_RESERVE.toString()} BUSD
-                      Liquidation Reserve excluded).
+                      You will need to repay {totalDebt.sub(LUSD_LIQUIDATION_RESERVE).prettify(6)}{" "}
+                      MIDL•RUNE•STABLECOIN to reclaim your collateral (
+                      {LUSD_LIQUIDATION_RESERVE.toString()} MIDL•RUNE•STABLECOIN Liquidation Reserve
+                      excluded).
                     </>
                   )}
                 </Card>

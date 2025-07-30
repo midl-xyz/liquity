@@ -50,8 +50,7 @@ const GAS_ROOM_ETH = Decimal.from(0.0000001);
 export const Opening: React.FC = () => {
   const { dispatchEvent } = useTroveView();
   const { fees, price, validationContext } = useLiquitySelector(selector);
-  const { balance } = useBalance({
-  });
+  const { balance } = useBalance({});
 
   const accountBalance = Decimal.fromBigNumberString(
     BigNumber.from(convertBTCtoETH(balance)).toHexString()
@@ -120,12 +119,12 @@ export const Opening: React.FC = () => {
         <EditableRow
           label="Collateral"
           inputId="trove-collateral"
-          amount={collateral.prettify(4)}
+          amount={collateral.prettify(6)}
           maxAmount={maxCollateral.toString()}
           maxedOut={collateralMaxedOut}
           editingState={editingState}
           unit="BTC"
-          editedAmount={collateral.toString(4)}
+          editedAmount={collateral.toString(6)}
           setEditedAmount={(amount: string) => setCollateral(Decimal.from(amount))}
         />
 
@@ -160,7 +159,7 @@ export const Opening: React.FC = () => {
         <StaticRow
           label="Borrowing Fee"
           inputId="trove-borrowing-fee"
-          amount={fee.prettify(2)}
+          amount={fee.prettify(6)}
           pendingAmount={feePct.toString(2)}
           unit={COIN}
           infoIcon={
@@ -178,18 +177,19 @@ export const Opening: React.FC = () => {
         <StaticRow
           label="Total debt"
           inputId="trove-total-debt"
-          amount={totalDebt.prettify(2)}
+          amount={totalDebt.prettify(6)}
           unit={COIN}
           infoIcon={
             <InfoIcon
               tooltip={
                 <Card variant="tooltip" sx={{ width: "240px" }}>
-                  The total amount of BUSD your Trove will hold.{" "}
+                  The total amount of MIDL•RUNE•STABLECOIN your Trove will hold.{" "}
                   {isDirty && (
                     <>
-                      You will need to repay {totalDebt.sub(LUSD_LIQUIDATION_RESERVE).prettify(2)}{" "}
-                      BUSD to reclaim your collateral ({LUSD_LIQUIDATION_RESERVE.toString()} BUSD
-                      Liquidation Reserve excluded).
+                      You will need to repay {totalDebt.sub(LUSD_LIQUIDATION_RESERVE).prettify(6)}{" "}
+                      MIDL•RUNE•STABLECOIN to reclaim your collateral (
+                      {LUSD_LIQUIDATION_RESERVE.toString()} MIDL•RUNE•STABLECOIN Liquidation Reserve
+                      excluded).
                     </>
                   )}
                 </Card>

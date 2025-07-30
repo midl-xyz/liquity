@@ -18,7 +18,7 @@ import {
 import { useAccounts, useRuneBalance, useToken, useAccounts } from "@midl-xyz/midl-js-react";
 import { useToken } from "@midl-xyz/midl-js-executor-react";
 import { useChainId } from "wagmi";
-import {useMemo} from "react";
+import { useMemo } from "react";
 
 import { COIN } from "../../../strings";
 
@@ -38,7 +38,7 @@ const TroveChangeDescription: React.FC<TroveAdjustmentDescriptionParams> = ({ pa
   <ActionDescription>
     {params.depositCollateral && params.borrowLUSD ? (
       <>
-        You will deposit <Amount>{params.depositCollateral.prettify(4)} BTC</Amount> and receive{" "}
+        You will deposit <Amount>{params.depositCollateral.prettify(6)} BTC</Amount> and receive{" "}
         <Amount>
           {params.borrowLUSD.prettify()} {COIN}
         </Amount>
@@ -49,29 +49,29 @@ const TroveChangeDescription: React.FC<TroveAdjustmentDescriptionParams> = ({ pa
         <Amount>
           {params.repayLUSD.prettify()} {COIN}
         </Amount>{" "}
-        and receive <Amount>{params.withdrawCollateral.prettify(4)} BTC</Amount>
+        and receive <Amount>{params.withdrawCollateral.prettify(6)} BTC</Amount>
       </>
     ) : params.depositCollateral && params.repayLUSD ? (
       <>
-        You will deposit <Amount>{params.depositCollateral.prettify(4)} BTC</Amount> and pay{" "}
+        You will deposit <Amount>{params.depositCollateral.prettify(6)} BTC</Amount> and pay{" "}
         <Amount>
           {params.repayLUSD.prettify()} {COIN}
         </Amount>
       </>
     ) : params.borrowLUSD && params.withdrawCollateral ? (
       <>
-        You will receive <Amount>{params.withdrawCollateral.prettify(4)} BTC</Amount> and{" "}
+        You will receive <Amount>{params.withdrawCollateral.prettify(6)} BTC</Amount> and{" "}
         <Amount>
           {params.borrowLUSD.prettify()} {COIN}
         </Amount>
       </>
     ) : params.depositCollateral ? (
       <>
-        You will deposit <Amount>{params.depositCollateral.prettify(4)} BTC</Amount>
+        You will deposit <Amount>{params.depositCollateral.prettify(6)} BTC</Amount>
       </>
     ) : params.withdrawCollateral ? (
       <>
-        You will receive <Amount>{params.withdrawCollateral.prettify(4)} BTC</Amount>
+        You will receive <Amount>{params.withdrawCollateral.prettify(6)} BTC</Amount>
       </>
     ) : params.borrowLUSD ? (
       <>
@@ -134,7 +134,7 @@ export const validateTroveChange = (
     .add(resultingTrove)
     .collateralRatioIsBelowCritical(price);
 
-    const context: TroveChangeValidationContext = {
+  const context: TroveChangeValidationContext = {
     ...selectedState,
     originalTrove,
     resultingTrove,
@@ -224,7 +224,7 @@ const validateTroveCreation: FC = (
     return (
       <ErrorDescription>
         The amount you're trying to deposit exceeds your balance by{" "}
-        <Amount>{depositCollateral.sub(accountBalance).prettify(4)} BTC</Amount>.
+        <Amount>{depositCollateral.sub(accountBalance).prettify(6)} BTC</Amount>.
       </ErrorDescription>
     );
   }
@@ -320,7 +320,7 @@ const validateTroveAdjustment = (
     return (
       <ErrorDescription>
         The amount you're trying to deposit exceeds your balance by{" "}
-        <Amount>{depositCollateral.sub(accountBalance).prettify(4)} BTC</Amount>.
+        <Amount>{depositCollateral.sub(accountBalance).prettify(6)} BTC</Amount>.
       </ErrorDescription>
     );
   }

@@ -131,7 +131,7 @@ export const DepositPane: React.FC = () => {
       <EditableRow
         label="bLUSD amount"
         inputId="deposit-blusd"
-        amount={bLusdAmount.prettify(2)}
+        amount={bLusdAmount.prettify(6)}
         unit="bLUSD"
         editingState={editingState}
         editedAmount={bLusdAmount.toString()}
@@ -143,7 +143,7 @@ export const DepositPane: React.FC = () => {
       <EditableRow
         label="BUSD amount"
         inputId="deposit-lusd"
-        amount={lusdAmount.prettify(2)}
+        amount={lusdAmount.prettify(6)}
         unit="BUSD"
         editingState={editingState}
         editedAmount={lusdAmount.toString()}
@@ -159,7 +159,7 @@ export const DepositPane: React.FC = () => {
       <DisabledEditableRow
         label="Mint LP tokens"
         inputId="deposit-mint-lp-tokens"
-        amount={lpTokens.prettify(2)}
+        amount={lpTokens.prettify(6)}
       />
 
       <Label>
@@ -172,7 +172,7 @@ export const DepositPane: React.FC = () => {
             tooltip={
               <Card variant="tooltip">
                 Tick this box to deposit bLUSD and BUSD-3CRV in the pool's current liquidity ratio.
-                Current ratio = 1 bLUSD : {poolBalanceRatio.prettify(2)} BUSD.
+                Current ratio = 1 bLUSD : {poolBalanceRatio.prettify(6)} BUSD.
               </Card>
             }
           />
@@ -203,12 +203,12 @@ export const DepositPane: React.FC = () => {
           Deposit exceeds your balance by{" "}
           {isBLusdBalanceInsufficient && (
             <>
-              <Amount>{bLusdAmount.sub(coalescedBLusdBalance).prettify(2)} bLUSD</Amount>
+              <Amount>{bLusdAmount.sub(coalescedBLusdBalance).prettify(6)} bLUSD</Amount>
               {isLusdBalanceInsufficient && <> and </>}
             </>
           )}
           {isLusdBalanceInsufficient && (
-            <Amount>{lusdAmount.sub(coalescedLusdBalance).prettify(2)} BUSD</Amount>
+            <Amount>{lusdAmount.sub(coalescedLusdBalance).prettify(6)} BUSD</Amount>
           )}
         </ErrorDescription>
       )}

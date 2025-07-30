@@ -58,7 +58,7 @@ export const Yield: React.FC = () => {
             </Paragraph>
             <Paragraph sx={{ fontSize: "12px", fontFamily: "monospace" }}>
               ($
-              {remainingLqtyInUSD.shorten()} * {dailyIssuancePercentage.toString(4)}% / $
+              {remainingLqtyInUSD.shorten()} * {dailyIssuancePercentage.toString(6)}% / $
               {lusdInStabilityPool.shorten()}) * 365 * 100 =
               <Text sx={{ fontWeight: "bold" }}> {aprPercentage.toString(2)}%</Text>
             </Paragraph>

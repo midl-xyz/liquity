@@ -7,5 +7,5 @@ export const midlConfig = createConfig({
   provider: new MempoolSpaceProvider({
     regtest: 'https://mempool.regtest.midl.xyz',
   } as any), // Any is used coz we don't wanna give mainnet links
-  connectors: [leatherConnector(), xverseConnector()],
+  connectors: [xverseConnector(), leatherConnector()],
 });

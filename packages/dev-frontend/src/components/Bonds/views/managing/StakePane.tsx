@@ -55,7 +55,7 @@ export const StakePane: React.FC = () => {
       <EditableRow
         label="Wallet LP Tokens"
         inputId="stake-lp"
-        amount={stakeAmount.prettify(2)}
+        amount={stakeAmount.prettify(6)}
         editingState={editingState}
         editedAmount={stakeAmount.toString()}
         setEditedAmount={amount => setStakeAmount(Decimal.from(amount))}
@@ -67,7 +67,7 @@ export const StakePane: React.FC = () => {
         <StaticRow label="bLUSD LP APR">
           <StaticAmounts sx={{ alignItems: "center", justifyContent: "flex-start" }}>
             <PoolBalance symbol="%">
-              {(protocolInfo?.bLusdLpApr ?? Decimal.INFINITY).prettify(2)}
+              {(protocolInfo?.bLusdLpApr ?? Decimal.INFINITY).prettify(6)}
             </PoolBalance>{" "}
           </StaticAmounts>
         </StaticRow>
@@ -81,7 +81,7 @@ export const StakePane: React.FC = () => {
       {isBalanceInsufficient && (
         <ErrorDescription>
           LP Token amount exceeds your balance by{" "}
-          <Amount>{stakeAmount.sub(coalescedLpTokenBalance).prettify(2)}</Amount>
+          <Amount>{stakeAmount.sub(coalescedLpTokenBalance).prettify(6)}</Amount>
         </ErrorDescription>
       )}
 

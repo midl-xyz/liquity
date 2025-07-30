@@ -81,8 +81,8 @@ export const StakingEditor: React.FC<StakingEditorProps> = ({
           <StaticRow
             label="Pool share"
             inputId="stake-share"
-            amount={newPoolShare.prettify(4)}
-            pendingAmount={poolShareChange?.prettify(4).concat("%")}
+            amount={newPoolShare.prettify(6)}
+            pendingAmount={poolShareChange?.prettify(6).concat("%")}
             pendingColor={poolShareChange?.positive ? "success" : "danger"}
             unit="%"
           />
@@ -93,7 +93,7 @@ export const StakingEditor: React.FC<StakingEditorProps> = ({
             <StaticRow
               label="Redemption gain"
               inputId="stake-gain-eth"
-              amount={originalStake.collateralGain.prettify(4)}
+              amount={originalStake.collateralGain.prettify(6)}
               color={originalStake.collateralGain.nonZero && "success"}
               unit="ETH"
             />

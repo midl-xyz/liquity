@@ -39,7 +39,7 @@ const liquidatableInRecoveryMode = (
   if (collateralRatio.gte(MINIMUM_COLLATERAL_RATIO) && collateralRatio.lt(totalCollateralRatio)) {
     return [
       trove.debt.lte(lusdInStabilityPool),
-      "There's not enough BUSD in the Stability pool to cover the debt"
+      "There's not enough MIDL•RUNE•STABLECOIN in the Stability pool to cover the debt"
     ] as const;
   } else {
     return liquidatableInNormalMode(trove, price);
@@ -293,7 +293,7 @@ export const RiskyTroves: React.FC<RiskyTrovesProps> = ({ pageSize }) => {
                       </td>
                       <td>
                         <Abbreviation short={trove.collateral.shorten()}>
-                          {trove.collateral.prettify(4)}
+                          {trove.collateral.prettify(6)}
                         </Abbreviation>
                       </td>
                       <td>

@@ -147,7 +147,7 @@ export const WithdrawPane: React.FC = () => {
       <EditableRow
         label="Burn LP Tokens"
         inputId="withdraw-burn-lp"
-        amount={burnLpTokens.prettify(2)}
+        amount={burnLpTokens.prettify(6)}
         editingState={editingState}
         editedAmount={burnLpTokens.toString()}
         setEditedAmount={amount => setBurnLp(Decimal.from(amount))}
@@ -189,7 +189,7 @@ export const WithdrawPane: React.FC = () => {
             <React.Fragment key={i}>
               {i > 0 && <Text sx={{ fontWeight: "light", mx: "12px" }}>+</Text>}
               <WithdrawnAmount symbol={tokenSymbol.get(token) ?? ""}>
-                {amount.prettify(2)}
+                {amount.prettify(6)}
               </WithdrawnAmount>
             </React.Fragment>
           ))}
@@ -201,7 +201,7 @@ export const WithdrawPane: React.FC = () => {
       {isBalanceInsufficient && (
         <ErrorDescription>
           LP Token amount exceeds your balance by{" "}
-          <Amount>{burnLpTokens.sub(coalescedLpTokenBalance).prettify(2)}</Amount>
+          <Amount>{burnLpTokens.sub(coalescedLpTokenBalance).prettify(6)}</Amount>
         </ErrorDescription>
       )}
 

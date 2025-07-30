@@ -7,7 +7,7 @@ export type Lexicon = {
 export const BORROW_FEE: Lexicon = {
   term: "Borrowing Fee",
   description:
-    "The Borrowing Fee is a one-off fee charged as a percentage of the borrowed amount (in BUSD) and is part of a Trove's debt. The fee varies between 0.5% and 5% depending on BUSD redemption volumes."
+    "The Borrowing Fee is a one-off fee charged as a percentage of the borrowed amount (in MIDL•RUNE•STABLECOIN) and is part of a Trove's debt. The fee varies between 0.5% and 5% depending on MIDL•RUNE•STABLECOIN redemption volumes."
 };
 
 export const TVL: Lexicon = {
@@ -34,9 +34,9 @@ export const RECOVERY_MODE: Lexicon = {
 };
 
 export const STABILITY_POOL_LUSD: Lexicon = {
-  term: "BUSD in Stability Pool",
+  term: "MIDL•RUNE•STABLECOIN in Stability Pool",
   description:
-    "The total BUSD currently held in the Stability Pool, expressed as an amount and a fraction of the BUSD supply."
+    "The total MIDL•RUNE•STABLECOIN currently held in the Stability Pool, expressed as an amount and a fraction of the MIDL•RUNE•STABLECOIN supply."
 };
 
 export const KICKBACK_RATE: Lexicon = {
@@ -50,11 +50,11 @@ export const ETH: Lexicon = {
 };
 
 export const LUSD: Lexicon = {
-  term: "BUSD"
+  term: "MIDL•RUNE•STABLECOIN"
 };
 
 export const LQTY: Lexicon = {
-  term: "BUSD"
+  term: "PROTOCOL TOKEN"
 };
 
 export const TROVES: Lexicon = {
@@ -63,6 +63,6 @@ export const TROVES: Lexicon = {
 };
 
 export const LUSD_SUPPLY: Lexicon = {
-  term: "BUSD supply",
-  description: "The total BUSD minted by the Liquity Protocol."
+  term: "MIDL•RUNE•STABLECOIN supply",
+  description: "The total MIDL•RUNE•STABLECOIN minted by the Liquity Protocol."
 };

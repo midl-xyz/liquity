@@ -175,7 +175,7 @@ export const SwapPane: React.FC = () => {
       <EditableRow
         label="Sell"
         inputId="swap-input-amount"
-        amount={inputAmount.prettify(2)}
+        amount={inputAmount.prettify(6)}
         unit={tokenSymbol[inputToken]}
         editingState={editingState}
         editedAmount={inputAmount.toString()}
@@ -192,7 +192,7 @@ export const SwapPane: React.FC = () => {
         {outputAmount ? (
           <DisabledEditableAmounts
             inputId="swap-output-amount"
-            amount={outputAmount.prettify(2)}
+            amount={outputAmount.prettify(6)}
             unit={tokenSymbol[outputToken[inputToken]]}
           />
         ) : (
@@ -208,7 +208,7 @@ export const SwapPane: React.FC = () => {
         {exchangeRate ? (
           <StaticAmounts
             inputId="swap-exchange-rate"
-            amount={exchangeRate.prettify(4)}
+            amount={exchangeRate.prettify(6)}
             unit={`${tokenSymbol[inputToken]}:${tokenSymbol[outputToken[inputToken]]}`}
           />
         ) : (
@@ -224,7 +224,7 @@ export const SwapPane: React.FC = () => {
         {priceImpact && priceImpactPct ? (
           <StaticAmounts
             inputId="swap-price-impact"
-            amount={priceImpactPct.toString(4)}
+            amount={priceImpactPct.toString(6)}
             color={priceImpact.gte(0.005) ? "danger" : undefined}
           />
         ) : (
@@ -314,7 +314,7 @@ export const SwapPane: React.FC = () => {
         <ErrorDescription>
           Amount exceeds your balance by{" "}
           <Amount>
-            {inputAmount.sub(inputTokenBalance).prettify(2)} {tokenSymbol[inputToken]}
+            {inputAmount.sub(inputTokenBalance).prettify(6)} {tokenSymbol[inputToken]}
           </Amount>
         </ErrorDescription>
       )}

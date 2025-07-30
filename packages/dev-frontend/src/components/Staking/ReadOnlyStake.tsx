@@ -38,14 +38,14 @@ export const ReadOnlyStake: React.FC = () => {
         <StaticRow
           label="Pool share"
           inputId="stake-share"
-          amount={poolShare.prettify(4)}
+          amount={poolShare.prettify(6)}
           unit="%"
         />
 
         <StaticRow
           label="Redemption gain"
           inputId="stake-gain-eth"
-          amount={lqtyStake.collateralGain.prettify(4)}
+          amount={lqtyStake.collateralGain.prettify(6)}
           color={lqtyStake.collateralGain.nonZero && "success"}
           unit="ETH"
         />

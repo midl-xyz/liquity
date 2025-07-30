@@ -38,7 +38,7 @@ export const BondStats: React.FC<BondStatsProps> = () => {
         BUSD
       </Heading>
       <Statistic lexicon={l.BLUSD_MARKET_PRICE}>
-        <Metric value={protocolInfo.marketPrice.prettify(3)} unit="BUSD" />
+        <Metric value={protocolInfo.marketPrice.prettify(6)} unit="BUSD" />
       </Statistic>
       <Statistic lexicon={l.BLUSD_FAIR_PRICE}>
         <Metric
@@ -47,22 +47,22 @@ export const BondStats: React.FC<BondStatsProps> = () => {
               ? "N/A"
               : `${protocolInfo.fairPrice.lower.prettify(
                   2
-                )} - ${protocolInfo.fairPrice.upper.prettify(2)}`
+                )} - ${protocolInfo.fairPrice.upper.prettify(6)}`
           }
           unit="BUSD"
         />
       </Statistic>
       <Statistic lexicon={l.BLUSD_FLOOR_PRICE}>
-        <Metric value={protocolInfo.floorPriceWithoutPendingHarvests.prettify(4)} unit="BUSD" />
+        <Metric value={protocolInfo.floorPriceWithoutPendingHarvests.prettify(6)} unit="BUSD" />
       </Statistic>
       <Statistic lexicon={l.BLUSD_WIND_DOWN_PRICE}>
-        <Metric value={protocolInfo.windDownPrice.prettify(4)} unit="BUSD" />
+        <Metric value={protocolInfo.windDownPrice.prettify(6)} unit="BUSD" />
       </Statistic>
       <Statistic lexicon={l.BLUSD_APR}>
         <Metric
           value={
             protocolInfo.bLusdApr && protocolInfo.bLusdSupply.gt(0)
-              ? protocolInfo.bLusdApr.mul(100).prettify(2)
+              ? protocolInfo.bLusdApr.mul(100).prettify(6)
               : "N/A"
           }
           unit="%"
@@ -71,7 +71,7 @@ export const BondStats: React.FC<BondStatsProps> = () => {
       <Statistic lexicon={l.BLUSD_LP_APR}>
         <Metric
           value={
-            protocolInfo?.bLusdLpApr !== undefined ? protocolInfo.bLusdLpApr.prettify(2) : "N/A"
+            protocolInfo?.bLusdLpApr !== undefined ? protocolInfo.bLusdLpApr.prettify(6) : "N/A"
           }
           unit="%"
         />
@@ -80,7 +80,7 @@ export const BondStats: React.FC<BondStatsProps> = () => {
         <Metric
           value={
             protocolInfo.yieldAmplification && protocolInfo.bLusdSupply.gt(0)
-              ? protocolInfo.yieldAmplification.prettify(2)
+              ? protocolInfo.yieldAmplification.prettify(6)
               : "N/A"
           }
           unit="x"

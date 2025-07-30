@@ -24,11 +24,11 @@ export const PoolDetails: React.FC = () => {
             inputId="deposit-pool-balance"
           >
             <PoolBalance symbol="bLUSD">
-              {(bLusdAmmBLusdBalance ?? Decimal.ZERO).prettify(2)}
+              {(bLusdAmmBLusdBalance ?? Decimal.ZERO).prettify(6)}
             </PoolBalance>
             <Text sx={{ fontWeight: "light", mx: "12px" }}>+</Text>
             <PoolBalance symbol="LUSD-3CRV">
-              {(bLusdAmmLusdBalance ?? Decimal.ZERO).prettify(2)}
+              {(bLusdAmmLusdBalance ?? Decimal.ZERO).prettify(6)}
             </PoolBalance>
           </StaticAmounts>
         </StaticRow>
@@ -40,7 +40,7 @@ export const PoolDetails: React.FC = () => {
           >
             <PoolBalance symbol="bLUSD">1</PoolBalance>
             <Text sx={{ fontWeight: "thin", mx: "6px" }}>:</Text>
-            <PoolBalance symbol="LUSD-3CRV">{poolBalanceRatio.prettify(2)}</PoolBalance>
+            <PoolBalance symbol="LUSD-3CRV">{poolBalanceRatio.prettify(6)}</PoolBalance>
           </StaticAmounts>
         </StaticRow>
 
@@ -48,13 +48,13 @@ export const PoolDetails: React.FC = () => {
           <StaticRow
             label="LP token supply"
             inputId="deposit-mint-lp-tokens"
-            amount={(lpTokenSupply ?? Decimal.ZERO).prettify(2)}
+            amount={(lpTokenSupply ?? Decimal.ZERO).prettify(6)}
           />
 
           <StaticRow label="bLUSD price">
             <StaticAmounts sx={{ alignItems: "center", justifyContent: "flex-start" }}>
               <PoolBalance symbol="BUSD">
-                {(protocolInfo?.marketPrice ?? Decimal.INFINITY).prettify(2)}
+                {(protocolInfo?.marketPrice ?? Decimal.INFINITY).prettify(6)}
               </PoolBalance>{" "}
             </StaticAmounts>
           </StaticRow>
@@ -62,7 +62,7 @@ export const PoolDetails: React.FC = () => {
           <StaticRow label="bLUSD LP APR">
             <StaticAmounts sx={{ alignItems: "center", justifyContent: "flex-start" }}>
               <PoolBalance symbol="%">
-                {(protocolInfo?.bLusdLpApr ?? Decimal.INFINITY).prettify(2)}
+                {(protocolInfo?.bLusdLpApr ?? Decimal.INFINITY).prettify(6)}
               </PoolBalance>{" "}
             </StaticAmounts>
           </StaticRow>

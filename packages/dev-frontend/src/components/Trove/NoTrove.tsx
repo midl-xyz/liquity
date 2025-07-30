@@ -14,8 +14,8 @@ export const NoTrove: React.FC = () => {
     <Card>
       <Heading>Trove</Heading>
       <Box sx={{ p: [2, 3] }}>
-        <InfoMessage title="You haven't borrowed any BUSD yet.">
-          You can borrow BUSD by opening a Trove.
+        <InfoMessage title="You haven't borrowed any MIDL•RUNE•STABLECOIN yet.">
+          You can borrow MIDL•RUNE•STABLECOIN by opening a Trove.
         </InfoMessage>
 
         <Flex variant="layout.actions">
@@ -23,7 +23,11 @@ export const NoTrove: React.FC = () => {
         </Flex>
 
         <Box sx={{ alignSelf: "end", justifySelf: "end" }}>
-          <NavLink href="https://medium.com/midl-xyz/pioneer-the-midl-testnet-56c412486f08" target="_blank" rel="noopener noreferrer">
+          <NavLink
+            href="https://medium.com/midl-xyz/pioneer-the-midl-testnet-56c412486f08"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Guide
           </NavLink>
         </Box>

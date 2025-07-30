@@ -29,7 +29,7 @@ export const RewardsPane: React.FC = () => {
       <StaticRow label="bLUSD LP APR">
         <StaticAmounts sx={{ alignItems: "center", justifyContent: "flex-start" }}>
           <PoolBalance symbol="%">
-            {(protocolInfo?.bLusdLpApr ?? Decimal.INFINITY).prettify(2)}
+            {(protocolInfo?.bLusdLpApr ?? Decimal.INFINITY).prettify(6)}
           </PoolBalance>{" "}
         </StaticAmounts>
       </StaticRow>
