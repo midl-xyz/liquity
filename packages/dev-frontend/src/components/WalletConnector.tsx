@@ -1,10 +1,9 @@
-import { useAccounts, useConnect } from "@midl-xyz/midl-js-react";
-import { Box, Button, Container, Flex } from "theme-ui";
-import { Icon } from "./Icon";
 import { AddressPurpose } from "@midl-xyz/midl-js-core";
+import { useAccounts, useConnect } from "@midl-xyz/midl-js-react";
 import { useState } from "react";
+import { Box, Button, Container, Flex } from "theme-ui";
 import useKeypress from "../hooks/useKeyPress";
-import { Header } from "./Header";
+import { Icon } from "./Icon";
 import { LiquityLogo } from "./LiquityLogo";
 import { Nav } from "./Nav";
 import { SideNav } from "./SideNav";
