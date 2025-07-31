@@ -168,8 +168,8 @@ export const Opening: React.FC = () => {
             <InfoIcon
               tooltip={
                 <Card variant="tooltip" sx={{ width: "240px" }}>
-                  This amount is deducted from the borrowed amount as a one-time fee. There are no
-                  recurring fees for borrowing, which is thus interest-free.
+                  This amount is deducted from the minting amount as a one-time fee. There are no
+                  recurring fees for minting, which is thus interest-free.
                 </Card>
               }
             />
@@ -185,7 +185,7 @@ export const Opening: React.FC = () => {
             <InfoIcon
               tooltip={
                 <Card variant="tooltip" sx={{ width: "240px" }}>
-                  The total amount of MIDL•RUNE•STABLECOIN your Trove will hold.{" "}
+                  The total amount of MIDL•RUNE•STABLECOIN your Position will hold.{" "}
                   {isDirty && (
                     <>
                       You will need to repay {totalDebt.sub(LUSD_LIQUIDATION_RESERVE).prettify(6)}{" "}

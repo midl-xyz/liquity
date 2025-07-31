@@ -93,7 +93,7 @@ export const TroveEditor: React.FC<TroveEditorProps> = ({
             <InfoIcon
               tooltip={
                 <Card variant="tooltip" sx={{ width: "240px" }}>
-                  This amount is deducted from the borrowed amount as a one-time fee. There are no
+                  This amount is deducted from the minting amount as a one-time fee. There are no
                   recurring fees for borrowing, which is thus interest-free.
                 </Card>
               }

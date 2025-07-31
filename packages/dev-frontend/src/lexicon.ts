@@ -13,7 +13,7 @@ export const BORROW_FEE: Lexicon = {
 export const TVL: Lexicon = {
   term: "TVL",
   description:
-    "The Total Value Locked (TVL) is the total value of Ether locked as collateral in the system, given in BTC and USD."
+    "The Total Value Locked (TVL) is the total value of Scaled Sats locked as collateral in the system, given in BTC and USD."
 };
 
 export const STAKED_LQTY: Lexicon = {
@@ -30,7 +30,7 @@ export const TCR: Lexicon = {
 export const RECOVERY_MODE: Lexicon = {
   term: "Recovery Mode",
   description:
-    "Recovery Mode is activated when the Total Collateral Ratio (TCR) falls below 150%. When active, your Trove can be liquidated if its collateral ratio is below the TCR. The maximum collateral you can lose from liquidation is capped at 110% of your Trove's debt. Operations are also restricted that would negatively impact the TCR."
+    "Recovery Mode is activated when the Total Collateral Ratio (TCR) falls below 150%. When active, your Position can be liquidated if its collateral ratio is below the TCR. The maximum collateral you can lose from liquidation is capped at 110% of your Trove's debt. Operations are also restricted that would negatively impact the TCR."
 };
 
 export const STABILITY_POOL_LUSD: Lexicon = {

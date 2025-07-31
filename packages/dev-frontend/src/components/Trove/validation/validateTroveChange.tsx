@@ -340,7 +340,7 @@ const validateTroveClosure = (
   if (numberOfTroves === 1) {
     return (
       <ErrorDescription>
-        You're not allowed to close your Trove when there are no other Troves in the system.
+        You're not allowed to close your Position when there are no other Troves in the system.
       </ErrorDescription>
     );
   }
@@ -348,7 +348,7 @@ const validateTroveClosure = (
   if (recoveryMode) {
     return (
       <ErrorDescription>
-        You're not allowed to close your Trove during recovery mode.
+        You're not allowed to close your Position during recovery mode.
       </ErrorDescription>
     );
   }
@@ -360,7 +360,7 @@ const validateTroveClosure = (
         <Amount>
           {repayLUSD.sub(lusdBalance).prettify()} {COIN}
         </Amount>{" "}
-        more to close your Trove.
+        more to close your Position.
       </ErrorDescription>
     );
   }
@@ -368,7 +368,7 @@ const validateTroveClosure = (
   if (wouldTriggerRecoveryMode) {
     return (
       <ErrorDescription>
-        You're not allowed to close a Trove if it would cause the Total Collateralization Ratio to
+        You're not allowed to close a Position if it would cause the Total Collateralization Ratio to
         fall below <Amount>{ccrPercent}</Amount>. Please wait until the Total Collateral Ratio
         increases.
       </ErrorDescription>

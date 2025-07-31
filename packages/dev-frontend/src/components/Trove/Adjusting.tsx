@@ -247,8 +247,8 @@ export const Adjusting: React.FC = () => {
             <InfoIcon
               tooltip={
                 <Card variant="tooltip" sx={{ width: "240px" }}>
-                  This amount is deducted from the borrowed amount as a one-time fee. There are no
-                  recurring fees for borrowing, which is thus interest-free.
+                  This amount is deducted from the minted amount as a one-time fee. There are no
+                  recurring fees for minting, which is thus interest-free.
                 </Card>
               }
             />
