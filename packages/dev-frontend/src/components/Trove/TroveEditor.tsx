@@ -51,7 +51,7 @@ export const TroveEditor: React.FC<TroveEditorProps> = ({
 
   return (
     <Card>
-      <Heading>Trove</Heading>
+      <Heading>Position</Heading>
 
       <Box sx={{ p: [2, 3] }}>
         <StaticRow
@@ -73,9 +73,9 @@ export const TroveEditor: React.FC<TroveEditorProps> = ({
               <InfoIcon
                 tooltip={
                   <Card variant="tooltip" sx={{ width: "200px" }}>
-                    An amount set aside to cover the liquidator’s gas costs if your Trove needs to be
+                    An amount set aside to cover the liquidator’s gas costs if your Position needs to be
                     liquidated. The amount increases your debt and is refunded if you close your
-                    Trove by fully paying off its net debt.
+                    Position by fully paying off its net debt.
                   </Card>
                 }
               />

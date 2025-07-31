@@ -149,8 +149,8 @@ export const Opening: React.FC = () => {
             <InfoIcon
               tooltip={
                 <Card variant="tooltip" sx={{ width: "200px" }}>
-                  An amount set aside to cover the liquidator’s gas costs if your Trove needs to be
-                  liquidated. The amount increases your debt and is refunded if you close your Trove
+                  An amount set aside to cover the liquidator’s gas costs if your Position needs to be
+                  liquidated. The amount increases your debt and is refunded if you close your Position
                   by fully paying off its net debt.
                 </Card>
               }

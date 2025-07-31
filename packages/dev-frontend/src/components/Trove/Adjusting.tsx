@@ -1,39 +1,38 @@
-import React, { useCallback, useEffect, useState, useRef, useMemo } from "react";
-import { Flex, Button, Box, Card, Heading } from "theme-ui";
 import {
-  LiquityStoreState,
   Decimal,
-  Trove,
+  Difference,
+  LiquityStoreState,
   LUSD_LIQUIDATION_RESERVE,
   Percent,
-  Difference,
-  Decimalish
+  Trove
 } from "@liquity/lib-base";
 import { useLiquitySelector } from "@liquity/lib-react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Box, Button, Card, Flex, Heading } from "theme-ui";
 
+import { deployments } from "@liquity/lib-ethers";
+import { convertBTCtoETH } from "@midl-xyz/midl-js-executor";
+import { useToken } from "@midl-xyz/midl-js-executor-react";
+import { useAccounts, useBalance, useRuneBalance } from "@midl-xyz/midl-js-react";
+import { BigNumber } from "ethers";
+import { Address } from "viem";
+import { useChainId } from "wagmi";
 import { useStableTroveChange } from "../../hooks/useStableTroveChange";
-import { InfoBubble } from "../InfoBubble";
-import { useMyTransactionState } from "../Transaction";
-import { TroveAction } from "./TroveAction";
-import { useTroveView } from "./context/TroveViewContext";
 import { COIN } from "../../strings";
 import { Icon } from "../Icon";
+import { InfoBubble } from "../InfoBubble";
 import { InfoIcon } from "../InfoIcon";
 import { LoadingOverlay } from "../LoadingOverlay";
+import { useMyTransactionState } from "../Transaction";
 import { CollateralRatio, CollateralRatioInfoBubble } from "./CollateralRatio";
 import { EditableRow, StaticRow } from "./Editor";
 import { ExpensiveTroveChangeWarning, GasEstimationState } from "./ExpensiveTroveChangeWarning";
+import { TroveAction } from "./TroveAction";
+import { useTroveView } from "./context/TroveViewContext";
 import {
   selectForTroveChangeValidation,
   validateTroveChange
 } from "./validation/validateTroveChange";
-import { useAccounts, useBalance, useRuneBalance } from "@midl-xyz/midl-js-react";
-import { BigNumber } from "ethers";
-import { convertBTCtoETH } from "@midl-xyz/midl-js-executor";
-import { useToken } from "@midl-xyz/midl-js-executor-react";
-import { deployments } from "@liquity/lib-ethers";
-import { useChainId } from "wagmi";
-import { Address } from "viem";
 
 const selector = (state: LiquityStoreState) => {
   const { trove, fees, price, accountBalance } = state;
@@ -265,7 +264,7 @@ export const Adjusting: React.FC = () => {
             <InfoIcon
               tooltip={
                 <Card variant="tooltip" sx={{ width: "240px" }}>
-                  The total amount of MIDL•RUNE•STABLECOIN your Trove will hold.{" "}
+                  The total amount of MIDL•RUNE•STABLECOIN your Position will hold.{" "}
                   {isDirty && (
                     <>
                       You will need to repay {totalDebt.sub(LUSD_LIQUIDATION_RESERVE).prettify(6)}{" "}
@@ -284,7 +283,7 @@ export const Adjusting: React.FC = () => {
         <CollateralRatioInfoBubble value={collateralRatio} />
 
         {description ?? (
-          <InfoBubble>Adjust your Trove by modifying its collateral, debt, or both.</InfoBubble>
+          <InfoBubble>Adjust your Position by modifying its collateral, debt, or both.</InfoBubble>
         )}
 
         <ExpensiveTroveChangeWarning
