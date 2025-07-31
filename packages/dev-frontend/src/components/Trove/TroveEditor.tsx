@@ -94,7 +94,7 @@ export const TroveEditor: React.FC<TroveEditorProps> = ({
               tooltip={
                 <Card variant="tooltip" sx={{ width: "240px" }}>
                   This amount is deducted from the minting amount as a one-time fee. There are no
-                  recurring fees for borrowing, which is thus interest-free.
+                  recurring fees for minting, which is thus interest-free.
                 </Card>
               }
             />

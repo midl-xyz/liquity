@@ -30,7 +30,7 @@ export const TCR: Lexicon = {
 export const RECOVERY_MODE: Lexicon = {
   term: "Recovery Mode",
   description:
-    "Recovery Mode is activated when the Total Collateral Ratio (TCR) falls below 150%. When active, your Position can be liquidated if its collateral ratio is below the TCR. The maximum collateral you can lose from liquidation is capped at 110% of your Trove's debt. Operations are also restricted that would negatively impact the TCR."
+    "Recovery Mode is activated when the Total Collateral Ratio (TCR) falls below 150%. When active, your Position can be liquidated if its collateral ratio is below the TCR. The maximum collateral you can lose from liquidation is capped at 110% of your Position's debt. Operations are also restricted that would negatively impact the TCR."
 };
 
 export const STABILITY_POOL_LUSD: Lexicon = {
