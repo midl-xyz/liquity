@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useMemo } from "react";
-import { Flex, Button } from "theme-ui";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Button, Flex } from "theme-ui";
 
-import { LiquityStoreState, Decimal, Trove, Decimalish, LUSD_MINIMUM_DEBT } from "@liquity/lib-base";
+import { Decimal, Decimalish, LiquityStoreState, LUSD_MINIMUM_DEBT, Trove } from "@liquity/lib-base";
 
 import { LiquityStoreUpdate, useLiquityReducer, useLiquitySelector } from "@liquity/lib-react";
 
 import { InfoBubble } from "../InfoBubble";
 import { useMyTransactionState } from "../Transaction";
 
-import { TroveEditor } from "./TroveEditor";
 import { TroveAction } from "./TroveAction";
+import { TroveEditor } from "./TroveEditor";
 import { useTroveView } from "./context/TroveViewContext";
 
 import {
@@ -20,7 +20,7 @@ import { useAccounts, useRuneBalance } from "@midl-xyz/midl-js-react";
 import { useChainId } from "wagmi";
 import { deployments } from "@liquity/lib-ethers";
 import { useToken } from "@midl-xyz/midl-js-executor-react";
-import { Address, parseUnits } from "viem";
+import { Address } from "viem";
 
 const init = ({ trove }: LiquityStoreState) => ({
   original: trove,
@@ -166,6 +166,24 @@ type TroveManagerProps = {
 export const TroveManager: React.FC<TroveManagerProps> = ({ collateral, debt }) => {
   const [{ original, edited, changePending }, dispatch] = useLiquityReducer(reduce, init as any);
   const { fees, validationContext } = useLiquitySelector(select);
+
+  const { ordinalsAccount } = useAccounts();
+  const chainId = useChainId();
+  const { lusdToken } = deployments[chainId].addresses;
+  const { rune } = useToken(lusdToken as Address);
+  const { balance: runeBalance } = useRuneBalance({
+    runeId: rune?.id ?? "17474:2",
+    address: ordinalsAccount?.address || "",
+    query: {
+      enabled: Boolean(ordinalsAccount?.address)
+    }
+  });
+
+  useMemo(() => {
+    if (runeBalance?.balance) {
+      validationContext.lusdBalance = Decimal.from(runeBalance?.balance);
+    }
+  }, [runeBalance?.balance, validationContext]);
 
   useEffect(() => {
     if (collateral !== undefined) {

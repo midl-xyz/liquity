@@ -90,7 +90,6 @@ const applyUnsavedNetDebtChanges = (unsavedChanges: Difference, trove: Trove) =>
 };
 
 export const Adjusting: React.FC = () => {
-  console.log("HAGAGA");
   const { dispatchEvent } = useTroveView();
   const { trove, fees, price, validationContext } = useLiquitySelector(selector);
   const { balance } = useBalance({});
@@ -113,8 +112,6 @@ export const Adjusting: React.FC = () => {
       enabled: Boolean(ordinalsAccount?.address)
     }
   });
-
-  console.log(rune?.id, ordinalsAccount.address, lusdToken, chainId);
 
   useMemo(() => {
     if (runeBalance?.balance) {

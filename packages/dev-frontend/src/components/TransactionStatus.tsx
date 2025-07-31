@@ -105,7 +105,7 @@ export const TransactionStatus: React.FC<TransactionStatusProps> = ({ state, mes
       </Box>
 
       <Text sx={{ fontSize: 3, color: "white" }}>
-        {state === "waitingForConfirmation"
+        {(state === "waitingForConfirmation" || state === "waitingForConfirmationMidl")
           ? "Waiting for confirmation"
           : state === "cancelled"
           ? "Cancelled"

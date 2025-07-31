@@ -1,12 +1,16 @@
-import React from "react";
-import { Card, Heading, Link, Box, Text } from "theme-ui";
 import { AddressZero } from "@ethersproject/constants";
-import { Decimal, Percent, LiquityStoreState } from "@liquity/lib-base";
+import { Decimal, LiquityStoreState, Percent } from "@liquity/lib-base";
 import { useLiquitySelector } from "@liquity/lib-react";
+import React from "react";
+import { Box, Card, Heading, Link, Text } from "theme-ui";
 
+import { deployments } from "@liquity/lib-ethers";
+import { regtest } from "@midl-xyz/midl-js-core";
+import { useToken } from "@midl-xyz/midl-js-executor-react";
+import { useAccounts, useRuneBalance } from "@midl-xyz/midl-js-react";
 import { useLiquity } from "../hooks/LiquityContext";
-import { Statistic } from "./Statistic";
 import * as l from "../lexicon";
+import { Statistic } from "./Statistic";
 
 const selectBalances = ({ accountBalance, lusdBalance, lqtyBalance }: LiquityStoreState) => ({
   accountBalance,
@@ -15,13 +19,25 @@ const selectBalances = ({ accountBalance, lusdBalance, lqtyBalance }: LiquitySto
 });
 
 const Balances: React.FC = () => {
-  const { accountBalance, lusdBalance, lqtyBalance } = useLiquitySelector(selectBalances);
+  const { accountBalance, lqtyBalance } = useLiquitySelector(selectBalances);
+  const { rune } = useToken(deployments[regtest.id].lusdToken);
+
+  const { ordinalsAccount } = useAccounts();
+  const { balance: runeBalance } = useRuneBalance({
+    runeId: rune?.id ?? "",
+    address: ordinalsAccount?.address || "",
+    query: {
+      enabled: Boolean(rune?.id && ordinalsAccount?.address)
+    }
+  });
 
   return (
     <Box sx={{ mb: 3 }}>
       <Heading>My Account Balances</Heading>
       <Statistic lexicon={l.ETH}>{accountBalance.prettify(6)}</Statistic>
-      <Statistic lexicon={l.LUSD}>{lusdBalance.prettify()}</Statistic>
+      <Statistic lexicon={l.LUSD}>
+        {Decimal.fromBigNumberString(runeBalance.balance).prettify()}
+      </Statistic>
       <Statistic lexicon={l.LQTY}>{lqtyBalance.prettify()}</Statistic>
     </Box>
   );

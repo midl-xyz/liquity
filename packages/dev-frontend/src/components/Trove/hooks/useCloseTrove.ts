@@ -1,3 +1,4 @@
+import { Decimal, TroveAdjustmentParams } from "@liquity/lib-base";
 import { deployments } from "@liquity/lib-ethers";
 import {
   useAddCompleteTxIntention,
@@ -10,20 +11,16 @@ import {
   useToken
 } from "@midl-xyz/midl-js-executor-react";
 import { useMutation } from "@tanstack/react-query";
-import { Address, encodeAbiParameters, parseEther, toHex } from "viem";
-import { useChainId, useClient, useConfig } from "wagmi";
+import { Address, encodeAbiParameters, keccak256, parseEther, toHex } from "viem";
+import { useChainId } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
-import { Decimal, TroveAdjustmentParams } from "@liquity/lib-base";
-import { createStateOverride } from "@midl-xyz/midl-js-executor";
-import { useConfigInternal } from "@midl-xyz/midl-js-react";
-import { keccak256 } from "viem";
 
 export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
-  const { addTxIntentionAsync, txIntentions } = useAddTxIntention();
+  const { addTxIntentionAsync } = useAddTxIntention();
   const clearTxIntentions = useClearTxIntentions();
   const { liquity } = useLiquity();
-  const { finalizeBTCTransactionAsync, error } = useFinalizeBTCTransaction();
+  const { finalizeBTCTransactionAsync } = useFinalizeBTCTransaction();
   const { signIntentionAsync, error: intentError } = useSignIntention();
   const { addCompleteTxIntentionAsync } = useAddCompleteTxIntention();
   const evmAddress = useEVMAddress();
@@ -32,8 +29,7 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
   const chainId = useChainId();
   const { lusdToken } = deployments[chainId].addresses;
   const { rune } = useToken(lusdToken as Address);
-  const config = useConfigInternal();
-  const client = useClient;
+
   return useMutation({
     onError: error => {
       setTransactionState({
@@ -44,14 +40,11 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
     },
     mutationFn: async (params: TroveAdjustmentParams<Decimal>) => {
       try {
-        setTransactionState({ type: "waitingForApproval", id: transactionId });
-
         const { rawPopulatedTransaction } = await liquity.populate.closeTrove({
           gasLimit: 100000000n
         });
 
         clearTxIntentions();
-        console.log("DEBT: ", params.repayLUSD.toString(), rune.id, lusdToken);
         const localUnsignedIntentions = [];
 
         localUnsignedIntentions.push(
@@ -104,8 +97,6 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
           stateOverride: customStateOverride
         });
 
-        console.log("signing intentions: ");
-        console.log(txIntentions);
         const serializedTransactions: Address[] = [];
         for (const intention of localUnsignedIntentions) {
           try {
@@ -120,10 +111,12 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
           }
         }
 
-        await sendBTCTransactionsAsync({
+        const txHash = await sendBTCTransactionsAsync({
           btcTransaction: btcTx?.tx.hex,
           serializedTransactions
         });
+
+        setTransactionState({ type: "waitingForConfirmationMidl", id: transactionId, tx: txHash[txHash.length-1] });
       } catch (e) {
         console.error(e);
       }

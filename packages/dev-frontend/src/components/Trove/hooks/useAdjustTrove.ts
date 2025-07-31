@@ -1,21 +1,19 @@
 import { Decimal, TroveAdjustmentParams } from "@liquity/lib-base";
 import { deployments } from "@liquity/lib-ethers";
+import { convertETHtoBTC } from "@midl-xyz/midl-js-executor";
 import {
   useAddCompleteTxIntention,
   useAddTxIntention,
   useClearTxIntentions,
-  useEVMAddress,
   useFinalizeBTCTransaction,
   useSendBTCTransactions,
   useSignIntention
 } from "@midl-xyz/midl-js-executor-react";
 import { useMutation } from "@tanstack/react-query";
 import { Address } from "viem";
-import { useChainId, usePublicClient, useWalletClient } from "wagmi";
+import { useChainId } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
-import { waitForTransactionReceipt } from "viem/actions";
-import { convertETHtoBTC } from "@midl-xyz/midl-js-executor";
 
 type OpenTroveParams = {
   maxBorrowingRate: Decimal;
@@ -33,13 +31,11 @@ export const useAdjustTrove = ({
   const { liquity } = useLiquity();
   const { signIntentionAsync, error: intentError } = useSignIntention();
   const { finalizeBTCTransactionAsync } = useFinalizeBTCTransaction();
-  const evmAddress = useEVMAddress();
   const [, setTransactionState] = useTransactionState();
   const { addCompleteTxIntentionAsync } = useAddCompleteTxIntention();
   const chainId = useChainId();
   const { lusdToken } = deployments[chainId].addresses;
   const { sendBTCTransactionsAsync } = useSendBTCTransactions({});
-  const publicClient = usePublicClient();
 
   return useMutation({
     onError: error => {
@@ -52,7 +48,6 @@ export const useAdjustTrove = ({
       });
     },
     mutationFn: async (params: TroveAdjustmentParams<Decimal>) => {
-
       const { rawPopulatedTransaction } = await liquity.populate.adjustTrove(
         params,
         {
@@ -78,11 +73,6 @@ export const useAdjustTrove = ({
         })
       );
 
-      console.log(
-        "shouldcomplete",
-        params.withdrawCollateral !== undefined && params.withdrawCollateral.gt(0)
-      );
-
       if (params.withdrawCollateral !== undefined && params.withdrawCollateral.gt(0)) {
         localUnsignedIntentions.push(
           await addCompleteTxIntentionAsync({ assetsToWithdraw: [lusdToken as Address] })
@@ -90,9 +80,6 @@ export const useAdjustTrove = ({
       }
 
       const btcTx = await finalizeBTCTransactionAsync({ assetsToWithdrawSize: 1 });
-
-      console.log("signing intentions: ");
-      console.log(localUnsignedIntentions);
 
       const serializedTransactions: Address[] = [];
       for (const intention of localUnsignedIntentions) {

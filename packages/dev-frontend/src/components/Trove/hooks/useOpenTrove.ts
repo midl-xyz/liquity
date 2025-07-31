@@ -23,13 +23,8 @@ const targetSlot = "0x0f65e0315bf0254cc9a814f380af6273469d0fc4fe0d9c60782c48ec70
 const candidateAddress = "0x122F8A4FB2761160a39a768001A7071DFF7a39f6";
 
 const slot = keccak256(
-  encodeAbiParameters(
-    [{ type: "address" }, { type: "uint256" }],
-    [candidateAddress, 0n]
-  )
+  encodeAbiParameters([{ type: "address" }, { type: "uint256" }], [candidateAddress, 0n])
 );
-
-
 
 type OpenTroveParams = {
   maxBorrowingRate: Decimal;
@@ -51,13 +46,11 @@ export const useOpenTrove = ({
   const { signIntentionAsync, error: intentError } = useSignIntention();
   const [, setTransactionState] = useTransactionState();
   const { sendBTCTransactionsAsync, error } = useSendBTCTransactions({});
-  console.log("Computed slot:", slot);
-console.log("Matches target?", slot === targetSlot);
 
   const { lusdToken } = deployments[chainId].addresses;
 
   const { addCompleteTxIntentionAsync } = useAddCompleteTxIntention();
-  const {getState} = useStoreInternal()
+  const { getState } = useStoreInternal();
 
   return useMutation({
     onError: error => {
@@ -81,8 +74,6 @@ console.log("Matches target?", slot === targetSlot);
       clearTxIntentions();
       const localUnsignedIntentions = [];
 
-
-     
       localUnsignedIntentions.push(
         await addTxIntentionAsync({
           intention: {
@@ -91,7 +82,7 @@ console.log("Matches target?", slot === targetSlot);
               data: rawPopulatedTransaction.data as `0x${string}`,
               value: rawPopulatedTransaction.value?.toBigInt()
             },
-            satoshis: convertETHtoBTC(rawPopulatedTransaction.value.toBigInt()),
+            satoshis: convertETHtoBTC(rawPopulatedTransaction.value.toBigInt())
           }
         })
       );
@@ -130,11 +121,16 @@ console.log("Matches target?", slot === targetSlot);
           console.error("error on intent signing: ", intentError, e);
         }
       }
-      console.log("ser: ", serializedTransactions);
       try {
-        await sendBTCTransactionsAsync({
+        const txHash = await sendBTCTransactionsAsync({
           btcTransaction: btcTx?.tx.hex,
           serializedTransactions
+        });
+
+        setTransactionState({
+          type: "waitingForConfirmationMidl",
+          id: transactionId,
+          tx: txHash[txHash.length - 1]
         });
       } catch (e) {
         console.error(e);

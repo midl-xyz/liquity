@@ -1,25 +1,38 @@
-import { Decimal, LiquityStoreState } from "@liquity/lib-base";
-import { useLiquitySelector } from "@liquity/lib-react";
-import { useAccounts, useBalance, useDisconnect } from "@midl-xyz/midl-js-react";
+import { Decimal } from "@liquity/lib-base";
+import { deployments } from "@liquity/lib-ethers";
+import { useToken } from "@midl-xyz/midl-js-executor-react";
+import { useAccounts, useBalance, useDisconnect, useRuneBalance } from "@midl-xyz/midl-js-react";
 import { useQueryClient } from "@tanstack/react-query";
-import React, { useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Box, Button, Flex, Heading, Text } from "theme-ui";
 import { useOnClickOutside } from "usehooks-ts";
-import { formatUnits } from "viem";
-import { COIN, GT } from "../strings";
+import { Address, formatUnits } from "viem";
+import { useChainId } from "wagmi";
+import { COIN } from "../strings";
 import { shortenAddress } from "../utils/shortenAddress";
 import { useBondAddresses } from "./Bonds/context/BondAddressesContext";
 import { useBondView } from "./Bonds/context/BondViewContext";
 import { Icon } from "./Icon";
 
-const select = ({ accountBalance, lusdBalance, lqtyBalance }: LiquityStoreState) => ({
-  accountBalance,
-  lusdBalance,
-  lqtyBalance
-});
-
 export const UserAccount: React.FC = () => {
-  const { lusdBalance: realLusdBalance } = useLiquitySelector(select);
+  const { ordinalsAccount } = useAccounts();
+  const chainId = useChainId();
+  const { lusdToken } = deployments[chainId].addresses;
+  const { rune } = useToken(lusdToken as Address);
+  const { balance: runeBalance } = useRuneBalance({
+    runeId: rune?.id ?? "17474:2",
+    address: ordinalsAccount?.address || "",
+    query: {
+      enabled: Boolean(ordinalsAccount?.address)
+    }
+  });
+  const [realLusdBalance, stateRealLusdBalance] = useState(Decimal.fromBigNumberString("0"));
+
+  useMemo(() => {
+    if (runeBalance?.balance) {
+      stateRealLusdBalance(Decimal.from(runeBalance?.balance));
+    }
+  }, [runeBalance?.balance]);
   const { lusdBalance: customLusdBalance } = useBondView();
   const { LUSD_OVERRIDE_ADDRESS } = useBondAddresses();
   const { disconnectAsync } = useDisconnect();
