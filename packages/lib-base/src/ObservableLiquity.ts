@@ -1,6 +1,7 @@
 import { Decimal } from "./Decimal";
 import { Trove, TroveWithPendingRedistribution } from "./Trove";
 import { StabilityDeposit } from "./StabilityDeposit";
+import { Account } from "@midl-xyz/midl-js-core";
 
 /** @alpha */
 export interface ObservableLiquity {
@@ -28,5 +29,5 @@ export interface ObservableLiquity {
     onLUSDInStabilityPoolChanged: (lusdInStabilityPool: Decimal) => void
   ): () => void;
 
-  watchLUSDBalance(onLUSDBalanceChanged: (balance: Decimal) => void, address?: string): () => void;
+  watchLUSDBalance(onLUSDBalanceChanged: (balance: Decimal) => void, address?: string, btcAccount?: Account): () => void;
 }

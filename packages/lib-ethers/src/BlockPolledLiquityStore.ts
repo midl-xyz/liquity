@@ -87,7 +87,7 @@ export class BlockPolledLiquityStore extends LiquityStore<BlockPolledLiquityStor
   private async _get(
     blockTag?: number
   ): Promise<[baseState: LiquityStoreBaseState, extraState: BlockPolledLiquityStoreExtraState]> {
-    const { userAddress, frontendTag } = this.connection;
+    const { userAddress, frontendTag, btcAccount } = this.connection;
 
     const {
       blockTimestamp,
@@ -120,7 +120,7 @@ export class BlockPolledLiquityStore extends LiquityStore<BlockPolledLiquityStor
       ...(userAddress
         ? {
             accountBalance: this._provider.getBalance(userAddress, blockTag).then(decimalify),
-            lusdBalance: this._readable.getLUSDBalance(userAddress, { blockTag }),
+            lusdBalance: this._readable.getLUSDBalance(userAddress, btcAccount),
             lqtyBalance: this._readable.getLQTYBalance(userAddress, { blockTag }),
             uniTokenBalance: this._readable.getUniTokenBalance(userAddress, { blockTag }),
             uniTokenAllowance: this._readable.getUniTokenAllowance(userAddress, { blockTag }),

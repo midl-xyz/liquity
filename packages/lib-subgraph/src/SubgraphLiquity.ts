@@ -25,6 +25,7 @@ import { Troves, TrovesVariables } from "../types/Troves";
 import { TroveWithoutRewards, TroveWithoutRewardsVariables } from "../types/TroveWithoutRewards";
 
 import { Query } from "./Query";
+import { Account } from "@midl-xyz/midl-js-core";
 
 const normalizeAddress = (address?: string) => {
   if (address === undefined) {
@@ -270,7 +271,7 @@ export class SubgraphLiquity implements ReadableLiquity, ObservableLiquity {
     return tokensInStabilityPool.watch(this.client, onLUSDInStabilityPoolChanged, undefined);
   }
 
-  getLUSDBalance(address?: string): Promise<Decimal> {
+  getLUSDBalance(address?: string, btcAccount?: Account): Promise<Decimal> {
     throw new Error("Method not implemented.");
   }
 

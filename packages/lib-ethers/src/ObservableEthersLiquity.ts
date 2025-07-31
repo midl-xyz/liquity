@@ -11,6 +11,7 @@ import {
 
 import { _getContracts, _requireAddress } from "./EthersLiquityConnection";
 import { ReadableEthersLiquity } from "./ReadableEthersLiquity";
+import { Account } from "@midl-xyz/midl-js-core";
 
 const debouncingDelayMs = 50;
 
@@ -187,7 +188,7 @@ export class ObservableEthersLiquity implements ObservableLiquity {
       );
   }
 
-  watchLUSDBalance(onLUSDBalanceChanged: (balance: Decimal) => void, address?: string): () => void {
+  watchLUSDBalance(onLUSDBalanceChanged: (balance: Decimal) => void, address?: string, btcAccount?: Account): () => void {
     address ??= _requireAddress(this._readable.connection);
 
     const { lusdToken } = _getContracts(this._readable.connection);
@@ -198,7 +199,7 @@ export class ObservableEthersLiquity implements ObservableLiquity {
     const lusdTransferFilters = [transferLUSDFromUser, transferLUSDToUser];
 
     const lusdTransferListener = debounce((blockTag: number) => {
-      this._readable.getLUSDBalance(address, { blockTag }).then(onLUSDBalanceChanged);
+      this._readable.getLUSDBalance(address, btcAccount).then(onLUSDBalanceChanged);
     });
 
     lusdTransferFilters.forEach(filter => lusdToken.on(filter, lusdTransferListener));

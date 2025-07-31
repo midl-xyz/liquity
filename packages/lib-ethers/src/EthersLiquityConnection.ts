@@ -5,12 +5,12 @@ import { Decimal } from "@liquity/lib-base";
 
 import devOrNull from "../deployments/dev.json";
 import goerli from "../deployments/goerli.json";
+import kiln from "../deployments/kiln.json";
 import kovan from "../deployments/kovan.json";
+import mainnet from "../deployments/mainnet.json";
+import midlRegtest from "../deployments/midlRegtest.json";
 import rinkeby from "../deployments/rinkeby.json";
 import ropsten from "../deployments/ropsten.json";
-import mainnet from "../deployments/mainnet.json";
-import kiln from "../deployments/kiln.json";
-import midlRegtest from "../deployments/midlRegtest.json";
 import sepolia from "../deployments/sepolia.json";
 
 import { numberify, panic } from "./_utils";
@@ -23,6 +23,7 @@ import {
   _LiquityDeploymentJSON
 } from "./contracts";
 
+import { Account } from "@midl-xyz/midl-js-core";
 import { _connectToMulticall, _Multicall } from "./_Multicall";
 
 const dev = devOrNull as _LiquityDeploymentJSON | null;
@@ -95,6 +96,8 @@ export interface EthersLiquityConnection extends EthersLiquityConnectionOptional
 
   /** @internal */
   readonly [brand]: unique symbol;
+
+  readonly btcAccount?: Account;
 }
 
 /** @internal */
@@ -107,6 +110,7 @@ export interface _InternalEthersLiquityConnection extends EthersLiquityConnectio
 const connectionFrom = (
   provider: EthersProvider,
   signer: EthersSigner | undefined,
+  btcAccount: Account | undefined,
   _contracts: _LiquityContracts,
   _multicall: _Multicall | undefined,
   {
@@ -128,6 +132,7 @@ const connectionFrom = (
   return branded({
     provider,
     signer,
+    btcAccount,
     _contracts,
     _multicall,
     deploymentDate: new Date(deploymentDate),
@@ -172,6 +177,9 @@ export const _requireAddress = (
 ): string =>
   overrides?.from ?? connection.userAddress ?? panic(new Error("A user address is required"));
 
+export const _requireBtcAccount = (connection: EthersLiquityConnection): Account =>
+  connection.btcAccount ?? panic(new Error("missing btc account"));
+
 /** @internal */
 export const _requireFrontendAddress = (connection: EthersLiquityConnection): string =>
   connection.frontendTag ?? panic(new Error("A frontend address is required"));
@@ -203,25 +211,27 @@ export class UnsupportedNetworkError extends Error {
 }
 
 const getProviderAndSigner = (
-  signerOrProvider: EthersSigner | EthersProvider
-): [provider: EthersProvider, signer: EthersSigner | undefined] => {
+  signerOrProvider: EthersSigner | EthersProvider,
+  btcAccount: Account
+): [provider: EthersProvider, signer: EthersSigner | undefined, btcAccount: Account | undefined] => {
   const provider: EthersProvider = Signer.isSigner(signerOrProvider)
     ? signerOrProvider.provider ?? panic(new Error("Signer must have a Provider"))
     : signerOrProvider;
 
   const signer = Signer.isSigner(signerOrProvider) ? signerOrProvider : undefined;
 
-  return [provider, signer];
+  return [provider, signer, btcAccount];
 };
 
 /** @internal */
 export const _connectToDeployment = (
   deployment: _LiquityDeploymentJSON,
   signerOrProvider: EthersSigner | EthersProvider,
+  btcAccount: Account,
   optionalParams?: EthersLiquityConnectionOptionalParams
 ): EthersLiquityConnection =>
   connectionFrom(
-    ...getProviderAndSigner(signerOrProvider),
+    ...getProviderAndSigner(signerOrProvider, btcAccount),
     _connectToContracts(signerOrProvider, deployment),
     undefined,
     deployment,
@@ -293,6 +303,7 @@ export interface EthersLiquityConnectionOptionalParams {
 export function _connectByChainId<T>(
   provider: EthersProvider,
   signer: EthersSigner | undefined,
+  btcAccount: Account | undefined,
   chainId: number,
   optionalParams: EthersLiquityConnectionOptionalParams & { useStore: T }
 ): EthersLiquityConnection & { useStore: T };
@@ -301,6 +312,7 @@ export function _connectByChainId<T>(
 export function _connectByChainId(
   provider: EthersProvider,
   signer: EthersSigner | undefined,
+  btcAccount: Account | undefined,
   chainId: number,
   optionalParams?: EthersLiquityConnectionOptionalParams
 ): EthersLiquityConnection;
@@ -309,6 +321,7 @@ export function _connectByChainId(
 export function _connectByChainId(
   provider: EthersProvider,
   signer: EthersSigner | undefined,
+  btcAccount: Account | undefined,
   chainId: number,
   optionalParams?: EthersLiquityConnectionOptionalParams
 ): EthersLiquityConnection {
@@ -318,6 +331,7 @@ export function _connectByChainId(
   return connectionFrom(
     provider,
     signer,
+    btcAccount,
     _connectToContracts(provider, deployment),
     _connectToMulticall(provider, chainId),
     deployment,
@@ -328,9 +342,10 @@ export function _connectByChainId(
 /** @internal */
 export const _connect = async (
   signerOrProvider: EthersSigner | EthersProvider,
+  btcAccount: Account,
   optionalParams?: EthersLiquityConnectionOptionalParams
 ): Promise<EthersLiquityConnection> => {
-  const [provider, signer] = getProviderAndSigner(signerOrProvider);
+  const [provider, signer] = getProviderAndSigner(signerOrProvider, btcAccount);
 
   if (signer) {
     if (optionalParams?.userAddress !== undefined) {
@@ -343,5 +358,11 @@ export const _connect = async (
     };
   }
 
-  return _connectByChainId(provider, signer, (await provider.getNetwork()).chainId, optionalParams);
+  return _connectByChainId(
+    provider,
+    signer,
+    btcAccount,
+    (await provider.getNetwork()).chainId,
+    optionalParams
+  );
 };

@@ -4,6 +4,7 @@ import { LQTYStake } from "./LQTYStake";
 import { StabilityDeposit } from "./StabilityDeposit";
 import { Trove, TroveWithPendingRedistribution, UserTrove } from "./Trove";
 import { FrontendStatus, ReadableLiquity, TroveListingParams } from "./ReadableLiquity";
+import { Account } from "@midl-xyz/midl-js-core";
 
 /** @internal */
 export type _ReadableLiquityWithExtraParamsBase<T extends unknown[]> = {
@@ -115,10 +116,10 @@ export class _CachedReadableLiquity<T extends unknown[]>
     );
   }
 
-  async getLUSDBalance(address?: string, ...extraParams: T): Promise<Decimal> {
+  async getLUSDBalance(address?: string, btcAccount?: Account, ...extraParams: T): Promise<Decimal> {
     return (
-      this._cache.getLUSDBalance(address, ...extraParams) ??
-      this._readable.getLUSDBalance(address, ...extraParams)
+      this._cache.getLUSDBalance(address, btcAccount, ...extraParams) ??
+      this._readable.getLUSDBalance(address, btcAccount, ...extraParams)
     );
   }
 

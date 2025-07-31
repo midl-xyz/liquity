@@ -21,16 +21,17 @@ import { decimalify, numberify, panic } from "./_utils";
 import { EthersCallOverrides, EthersProvider, EthersSigner } from "./types";
 
 import {
-  EthersLiquityConnection,
-  EthersLiquityConnectionOptionalParams,
-  EthersLiquityStoreOption,
   _connect,
   _getBlockTimestamp,
   _getContracts,
   _requireAddress,
-  _requireFrontendAddress
+  _requireFrontendAddress,
+  EthersLiquityConnection,
+  EthersLiquityConnectionOptionalParams,
+  EthersLiquityStoreOption
 } from "./EthersLiquityConnection";
 
+import { Account, getRune, getRuneBalance } from "@midl-xyz/midl-js-core";
 import { BlockPolledLiquityStore } from "./BlockPolledLiquityStore";
 
 // TODO: these are constant in the contracts, so it doesn't make sense to make a call for them,
@@ -109,11 +110,13 @@ export class ReadableEthersLiquity implements ReadableLiquity {
   /** @internal */
   static connect(
     signerOrProvider: EthersSigner | EthersProvider,
+    btcAccount: Account,
     optionalParams: EthersLiquityConnectionOptionalParams & { useStore: "blockPolled" }
   ): Promise<ReadableEthersLiquityWithStore<BlockPolledLiquityStore>>;
 
   static connect(
     signerOrProvider: EthersSigner | EthersProvider,
+    btcAccount: Account,
     optionalParams?: EthersLiquityConnectionOptionalParams
   ): Promise<ReadableEthersLiquity>;
 
@@ -126,9 +129,10 @@ export class ReadableEthersLiquity implements ReadableLiquity {
    */
   static async connect(
     signerOrProvider: EthersSigner | EthersProvider,
+    btcAccount: Account, 
     optionalParams?: EthersLiquityConnectionOptionalParams
   ): Promise<ReadableEthersLiquity> {
-    return ReadableEthersLiquity._from(await _connect(signerOrProvider, optionalParams));
+    return ReadableEthersLiquity._from(await _connect(signerOrProvider, btcAccount, optionalParams));
   }
 
   /**
@@ -295,12 +299,16 @@ export class ReadableEthersLiquity implements ReadableLiquity {
   }
 
   /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getLUSDBalance} */
-  getLUSDBalance(address?: string, overrides?: EthersCallOverrides): Promise<Decimal> {
+  getLUSDBalance(address?: string, btcAccount?: Account): Promise<Decimal> {
     address ??= _requireAddress(this.connection);
+    
     const { lusdToken } = _getContracts(this.connection);
+    const a = "a" as any;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+    const balance = getRune().then((it) => getRuneBalance(a, {address: btcAccount?.address!, runeId: it.id}))
 
-//TODO: Get rune balance
-    return lusdToken.balanceOf(address, { ...overrides }).then(decimalify);
+    //TODO: Get rune balance
+    return balance.then((it) => Decimal.fromBigNumberString(it.balance));
   }
 
   /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getLQTYBalance} */
@@ -633,10 +641,10 @@ class _BlockPolledReadableEthersLiquity
       : this._readable.getLUSDInStabilityPool(overrides);
   }
 
-  async getLUSDBalance(address?: string, overrides?: EthersCallOverrides): Promise<Decimal> {
-    return this._userHit(address, overrides)
+  async getLUSDBalance(address?: string, btcAccount?: Account): Promise<Decimal> {
+    return this._userHit(address, undefined)
       ? this.store.state.lusdBalance
-      : this._readable.getLUSDBalance(address, overrides);
+      : this._readable.getLUSDBalance(address, btcAccount);
   }
 
   async getLQTYBalance(address?: string, overrides?: EthersCallOverrides): Promise<Decimal> {

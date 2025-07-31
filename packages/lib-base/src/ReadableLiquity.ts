@@ -3,6 +3,7 @@ import { Trove, TroveWithPendingRedistribution, UserTrove } from "./Trove";
 import { StabilityDeposit } from "./StabilityDeposit";
 import { Fees } from "./Fees";
 import { LQTYStake } from "./LQTYStake";
+import { Account } from "@midl-xyz/midl-js-core";
 
 /**
  * Represents whether an address has been registered as a Liquity frontend.
@@ -116,7 +117,7 @@ export interface ReadableLiquity {
    *
    * @param address - Address whose balance should be retrieved.
    */
-  getLUSDBalance(address?: string): Promise<Decimal>;
+  getLUSDBalance(address?: string, btcAccount?: Account): Promise<Decimal>;
 
   /**
    * Get the amount of LQTY held by an address.

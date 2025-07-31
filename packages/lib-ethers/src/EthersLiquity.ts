@@ -51,6 +51,7 @@ import {
 import { ReadableEthersLiquity, ReadableEthersLiquityWithStore } from "./ReadableEthersLiquity";
 import { SendableEthersLiquity } from "./SendableEthersLiquity";
 import { BlockPolledLiquityStore } from "./BlockPolledLiquityStore";
+import { Account } from "@midl-xyz/midl-js-core";
 
 /**
  * Thrown by {@link EthersLiquity} in case of transaction failure.
@@ -120,6 +121,7 @@ export class EthersLiquity implements ReadableEthersLiquity, TransactableLiquity
   /** @internal */
   static connect(
     signerOrProvider: EthersSigner | EthersProvider,
+    btcAccount: Account,
     optionalParams: EthersLiquityConnectionOptionalParams & { useStore: "blockPolled" }
   ): Promise<EthersLiquityWithStore<BlockPolledLiquityStore>>;
 
@@ -132,14 +134,16 @@ export class EthersLiquity implements ReadableEthersLiquity, TransactableLiquity
    */
   static connect(
     signerOrProvider: EthersSigner | EthersProvider,
+    btcAccount: Account,
     optionalParams?: EthersLiquityConnectionOptionalParams
   ): Promise<EthersLiquity>;
 
   static async connect(
     signerOrProvider: EthersSigner | EthersProvider,
+    btcAccount: Account, 
     optionalParams?: EthersLiquityConnectionOptionalParams
   ): Promise<EthersLiquity> {
-    return EthersLiquity._from(await _connect(signerOrProvider, optionalParams));
+    return EthersLiquity._from(await _connect(signerOrProvider, btcAccount, optionalParams));
   }
 
   /**
@@ -216,8 +220,8 @@ export class EthersLiquity implements ReadableEthersLiquity, TransactableLiquity
   }
 
   /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getLUSDBalance} */
-  getLUSDBalance(address?: string, overrides?: EthersCallOverrides): Promise<Decimal> {
-    return this._readable.getLUSDBalance(address, overrides);
+  getLUSDBalance(address?: string, btcAccount?: Account): Promise<Decimal> {
+    return this._readable.getLUSDBalance(address, btcAccount);
   }
 
   /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getLQTYBalance} */
