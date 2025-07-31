@@ -32,6 +32,7 @@ import {
   selectForTroveChangeValidation,
   validateTroveChange
 } from "./validation/validateTroveChange";
+import { parseUnits } from "viem";
 
 const selector = (state: LiquityStoreState) => {
   const { fees, price, accountBalance } = state;
@@ -99,7 +100,8 @@ export const Opening: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!collateral.isZero && borrowAmount.isZero) {
+    if (collateral.isZero && borrowAmount.isZero) {
+      setCollateral(Decimal.fromBigNumberString(parseUnits("7", 13).toString()));
       setBorrowAmount(LUSD_MINIMUM_NET_DEBT);
     }
   }, [collateral, borrowAmount]);
