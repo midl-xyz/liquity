@@ -157,7 +157,7 @@ export const RiskyTroves: React.FC<RiskyTrovesProps> = ({ pageSize }) => {
   return (
     <Card sx={{ width: "100%" }}>
       <Heading>
-        <Abbreviation short="Troves">Risky Troves</Abbreviation>
+        <Abbreviation short="Troves">Risky Positions</Abbreviation>
 
         <Flex sx={{ alignItems: "center" }}>
           {numberOfTroves !== 0 && (

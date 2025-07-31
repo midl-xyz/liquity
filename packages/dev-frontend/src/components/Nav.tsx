@@ -33,7 +33,7 @@ export const Nav: React.FC<{
       {!hideLinks && (
         <Flex sx={{ justifyContent: "flex-end", mr: 3, flex: 1 }}>
           <Link sx={{ fontSize: 1 }} to="/risky-troves">
-            Risky Troves
+            Risky Positions
           </Link>
         </Flex>
       )}

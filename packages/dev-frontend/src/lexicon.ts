@@ -5,9 +5,9 @@ export type Lexicon = {
 };
 
 export const BORROW_FEE: Lexicon = {
-  term: "Borrowing Fee",
+  term: "Minting Fee",
   description:
-    "The Borrowing Fee is a one-off fee charged as a percentage of the borrowed amount (in MIDL•RUNE•STABLECOIN) and is part of a Trove's debt. The fee varies between 0.5% and 5% depending on MIDL•RUNE•STABLECOIN redemption volumes."
+    "The Minting Fee is a one-off fee charged as a percentage of the minted amount (in MIDL•RUNE•STABLECOIN) and is part of a Positions's debt. The fee varies between 0.5% and 5% depending on MIDL•RUNE•STABLECOIN redemption volumes."
 };
 
 export const TVL: Lexicon = {
@@ -58,11 +58,11 @@ export const LQTY: Lexicon = {
 };
 
 export const TROVES: Lexicon = {
-  term: "Troves",
-  description: "The total number of active Troves in the system."
+  term: "Positions",
+  description: "The total number of active Positions in the system."
 };
 
 export const LUSD_SUPPLY: Lexicon = {
   term: "MIDL•RUNE•STABLECOIN supply",
-  description: "The total MIDL•RUNE•STABLECOIN minted by the Liquity Protocol."
+  description: "The total MIDL•RUNE•STABLECOIN minted by the Stable Protocol."
 };

@@ -189,7 +189,7 @@ export const Adjusting: React.FC = () => {
   return (
     <Card>
       <Heading>
-        Trove
+        Position
         {isDirty && !isTransactionPending && (
           <Button variant="titleIcon" sx={{ ":enabled:hover": { color: "danger" } }} onClick={reset}>
             <Icon name="history" size="lg" />
@@ -229,8 +229,8 @@ export const Adjusting: React.FC = () => {
             <InfoIcon
               tooltip={
                 <Card variant="tooltip" sx={{ width: "200px" }}>
-                  An amount set aside to cover the liquidator’s gas costs if your Trove needs to be
-                  liquidated. The amount increases your debt and is refunded if you close your Trove
+                  An amount set aside to cover the liquidator’s gas costs if your Position needs to be
+                  liquidated. The amount increases your debt and is refunded if you close your Position
                   by fully paying off its net debt.
                 </Card>
               }
@@ -239,7 +239,7 @@ export const Adjusting: React.FC = () => {
         />
 
         <StaticRow
-          label="Borrowing Fee"
+          label="Minting Fee"
           inputId="trove-borrowing-fee"
           amount={fee.prettify(6)}
           pendingAmount={feePct.toString(2)}

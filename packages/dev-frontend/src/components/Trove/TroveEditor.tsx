@@ -84,7 +84,7 @@ export const TroveEditor: React.FC<TroveEditorProps> = ({
         )}
 
         <StaticRow
-          label="Borrowing Fee"
+          label="Minting Fee"
           inputId="trove-borrowing-fee"
           amount={fee.toString(2)}
           pendingAmount={feePct.toString(2)}

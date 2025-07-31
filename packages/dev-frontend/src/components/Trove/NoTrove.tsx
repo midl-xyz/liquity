@@ -12,14 +12,14 @@ export const NoTrove: React.FC = () => {
 
   return (
     <Card>
-      <Heading>Trove</Heading>
+      <Heading>Position</Heading>
       <Box sx={{ p: [2, 3] }}>
-        <InfoMessage title="You haven't borrowed any MIDL•RUNE•STABLECOIN yet.">
-          You can borrow MIDL•RUNE•STABLECOIN by opening a Trove.
+        <InfoMessage title="You haven't minted any MIDL•RUNE•STABLECOIN yet.">
+          You can mint MIDL•RUNE•STABLECOIN by opening a Position.
         </InfoMessage>
 
         <Flex variant="layout.actions">
-          <Button onClick={handleOpenTrove}>Open Trove</Button>
+          <Button onClick={handleOpenTrove}>Mint: Open Position</Button>
         </Flex>
 
         <Box sx={{ alignSelf: "end", justifySelf: "end" }}>

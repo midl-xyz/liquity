@@ -109,7 +109,7 @@ export const Opening: React.FC = () => {
   return (
     <Card>
       <Heading>
-        Trove
+        Position
         {isDirty && !isTransactionPending && (
           <Button variant="titleIcon" sx={{ ":enabled:hover": { color: "danger" } }} onClick={reset}>
             <Icon name="history" size="lg" />
@@ -131,7 +131,7 @@ export const Opening: React.FC = () => {
         />
 
         <EditableRow
-          label="Borrow"
+          label="Mint"
           inputId="trove-borrow-amount"
           amount={borrowAmount.prettify()}
           unit={COIN}
@@ -159,7 +159,7 @@ export const Opening: React.FC = () => {
         />
 
         <StaticRow
-          label="Borrowing Fee"
+          label="Minting Fee"
           inputId="trove-borrowing-fee"
           amount={fee.prettify(6)}
           pendingAmount={feePct.toString(2)}
@@ -205,7 +205,7 @@ export const Opening: React.FC = () => {
         <InfoBubble>
           Keep your collateral ratio above the{" "}
           <Link sx={{ variant: "styles.a" }} to="/risky-troves">
-            riskiest Troves
+            riskiest Position
           </Link>{" "}
           to avoid being{" "}
           <LearnMoreLink link="https://docs.liquity.org/faq/lusd-redemptions#how-can-i-avoid-being-redeemed-against">
