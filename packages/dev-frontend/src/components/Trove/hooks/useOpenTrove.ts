@@ -62,66 +62,66 @@ export const useOpenTrove = ({
     },
     mutationFn: async (params: TroveCreationParams<Decimalish>) => {
       setTransactionState({ type: "waitingForApproval", id: transactionId });
-
-      const { rawPopulatedTransaction } = await liquity.populate.openTrove(
-        params,
-        {
-          maxBorrowingRate,
-          borrowingFeeDecayToleranceMinutes
-        },
-        { gasLimit: 100000000n }
-      );
-      clearTxIntentions();
-      const localUnsignedIntentions = [];
-
-      localUnsignedIntentions.push(
-        await addTxIntentionAsync({
-          intention: {
-            evmTransaction: {
-              to: rawPopulatedTransaction.to as Address,
-              data: rawPopulatedTransaction.data as `0x${string}`,
-              value: rawPopulatedTransaction.value?.toBigInt()
-            },
-            satoshis: convertETHtoBTC(rawPopulatedTransaction.value.toBigInt())
-          }
-        })
-      );
-
-      localUnsignedIntentions.push(
-        await addTxIntentionAsync({
-          intention: {
-            evmTransaction: {
-              to: lusdToken as Address,
-              data: encodeFunctionData({
-                abi: erc20Abi,
-                functionName: "approve",
-                args: [executorAddress[network.id] as Address, maxUint256 - 1n]
-              })
-            }
-          }
-        })
-      );
-
-      localUnsignedIntentions.push(
-        await addCompleteTxIntentionAsync({ assetsToWithdraw: [lusdToken as Address] })
-      );
-
-      const btcTx = await finalizeBTCTransactionAsync({ assetsToWithdrawSize: 1 });
-
-      const serializedTransactions: Address[] = [];
-      for (const intention of localUnsignedIntentions) {
-        try {
-          serializedTransactions.push(
-            await signIntentionAsync({
-              intention,
-              txId: btcTx.tx.id
-            })
-          );
-        } catch (e) {
-          console.error("error on intent signing: ", intentError, e);
-        }
-      }
       try {
+        const { rawPopulatedTransaction } = await liquity.populate.openTrove(
+          params,
+          {
+            maxBorrowingRate,
+            borrowingFeeDecayToleranceMinutes
+          },
+          { gasLimit: 100000000n }
+        );
+        clearTxIntentions();
+        const localUnsignedIntentions = [];
+
+        localUnsignedIntentions.push(
+          await addTxIntentionAsync({
+            intention: {
+              evmTransaction: {
+                to: rawPopulatedTransaction.to as Address,
+                data: rawPopulatedTransaction.data as `0x${string}`,
+                value: rawPopulatedTransaction.value?.toBigInt()
+              },
+              satoshis: convertETHtoBTC(rawPopulatedTransaction.value.toBigInt())
+            }
+          })
+        );
+
+        localUnsignedIntentions.push(
+          await addTxIntentionAsync({
+            intention: {
+              evmTransaction: {
+                to: lusdToken as Address,
+                data: encodeFunctionData({
+                  abi: erc20Abi,
+                  functionName: "approve",
+                  args: [executorAddress[network.id] as Address, maxUint256 - 1n]
+                })
+              }
+            }
+          })
+        );
+
+        localUnsignedIntentions.push(
+          await addCompleteTxIntentionAsync({ assetsToWithdraw: [lusdToken as Address] })
+        );
+
+        const btcTx = await finalizeBTCTransactionAsync({ assetsToWithdrawSize: 1 });
+
+        const serializedTransactions: Address[] = [];
+        for (const intention of localUnsignedIntentions) {
+          try {
+            serializedTransactions.push(
+              await signIntentionAsync({
+                intention,
+                txId: btcTx.tx.id
+              })
+            );
+          } catch (e) {
+            console.error("error on intent signing: ", intentError, e);
+          }
+        }
+
         const txHash = await sendBTCTransactionsAsync({
           btcTransaction: btcTx?.tx.hex,
           serializedTransactions
@@ -133,7 +133,15 @@ export const useOpenTrove = ({
           tx: txHash[txHash.length - 1]
         });
       } catch (e) {
-        console.error(e);
+        console.error("Error: ", e);
+        if(e.message === "No selected UTXOs") {
+          e.message = "BTC balance is not enough to cover tx costs. Please fund your account and try again";
+        } 
+        setTransactionState({
+          type: "failed",
+          id: transactionId,
+          error: e
+        });
         console.error("sendTxError: ", error);
       }
     }

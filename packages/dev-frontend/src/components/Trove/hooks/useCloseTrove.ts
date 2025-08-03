@@ -15,6 +15,7 @@ import { Address, encodeAbiParameters, keccak256, parseEther, toHex } from "viem
 import { useChainId } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
+import { useAccounts, useRuneBalance } from "@midl-xyz/midl-js-react";
 
 export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
   const { addTxIntentionAsync } = useAddTxIntention();
@@ -29,6 +30,9 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
   const chainId = useChainId();
   const { lusdToken } = deployments[chainId].addresses;
   const { rune } = useToken(lusdToken as Address);
+  const { ordinalsAccount } = useAccounts();
+
+  const { balance } = useRuneBalance({ address: ordinalsAccount.address, runeId: "17474:2" });
 
   return useMutation({
     onError: error => {
@@ -39,6 +43,8 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
       });
     },
     mutationFn: async (params: TroveAdjustmentParams<Decimal>) => {
+      setTransactionState({ type: "waitingForApproval", id: transactionId });
+
       try {
         const { rawPopulatedTransaction } = await liquity.populate.closeTrove({
           gasLimit: 100000000n
@@ -116,9 +122,34 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
           serializedTransactions
         });
 
-        setTransactionState({ type: "waitingForConfirmationMidl", id: transactionId, tx: txHash[txHash.length-1] });
+        setTransactionState({
+          type: "waitingForConfirmationMidl",
+          id: transactionId,
+          tx: txHash[txHash.length - 1]
+        });
       } catch (e) {
-        console.error(e);
+        const btcBalanceError =
+          "BTC balance is not enough to cover tx costs. Please fund your account and try again";
+        console.error("Error: ", e);
+        if (e.message === "No selected UTXOs") {
+          e.message = btcBalanceError;
+        }
+
+        if (e.message === "No ordinals UTXOs") {
+          e.message = "MIDL•RUNE•STABLECOIN balance is not enough to cover tx";
+        }
+        if (e.message === "Insufficient funds") {
+          if (Decimal.from(balance.balance).lt(params.repayLUSD)) {
+            e.message = "MIDL•RUNE•STABLECOIN balance is not enough";
+          } else {
+            e.message = btcBalanceError;
+          }
+        }
+        setTransactionState({
+          type: "failed",
+          id: transactionId,
+          error: e
+        });
       }
     }
   });
