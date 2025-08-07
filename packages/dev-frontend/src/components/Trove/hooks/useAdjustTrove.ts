@@ -1,6 +1,6 @@
 import { Decimal, TroveAdjustmentParams } from "@liquity/lib-base";
 import { deployments } from "@liquity/lib-ethers";
-import { convertETHtoBTC } from "@midl-xyz/midl-js-executor";
+import { convertETHtoBTC, executorAddress } from "@midl-xyz/midl-js-executor";
 import {
   useAddCompleteTxIntention,
   useAddTxIntention,
@@ -9,8 +9,9 @@ import {
   useSendBTCTransactions,
   useSignIntention
 } from "@midl-xyz/midl-js-executor-react";
+import { useConfig } from "@midl-xyz/midl-js-react";
 import { useMutation } from "@tanstack/react-query";
-import { Address } from "viem";
+import { Address, encodeFunctionData, erc20Abi, maxUint256 } from "viem";
 import { useChainId } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
@@ -36,6 +37,7 @@ export const useAdjustTrove = ({
   const chainId = useChainId();
   const { lusdToken } = deployments[chainId].addresses;
   const { sendBTCTransactionsAsync } = useSendBTCTransactions({});
+  const { network } = useConfig();
 
   return useMutation({
     onError: error => {
@@ -68,18 +70,34 @@ export const useAdjustTrove = ({
               data: rawPopulatedTransaction.data as `0x${string}`,
               value: rawPopulatedTransaction.value?.toBigInt()
             },
-            satoshis: convertETHtoBTC(rawPopulatedTransaction.value.toBigInt()) * 1.01
+            satoshis: convertETHtoBTC(
+              rawPopulatedTransaction.value ? rawPopulatedTransaction.value.toBigInt() : 0n
+            )
           }
         })
       );
-
-      if (params.withdrawCollateral !== undefined && params.withdrawCollateral.gt(0)) {
+      console.log("params: ",params)
+      if (params.borrowLUSD !== undefined && params.borrowLUSD.gt(0)) {
+        localUnsignedIntentions.push(
+          await addTxIntentionAsync({
+            intention: {
+              evmTransaction: {
+                to: lusdToken as Address,
+                data: encodeFunctionData({
+                  abi: erc20Abi,
+                  functionName: "approve",
+                  args: [executorAddress[network.id] as Address, maxUint256 - 1n]
+                })
+              }
+            }
+          })
+        );
         localUnsignedIntentions.push(
           await addCompleteTxIntentionAsync({ assetsToWithdraw: [lusdToken as Address] })
         );
       }
 
-      const btcTx = await finalizeBTCTransactionAsync({ assetsToWithdrawSize: 1 });
+      const btcTx = await finalizeBTCTransactionAsync({ assetsToWithdrawSize: params.withdrawCollateral !== undefined && params.withdrawCollateral.gt(0) ? 1 : 0 });
 
       const serializedTransactions: Address[] = [];
       for (const intention of localUnsignedIntentions) {
@@ -100,7 +118,11 @@ export const useAdjustTrove = ({
         serializedTransactions
       });
 
-      setTransactionState({ type: "waitingForConfirmationMidl", id: transactionId, tx: txHash[txHash.length-1] });
+      setTransactionState({
+        type: "waitingForConfirmationMidl",
+        id: transactionId,
+        tx: txHash[txHash.length - 1]
+      });
     }
   });
 };

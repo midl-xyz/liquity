@@ -5,7 +5,6 @@ import {
   useAddCompleteTxIntention,
   useAddTxIntention,
   useClearTxIntentions,
-  useEVMAddress,
   useFinalizeBTCTransaction,
   useSendBTCTransactions,
   useSignIntention
@@ -17,7 +16,7 @@ import { useChainId } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
 
-import { keccak256, encodeAbiParameters } from "viem";
+import { encodeAbiParameters, keccak256 } from "viem";
 
 const targetSlot = "0x0f65e0315bf0254cc9a814f380af6273469d0fc4fe0d9c60782c48ec70a876c0";
 const candidateAddress = "0x122F8A4FB2761160a39a768001A7071DFF7a39f6";
