@@ -71,7 +71,7 @@ export const useAdjustTrove = ({
               value: rawPopulatedTransaction.value?.toBigInt()
             },
             satoshis: convertETHtoBTC(
-              rawPopulatedTransaction.value ? rawPopulatedTransaction.value.toBigInt() : 0n
+              rawPopulatedTransaction.value ? rawPopulatedTransaction.value.toBigInt() + 200_000n : 0n
             )
           }
         })
