@@ -85,12 +85,12 @@ const config: HardhatUserConfig = {
         btcConfirmationsRequired: 1,
         hardhatNetwork: "default",
         network: {
-          explorerUrl: "https://mempool.regtest.midl.xyz",
+          explorerUrl: "https://mempool.staging.midl.xyz",
           id: "regtest",
           network: "regtest"
         },
         provider: new MempoolSpaceProvider({
-          "regtest": "https://mempool.regtest.midl.xyz",
+          "regtest": "https://mempool.staging.midl.xyz",
         } as any)
       },
     }
@@ -98,12 +98,12 @@ const config: HardhatUserConfig = {
   },
   networks: {
     default: {
-      url: "https://rpc.regtest.midl.xyz",
+      url: "https://rpc.staging.midl.xyz",
       chainId: 777,
 
     },
       pkRemote: {
-      url: "https://rpc.regtest.midl.xyz",
+      url: "https://rpc.staging.midl.xyz",
       chainId: 777,
     },
   },
