@@ -7,6 +7,10 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 // https://vitejs.dev/config/
 export default defineConfig({
   base: "./",
+  define: {
+    'import.meta.env.VITE_EVM_RPC': JSON.stringify(process.env.EVM_RPC || 'https://rpc.regtest.midl.xyz'),
+    'import.meta.env.VITE_MEMPOOL_RPC': JSON.stringify(process.env.MEMPOOL_RPC || 'https://mempool.regtest.midl.xyz')
+  },
   plugins: [
     react(),
     nodePolyfills({
