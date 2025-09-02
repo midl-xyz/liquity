@@ -3,13 +3,13 @@ import { DeployFunction } from "hardhat-deploy/types";
 const deploy: DeployFunction = async ({ midl }) => {
   await midl.initialize();
   await midl.callContract("BTCOracle", "feedBaseFeeValue", {
-    args: ["120000000000000000000000", 1]
+    args: ["120000000000000000000000", 7]
   });
   await midl.callContract("BTCOracle", "feedBaseFeeValue", {
-    args: ["120000000000000000000000", 2]
+    args: ["120000000000000000000000", 8]
   });
   await midl.callContract("BTCOracle", "feedBaseFeeValue", {
-    args: ["120000000000000000000000", 3]
+    args: ["120000000000000000000000", 9]
   });
   await midl.callContract("BTCOracle", "grantRole", {
     args: [
