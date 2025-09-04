@@ -4,6 +4,7 @@ import {
   useAddCompleteTxIntention,
   useAddTxIntention,
   useClearTxIntentions,
+  useERC20Rune,
   useEVMAddress,
   useFinalizeBTCTransaction,
   useSendBTCTransactions,
@@ -15,7 +16,7 @@ import { Address, encodeAbiParameters, keccak256, parseEther, toHex } from "viem
 import { useChainId } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
-import { useAccounts, useRuneBalance } from "@midl-xyz/midl-js-react";
+import { useAccounts, useRune, useRuneBalance } from "@midl-xyz/midl-js-react";
 
 export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
   const { addTxIntentionAsync } = useAddTxIntention();
@@ -29,10 +30,15 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
   const { sendBTCTransactionsAsync } = useSendBTCTransactions({});
   const chainId = useChainId();
   const { lusdToken } = deployments[chainId].addresses;
+  console.log("KUSDTOKEN: ", lusdToken)
   const { rune } = useToken(lusdToken as Address);
+  const { erc20Address } = useERC20Rune("17036:1")
+    console.log("LUSDRUNE: ", erc20Address)
+
+
   const { ordinalsAccount } = useAccounts();
 
-  const { balance } = useRuneBalance({ address: ordinalsAccount.address, runeId: "17474:2" });
+  const { balance } = useRuneBalance({ address: ordinalsAccount.address, runeId: "17036:1" });
 
   return useMutation({
     onError: error => {
@@ -64,7 +70,7 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
               runes: [
                 {
                   address: lusdToken as Address,
-                  id: rune.id,
+                  id: "17036:1",
                   value: BigInt(parseEther(params.repayLUSD.toString()))
                 }
               ]
@@ -76,32 +82,7 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
           await addCompleteTxIntentionAsync({ assetsToWithdraw: [] as any })
         );
 
-        const slot = keccak256(
-          encodeAbiParameters(
-            [
-              {
-                type: "address"
-              },
-              { type: "uint256" }
-            ],
-            [evmAddress, 2n]
-          )
-        );
-
-        const customStateOverride = [
-          {
-            address: lusdToken as Address,
-            stateDiff: [
-              {
-                slot,
-                value: toHex(BigInt(parseEther(params.repayLUSD.toString())) as any, { size: 32 })
-              }
-            ]
-          }
-        ];
-        const btcTx = await finalizeBTCTransactionAsync({
-          stateOverride: customStateOverride
-        });
+        const btcTx = await finalizeBTCTransactionAsync({});
 
         const serializedTransactions: Address[] = [];
         for (const intention of localUnsignedIntentions) {

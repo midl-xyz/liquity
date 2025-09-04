@@ -20,7 +20,7 @@ export const UserAccount: React.FC = () => {
   const { lusdToken } = deployments[chainId].addresses;
   const { rune } = useToken(lusdToken as Address);
   const { balance: runeBalance } = useRuneBalance({
-    runeId: rune?.id ?? "17474:2",
+    runeId: rune?.id ?? "17036:1",
     address: ordinalsAccount?.address || "",
     query: {
       enabled: Boolean(ordinalsAccount?.address)
