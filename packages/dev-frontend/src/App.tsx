@@ -112,7 +112,7 @@ const App = () => {
 
             rpcUrls: {
               default: {
-                http: ['https://rpc.staging.midl.xyz'],
+                http: ['https://rpc.regtest.midl.xyz'],
               },
             },
           }}
