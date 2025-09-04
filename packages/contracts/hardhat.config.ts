@@ -85,27 +85,25 @@ const config: HardhatUserConfig = {
         btcConfirmationsRequired: 1,
         hardhatNetwork: "default",
         network: {
-          explorerUrl: "https://mempool.staging.midl.xyz",
+          explorerUrl: process.env.MEMPOOL_RPC || "https://mempool.regtest.midl.xyz",
           id: "regtest",
           network: "regtest"
         },
         provider: new MempoolSpaceProvider({
-          "regtest": "https://mempool.staging.midl.xyz",
+          regtest: process.env.MEMPOOL_RPC || "https://mempool.regtest.midl.xyz"
         } as any)
-      },
+      }
     }
-
   },
   networks: {
     default: {
-      url: "https://rpc.staging.midl.xyz",
-      chainId: 777,
-
+      url: process.env.EVM_RPC || "https://rpc.regtest.midl.xyz",
+      chainId: 777
     },
-      pkRemote: {
-      url: "https://rpc.staging.midl.xyz",
-      chainId: 777,
-    },
+    pkRemote: {
+      url: process.env.EVM_RPC || "https://rpc.regtest.midl.xyz",
+      chainId: 777
+    }
   },
 
   mocha: { timeout: 12000000 },

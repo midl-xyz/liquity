@@ -12,7 +12,6 @@ import { getConfig } from "./config";
 import { LiquityProvider } from "./hooks/LiquityContext";
 import theme from "./theme";
 
-import { AddressPurpose } from "@midl-xyz/midl-js-core";
 import { midlRegtest } from "@midl-xyz/midl-js-executor";
 import { AppLoader } from "./components/AppLoader";
 import { DisposableWalletProvider } from "./testUtils/DisposableWalletProvider";
@@ -84,6 +83,7 @@ const loader = <AppLoader />;
 
 const App = () => {
   const queryClient = useMemo(() => new QueryClient(), []);
+
   const wagmiConfig = useMemo(() => {
     return createConfig({
       chains: [
@@ -91,13 +91,13 @@ const App = () => {
           ...midlRegtest,
           rpcUrls: {
             default: {
-              http: [midlRegtest.rpcUrls.default.http[0]]
+              http: [import.meta.env.VITE_EVM_RPC]
             }
           }
         } as Chain
       ],
       transports: {
-        [midlRegtest.id]: http(midlRegtest.rpcUrls.default.http[0])
+        [midlRegtest.id]: http(import.meta.env.VITE_EVM_RPC)
       }
     });
   }, []);
@@ -108,16 +108,16 @@ const App = () => {
         <QueryClientProvider client={queryClient}>
           <WagmiMidlProvider
             chain={{
-            ...midlRegtest,
+              ...midlRegtest,
 
-            rpcUrls: {
-              default: {
-                http: ['https://rpc.regtest.midl.xyz'],
-              },
-            },
-          }}
-        >
-          <WalletConnector loader={loader}>
+              rpcUrls: {
+                default: {
+                  http: [import.meta.env.VITE_EVM_RPC]
+                }
+              }
+            }}
+          >
+            <WalletConnector loader={loader}>
               <LiquityProvider
                 loader={loader}
                 unsupportedNetworkFallback={<UnsupportedNetworkFallback />}
@@ -127,11 +127,11 @@ const App = () => {
                   <LiquityFrontend loader={loader} />
                 </TransactionProvider>
               </LiquityProvider>
-              </WalletConnector>
-            </WagmiMidlProvider>
+            </WalletConnector>
+          </WagmiMidlProvider>
         </QueryClientProvider>
       </MidlProvider>
-    </ThemeUIProvider> 
+    </ThemeUIProvider>
   );
 };
 
