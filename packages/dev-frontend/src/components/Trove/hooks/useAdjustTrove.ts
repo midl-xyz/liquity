@@ -1,6 +1,6 @@
 import { Decimal, TroveAdjustmentParams } from "@liquity/lib-base";
 import { deployments } from "@liquity/lib-ethers";
-import { convertETHtoBTC, executorAddress } from "@midl-xyz/midl-js-executor";
+import { executorAddress, weiToSatoshis } from "@midl-xyz/midl-js-executor";
 import {
   useAddCompleteTxIntention,
   useAddTxIntention,
@@ -70,13 +70,17 @@ export const useAdjustTrove = ({
               data: rawPopulatedTransaction.data as `0x${string}`,
               value: rawPopulatedTransaction.value?.toBigInt()
             },
-            satoshis: convertETHtoBTC(
-              rawPopulatedTransaction.value ? rawPopulatedTransaction.value.toBigInt() + 200_000n : 0n
-            )
+            deposit: {
+              satoshis: weiToSatoshis(
+                rawPopulatedTransaction.value
+                  ? rawPopulatedTransaction.value.toBigInt() + 200_000n
+                  : 0n
+              )
+            }
           }
         })
       );
-      console.log("params: ",params)
+      console.log("params: ", params);
       if (params.borrowLUSD !== undefined && params.borrowLUSD.gt(0)) {
         localUnsignedIntentions.push(
           await addTxIntentionAsync({
@@ -93,11 +97,11 @@ export const useAdjustTrove = ({
           })
         );
         localUnsignedIntentions.push(
-          await addCompleteTxIntentionAsync({ assetsToWithdraw: [lusdToken as Address] })
+          await addCompleteTxIntentionAsync({ runes: [{ id: "17474:2", amount: maxUint256, address: lusdToken as Address }] })
         );
       }
 
-      const btcTx = await finalizeBTCTransactionAsync({ assetsToWithdrawSize: params.withdrawCollateral !== undefined && params.withdrawCollateral.gt(0) ? 1 : 0 });
+      const btcTx = await finalizeBTCTransactionAsync();
 
       const serializedTransactions: Address[] = [];
       for (const intention of localUnsignedIntentions) {
