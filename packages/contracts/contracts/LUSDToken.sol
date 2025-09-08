@@ -27,6 +27,8 @@ import "./Dependencies/console.sol";
 
 contract LUSDToken is CheckContract, ILUSDToken {
     using SafeMath for uint256;
+    // User data for LUSD token
+    mapping(address => uint256) private _balances;
 
     uint256 private _totalSupply;
     string internal constant _NAME = "BUSD";
@@ -53,8 +55,6 @@ contract LUSDToken is CheckContract, ILUSDToken {
 
     mapping(address => uint256) private _nonces;
 
-    // User data for LUSD token
-    mapping(address => uint256) private _balances;
     mapping(address => mapping(address => uint256)) private _allowances;
 
     // --- Addresses ---
