@@ -1,6 +1,6 @@
 import { Decimal, Decimalish, TroveCreationParams } from "@liquity/lib-base";
 import { deployments } from "@liquity/lib-ethers";
-import { convertETHtoBTC, executorAddress } from "@midl-xyz/midl-js-executor";
+import { executorAddress, weiToSatoshis } from "@midl-xyz/midl-js-executor";
 import {
   useAddCompleteTxIntention,
   useAddTxIntention,
@@ -81,7 +81,9 @@ export const useOpenTrove = ({
                 data: rawPopulatedTransaction.data as `0x${string}`,
                 value: rawPopulatedTransaction.value?.toBigInt()
               },
-              satoshis: convertETHtoBTC(rawPopulatedTransaction.value.toBigInt())
+              deposit: {
+                satoshis: weiToSatoshis(rawPopulatedTransaction.value.toBigInt())
+              }
             }
           })
         );
@@ -102,10 +104,12 @@ export const useOpenTrove = ({
         );
 
         localUnsignedIntentions.push(
-          await addCompleteTxIntentionAsync({ assetsToWithdraw: [lusdToken as Address] })
+          await addCompleteTxIntentionAsync({
+            runes: [{ id: "17474:2", amount: maxUint256, address: lusdToken as Address }]
+          })
         );
 
-        const btcTx = await finalizeBTCTransactionAsync({ assetsToWithdrawSize: 1 });
+        const btcTx = await finalizeBTCTransactionAsync();
 
         const serializedTransactions: Address[] = [];
         for (const intention of localUnsignedIntentions) {
@@ -133,9 +137,10 @@ export const useOpenTrove = ({
         });
       } catch (e) {
         console.error("Error: ", e);
-        if(e.message === "No selected UTXOs") {
-          e.message = "BTC balance is not enough to cover tx costs. Please fund your account and try again";
-        } 
+        if (e.message === "No selected UTXOs") {
+          e.message =
+            "BTC balance is not enough to cover tx costs. Please fund your account and try again";
+        }
         setTransactionState({
           type: "failed",
           id: transactionId,

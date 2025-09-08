@@ -12,7 +12,7 @@ import {
   useToken
 } from "@midl-xyz/midl-js-executor-react";
 import { useMutation } from "@tanstack/react-query";
-import { Address, encodeAbiParameters, keccak256, parseEther, toHex } from "viem";
+import { Address, encodeAbiParameters, keccak256, maxUint256, parseEther, toHex } from "viem";
 import { useChainId } from "wagmi";
 import { useLiquity } from "../../../hooks/LiquityContext";
 import { useTransactionState } from "../../Transaction";
@@ -66,20 +66,21 @@ export const useCloseTrove = ({ transactionId }: { transactionId: string }) => {
                 to: rawPopulatedTransaction.to as Address,
                 data: rawPopulatedTransaction.data as `0x${string}`
               },
-              hasRunesDeposit: true,
-              runes: [
-                {
-                  address: lusdToken as Address,
-                  id: "17036:1",
-                  value: BigInt(parseEther(params.repayLUSD.toString()))
-                }
-              ]
+              deposit: {
+                runes: [
+                  {
+                    address: lusdToken as Address,
+                    id: rune.id,
+                    amount: BigInt(parseEther(params.repayLUSD.toString()))
+                  }
+                ]
+              }
             }
           })
         );
 
         localUnsignedIntentions.push(
-          await addCompleteTxIntentionAsync({ assetsToWithdraw: [] as any })
+          await addCompleteTxIntentionAsync()
         );
 
         const btcTx = await finalizeBTCTransactionAsync({});

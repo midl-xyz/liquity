@@ -11,7 +11,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Box, Button, Card, Flex, Heading } from "theme-ui";
 
 import { deployments } from "@liquity/lib-ethers";
-import { convertBTCtoETH } from "@midl-xyz/midl-js-executor";
 import { useToken } from "@midl-xyz/midl-js-executor-react";
 import { useAccounts, useBalance, useRuneBalance } from "@midl-xyz/midl-js-react";
 import { BigNumber } from "ethers";
@@ -33,6 +32,7 @@ import {
   selectForTroveChangeValidation,
   validateTroveChange
 } from "./validation/validateTroveChange";
+import { satoshisToWei } from "@midl-xyz/midl-js-executor";
 
 const selector = (state: LiquityStoreState) => {
   const { trove, fees, price, accountBalance } = state;
@@ -160,7 +160,7 @@ export const Adjusting: React.FC = () => {
   const feePct = new Percent(borrowingRate);
 
   const availableEth = Decimal.fromBigNumberString(
-    BigNumber.from(convertBTCtoETH(balance)).toHexString()
+    BigNumber.from(satoshisToWei(balance)).toHexString()
   );
   console.log(availableEth, trove.collateral);
   const maxCollateral = trove.collateral.add(availableEth);
