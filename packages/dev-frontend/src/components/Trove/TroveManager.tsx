@@ -20,7 +20,7 @@ import { useAccounts, useRuneBalance } from "@midl-xyz/midl-js-react";
 import { useChainId } from "wagmi";
 import { deployments } from "@liquity/lib-ethers";
 import { useToken } from "@midl-xyz/midl-js-executor-react";
-import { Address } from "viem";
+import { Address, formatEther } from "viem";
 
 const init = ({ trove }: LiquityStoreState) => ({
   original: trove,
@@ -181,7 +181,7 @@ export const TroveManager: React.FC<TroveManagerProps> = ({ collateral, debt }) 
 
   useMemo(() => {
     if (runeBalance?.balance) {
-      validationContext.lusdBalance = Decimal.from(runeBalance?.balance);
+      validationContext.lusdBalance = Decimal.from(formatEther(runeBalance?.balance));
     }
   }, [runeBalance?.balance, validationContext]);
 

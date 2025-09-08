@@ -11,6 +11,7 @@ import { useAccounts, useRuneBalance } from "@midl-xyz/midl-js-react";
 import { useLiquity } from "../hooks/LiquityContext";
 import * as l from "../lexicon";
 import { Statistic } from "./Statistic";
+import { formatEther } from "viem";
 
 const selectBalances = ({ accountBalance, lusdBalance, lqtyBalance }: LiquityStoreState) => ({
   accountBalance,
@@ -36,7 +37,7 @@ const Balances: React.FC = () => {
       <Heading>My Account Balances</Heading>
       <Statistic lexicon={l.ETH}>{accountBalance.prettify(6)}</Statistic>
       <Statistic lexicon={l.LUSD}>
-        {Decimal.fromBigNumberString(runeBalance.balance).prettify()}
+        {Decimal.fromBigNumberString(formatEther(runeBalance.balance)).prettify()}
       </Statistic>
       <Statistic lexicon={l.LQTY}>{lqtyBalance.prettify()}</Statistic>
     </Box>

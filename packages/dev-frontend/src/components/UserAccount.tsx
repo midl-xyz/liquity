@@ -6,7 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import React, { useMemo, useRef, useState } from "react";
 import { Box, Button, Flex, Heading, Text } from "theme-ui";
 import { useOnClickOutside } from "usehooks-ts";
-import { Address, formatUnits } from "viem";
+import { Address, formatEther, formatUnits } from "viem";
 import { useChainId } from "wagmi";
 import { COIN } from "../strings";
 import { shortenAddress } from "../utils/shortenAddress";
@@ -30,7 +30,7 @@ export const UserAccount: React.FC = () => {
 
   useMemo(() => {
     if (runeBalance?.balance) {
-      stateRealLusdBalance(Decimal.from(runeBalance?.balance));
+      stateRealLusdBalance(Decimal.from(formatEther(runeBalance?.balance)));
     }
   }, [runeBalance?.balance]);
   const { lusdBalance: customLusdBalance } = useBondView();

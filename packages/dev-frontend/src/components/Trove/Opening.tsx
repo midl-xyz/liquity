@@ -12,7 +12,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Box, Button, Card, Flex, Heading, Spinner } from "theme-ui";
 
-import { convertBTCtoETH } from "@midl-xyz/midl-js-executor";
+import { satoshisToWei } from "@midl-xyz/midl-js-executor";
 import { useBalance } from "@midl-xyz/midl-js-react";
 import { BigNumber } from "ethers";
 import { useStableTroveChange } from "../../hooks/useStableTroveChange";
@@ -54,7 +54,7 @@ export const Opening: React.FC = () => {
   const { balance } = useBalance({});
 
   const accountBalance = Decimal.fromBigNumberString(
-    BigNumber.from(convertBTCtoETH(balance)).toHexString()
+    BigNumber.from(satoshisToWei(balance)).toHexString()
   );
 
   const borrowingRate = fees.borrowingRate();
