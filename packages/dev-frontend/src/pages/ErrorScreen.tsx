@@ -53,9 +53,10 @@ export const ErrorScreen: FC<Props> = ({ name, description, buttonHref, buttonTe
           <Text
             sx={{
               fontWeight: 500,
-              fontSize: "120px",
+              fontSize: ["40px", "120px"],
               letterSpacing: "0.2px",
               fontVariationSettings: "'wdth' 110",
+              wordBreak: "break-all",
               color: "#DC7520"
             }}
           >
@@ -63,6 +64,7 @@ export const ErrorScreen: FC<Props> = ({ name, description, buttonHref, buttonTe
           </Text>
           <Text
             sx={{
+              textAlign: "center",
               fontSize: "24px"
             }}
           >
@@ -73,7 +75,10 @@ export const ErrorScreen: FC<Props> = ({ name, description, buttonHref, buttonTe
         <Link href={buttonHref || "/"}>
           <Button
             sx={{
-              background: "#0000009b"
+              background: "#0000009b",
+              borderRadius: "80px",
+              paddingX: 5,
+              paddingY: 2
             }}
             variant="primary"
           >
